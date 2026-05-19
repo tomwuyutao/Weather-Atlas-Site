@@ -26,8 +26,8 @@ const storyCities = [
     story: "Keep saved cities visible together, without opening a dense forecast screen.",
     lng: -0.13,
     lat: 51.51,
-    color: "#D3E3EC",
-    tone: "rgba(211, 227, 236, 0.2)",
+    color: "#65ABE3",
+    tone: "rgba(101, 171, 227, 0.2)",
     icon: "cloud",
     cardOffset: 390
   },
@@ -36,11 +36,11 @@ const storyCities = [
     temp: "19°",
     condition: "Partly cloudy",
     forecast: "19° / 12° · mixed",
-    story: "Use the map to compare conditions spatially, then open details only when needed.",
+    story: "Use the map to compare conditions by place, then open details only when needed.",
     lng: 13.4,
     lat: 52.52,
-    color: "#D3E3EC",
-    tone: "rgba(211, 227, 236, 0.18)",
+    color: "#FF8A65",
+    tone: "rgba(255, 138, 101, 0.2)",
     icon: "cloud",
     cardOffset: 290
   },
@@ -62,16 +62,16 @@ const storyCities = [
 const backgroundDots = [
   [-3.7, 40.42, "#F4B65E"],
   [2.35, 48.86, "#65ABE3"],
-  [4.9, 52.37, "#D3E3EC"],
-  [12.57, 55.68, "#D3E3EC"],
-  [16.37, 48.21, "#F4B65E"],
-  [28.98, 41.01, "#D3E3EC"]
+  [4.9, 52.37, "#4D70D4"],
+  [12.57, 55.68, "#F4B65E"],
+  [16.37, 48.21, "#FF8A65"],
+  [28.98, 41.01, "#65ABE3"]
 ];
 
 const appNotes = [
   ["Free", "Completely free to use."],
   ["Fast", "Native performance on iPhone, iPad, and Mac."],
-  ["Minimal", "Weather dots, saved places, and clean forecast views without extra dashboard noise."]
+  ["Private", "Weather Map does not collect any personal information."]
 ];
 
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -80,8 +80,8 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
-  overlays: 0.42,
-  uv: 0.58
+  overlays: 0.52,
+  uv: 0.68
 };
 
 const overlayIcons = {
@@ -201,9 +201,9 @@ function StoryMap({ progress, activeStep }) {
   const selectedDateLabel = dateLabels[dateFrame];
   const dateSliderTop = ["10%", "36%", "62%"][dateFrame];
   const forecastPalettes = [
-    ["#F4B65E", "#D3E3EC", "#D3E3EC", "#FF8A65", "#F4B65E", "#65ABE3", "#D3E3EC", "#F4B65E", "#D3E3EC", "#F4B65E"],
-    ["#D3E3EC", "#65ABE3", "#F4B65E", "#D3E3EC", "#FF8A65", "#D3E3EC", "#F4B65E", "#D3E3EC", "#65ABE3", "#FF8A65"],
-    ["#FF8A65", "#F4B65E", "#D3E3EC", "#F4B65E", "#D3E3EC", "#D3E3EC", "#FF8A65", "#65ABE3", "#F4B65E", "#D3E3EC"]
+    ["#F4B65E", "#FF8A65", "#65ABE3", "#4D70D4", "#F4B65E", "#65ABE3", "#F4B65E", "#65ABE3", "#FF8A65", "#F4B65E"],
+    ["#4D70D4", "#65ABE3", "#F4B65E", "#F4B65E", "#4D70D4", "#FF8A65", "#65ABE3", "#F4B65E", "#4D70D4", "#FF8A65"],
+    ["#FF8A65", "#4D70D4", "#65ABE3", "#FF8A65", "#F4B65E", "#4D70D4", "#F4B65E", "#4D70D4", "#65ABE3", "#F4B65E"]
   ];
   const uvPalette = [
     "#F8F4F1",
@@ -237,8 +237,9 @@ function StoryMap({ progress, activeStep }) {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    const heldProgress = Math.max(0, (timeProgress - 0.3) / 0.7);
-    setDateFrame(Math.min(2, Math.floor(heldProgress * 2.25)));
+    const heldProgress = Math.max(0, (timeProgress - 0.24) / 0.76);
+    const nextFrame = heldProgress < 0.42 ? 0 : heldProgress < 0.72 ? 1 : 2;
+    setDateFrame(nextFrame);
   });
 
   useEffect(() => {
@@ -338,10 +339,11 @@ function StoryMap({ progress, activeStep }) {
         <div className="absolute inset-0">
           {projectedDots.background.map(({ x, y, color }, index) => {
             const dotColor = allDotColors[index] ?? color;
+            const isDimmedByFocus = activeStep === 1;
             return (
             <motion.span
               key={`${x}-${y}-${index}`}
-              className={`absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 ${isUvOverlay ? "" : "grayscale"}`}
+              className={`absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 ${isDimmedByFocus ? "grayscale" : ""}`}
               style={{
                 left: x,
                 top: y
@@ -349,8 +351,8 @@ function StoryMap({ progress, activeStep }) {
               animate={{
                 scale: [0.92, 1.02, 0.92],
                 backgroundColor: dotColor,
-                boxShadow: isUvOverlay ? "0 0 24px rgba(230, 98, 98, 0.34)" : "0 0 18px rgba(211, 227, 236, 0.22)",
-                opacity: isUvOverlay ? 0.88 : activeStep === 0 || activeStep === 2 ? 0.38 : 0.2
+                boxShadow: isUvOverlay ? "0 0 24px rgba(230, 98, 98, 0.34)" : `0 0 22px ${dotColor}66`,
+                opacity: isDimmedByFocus ? 0.24 : isUvOverlay ? 0.88 : 0.78
               }}
               transition={{
                 scale: { duration: 5 + (index % 5), repeat: Infinity, ease: "easeInOut", delay: index * 0.12 },
@@ -375,8 +377,8 @@ function StoryMap({ progress, activeStep }) {
                 style={{ left: point.x, top: point.y }}
                 animate={{
                   scale: isActive ? 1.08 : 1,
-                  opacity: activeStep === 0 || activeStep === 2 || activeStep === 3 ? 0.62 : isActive ? 1 : 0.24,
-                  filter: activeStep === 0 || activeStep === 2 || activeStep === 3 || isActive ? "saturate(1)" : "saturate(0.15)"
+                  opacity: activeStep === 1 ? (isActive ? 1 : 0.24) : 0.82,
+                  filter: activeStep === 1 && !isActive ? "saturate(0.18)" : "saturate(1)"
                 }}
                 transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
               >
@@ -417,7 +419,9 @@ function StoryMap({ progress, activeStep }) {
                       <p className="text-sm font-medium text-weather-cloud/68">{city.name}</p>
                       <p className="mt-1 text-3xl font-semibold tracking-normal text-weather-text">{city.temp}</p>
                     </div>
-                    <WeatherIcon type={city.icon} color={city.color} />
+                    <span className="translate-y-2">
+                      <WeatherIcon type={city.icon} color={city.color} />
+                    </span>
                   </div>
                 </motion.div>
               </motion.div>
@@ -479,11 +483,11 @@ function ScrollCopy({ activeStep }) {
   const copy = useMemo(
     () => [
       {
-        title: "Weather, spatially.",
-        body: "Quickly compare weather conditions across places."
+        title: "Weather, on a map.",
+        body: ""
       },
       {
-        title: "Find where it is sunny.",
+        title: "Quickly find where it is sunny.",
         body: "Instead of opening forecasts for dozens of cities one by one, see where conditions look good at a glance."
       },
       {
@@ -516,7 +520,9 @@ function ScrollCopy({ activeStep }) {
         >
           {copy[activeStep].title}
         </h1>
-        <p className="mt-7 max-w-[540px] text-lg leading-8 text-weather-muted/74 md:text-xl md:leading-9">{copy[activeStep].body}</p>
+        {copy[activeStep].body ? (
+          <p className="mt-7 max-w-[540px] text-lg leading-8 text-weather-muted/74 md:text-xl md:leading-9">{copy[activeStep].body}</p>
+        ) : null}
       </motion.div>
     </div>
   );
@@ -528,14 +534,14 @@ function NativeMapPreview() {
   const [projectedPreviewDots, setProjectedPreviewDots] = useState([]);
   const previewDots = [
     [-9.14, 38.72, "#F4B65E"],
-    [-0.13, 51.51, "#D3E3EC"],
+    [-0.13, 51.51, "#65ABE3"],
     [13.4, 52.52, "#FF8A65", true],
     [23.73, 37.98, "#F4B65E"],
     [2.35, 48.86, "#65ABE3"],
-    [4.9, 52.37, "#D3E3EC"],
-    [12.5, 41.9, "#D3E3EC"],
+    [4.9, 52.37, "#4D70D4"],
+    [12.5, 41.9, "#FF8A65"],
     [16.37, 48.21, "#F4B65E"],
-    [28.98, 41.01, "#D3E3EC"],
+    [28.98, 41.01, "#65ABE3"],
     [-3.7, 40.42, "#F4B65E"]
   ];
 
@@ -598,7 +604,7 @@ function NativeMapPreview() {
           {selected ? (
             <span className="relative inline-flex h-10 w-10 items-center justify-center">
               <span className="absolute h-20 w-20 rounded-full bg-[#FF8A65]/12 shadow-[0_0_54px_rgba(255,138,101,0.34)]" />
-              <WeatherIcon type="sun" color="#FF8A65" size="small" />
+              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_0_14px_rgba(255,138,101,0.16),0_0_34px_rgba(255,138,101,0.52)]" />
             </span>
           ) : (
             <span
@@ -616,7 +622,7 @@ function NativeMapPreview() {
             <p className="mt-3 text-xl font-semibold">Berlin</p>
           </div>
           <div className="flex min-w-[118px] flex-col items-end justify-between pb-0.5 pt-1">
-            <span className="mt-2 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
+            <span className="mr-7 mt-9 h-7 w-7 rounded-full border border-white/25 bg-[#FF8A65] shadow-[0_0_0_18px_rgba(255,138,101,0.14),0_0_48px_rgba(255,138,101,0.58)]" />
             <div className="grid grid-cols-5 gap-1.5">
               {["#F4B65E", "#6E83B6", "#D3E3EC", "#D3E3EC", "#D9826F", "#D9826F", "#E99573", "#E99573", "#E99573", "#D9826F"].map((color, index) => (
                 <span key={index} className="h-2 w-2 rounded-full" style={{ background: color, opacity: index < 5 ? 0.78 : 0.9 }} />
@@ -635,10 +641,10 @@ function AppReveal() {
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-3xl">
           <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">
-            Native performance, simple weather.
+            Simple and powerful.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-weather-muted/68">
-            A lightweight weather map for saved places, quick checks, and everyday planning on iPhone, iPad, and Mac.
+            Built with native iOS technologies for the best performance.
           </p>
         </div>
 
@@ -684,7 +690,7 @@ function AppReveal() {
 }
 
 function DownloadFooter() {
-  const links = ["About", "Request a feature", "Contact", "Privacy Policy", "T&C", "Download", "Help"];
+  const links = ["Request a feature", "Contact", "Privacy Policy"];
 
   return (
     <section className="relative z-20 px-5 pb-12 pt-8 md:px-10 lg:px-16">
@@ -706,7 +712,7 @@ function DownloadFooter() {
         </div>
 
         <footer className="mt-16 flex flex-col gap-6 border-t border-white/10 pt-8 md:flex-row md:items-center md:justify-between">
-          <p className="text-sm text-weather-cloud/52">Weather, spatially.</p>
+          <p className="text-sm text-weather-cloud/52">Weather, on a map.</p>
           <nav className="flex flex-wrap gap-x-6 gap-y-3 text-sm text-weather-cloud/64">
             {links.map((link) => (
               <a key={link} href="#" className="transition hover:text-weather-text">
