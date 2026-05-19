@@ -198,9 +198,11 @@ function StoryMap({ progress, activeStep }) {
   const overlaySwitcherOpacity = activeStep === 3 ? 1 : 0;
   const selectedOverlay = activeStep === 3 && storyProgress >= storyBreakpoints.uv ? "uv" : "weather";
   const isUvOverlay = selectedOverlay === "uv";
-  const dateLabels = ["Now", "Thu, May 21", "Thu, May 28"];
+  const dateLabels = ["Thu, May 21", "Sun, May 24", "Thu, May 28"];
   const selectedDateLabel = dateLabels[dateFrame];
   const nextDateLabel = dateLabels[Math.min(dateFrame + 1, dateLabels.length - 1)];
+  const dateSliderTop = ["10%", "36%", "62%"][dateFrame];
+  const nextDateTop = ["72%", "90%", "104%"][dateFrame];
   const forecastPalettes = [
     ["#F4B65E", "#D3E3EC", "#D3E3EC", "#FF8A65", "#F4B65E", "#65ABE3", "#D3E3EC", "#F4B65E", "#D3E3EC", "#F4B65E"],
     ["#D3E3EC", "#65ABE3", "#F4B65E", "#D3E3EC", "#FF8A65", "#D3E3EC", "#F4B65E", "#D3E3EC", "#65ABE3", "#FF8A65"],
@@ -238,7 +240,8 @@ function StoryMap({ progress, activeStep }) {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    setDateFrame(Math.min(2, Math.floor(timeProgress * 3)));
+    const heldProgress = Math.max(0, (timeProgress - 0.38) / 0.62);
+    setDateFrame(Math.min(2, Math.floor(heldProgress * 3)));
   });
 
   useEffect(() => {
@@ -430,27 +433,28 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-72px] top-[47vh] z-20 hidden h-[86px] w-[720px] items-center lg:flex"
-        animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 60, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
+        className="absolute right-[-86px] top-[31vh] z-20 hidden h-[54vh] w-[560px] lg:block"
+        animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative h-full w-full">
-          <div className="absolute left-0 top-1/2 h-14 w-full -translate-y-1/2 rounded-full bg-white/10" />
+          <div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(90deg,rgba(46,41,97,0),rgba(46,41,97,0.14))]" />
           <motion.div
-            className="absolute top-1/2 flex h-16 -translate-y-1/2 items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-8 text-3xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl"
-            animate={{ left: ["8%", "18%", "30%"][dateFrame] }}
+            className="absolute left-0 flex h-16 min-w-[320px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-8 text-3xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl"
+            animate={{ top: dateSliderTop }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             {selectedDateLabel}
           </motion.div>
+          <div className="absolute -right-5 h-12 w-28 rounded-full bg-[#211E49]/76 shadow-atmospheric backdrop-blur-xl" style={{ top: dateSliderTop }} />
           <motion.div
-            className="absolute left-[64%] top-[calc(100%+22px)] text-3xl font-semibold text-white/50"
-            animate={{ opacity: dateFrame === 2 ? 0 : 0.62, x: dateFrame * -24 }}
+            className="absolute left-[96px] text-3xl font-semibold text-white/50"
+            animate={{ opacity: dateFrame === 2 ? 0 : 0.62, top: nextDateTop }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
             {nextDateLabel}
           </motion.div>
-          <div className="absolute -right-4 top-1/2 h-12 w-32 -translate-y-1/2 rounded-full bg-[#211E49]/66 shadow-atmospheric backdrop-blur-xl" />
+          <div className="absolute -right-5 h-12 w-28 rounded-full bg-[#211E49]/60 shadow-atmospheric backdrop-blur-xl" style={{ top: nextDateTop }} />
         </div>
       </motion.div>
       <motion.div
