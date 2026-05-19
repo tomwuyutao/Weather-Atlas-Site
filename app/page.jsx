@@ -237,8 +237,8 @@ function StoryMap({ progress, activeStep }) {
     setStoryProgress(latest);
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    const heldProgress = Math.max(0, (timeProgress - 0.24) / 0.76);
-    setDateFrame(Math.min(2, Math.floor(heldProgress * 3)));
+    const heldProgress = Math.max(0, (timeProgress - 0.3) / 0.7);
+    setDateFrame(Math.min(2, Math.floor(heldProgress * 2.25)));
   });
 
   useEffect(() => {
@@ -456,15 +456,16 @@ function StoryMap({ progress, activeStep }) {
         <div className="space-y-6">
           {overlayOptions.map(([type, label]) => {
             const isSelected = selectedOverlay === type;
-            const color = isSelected && type === "uv" ? "#E66262" : "#FFFFFF";
+            const selectedColor = type === "uv" ? "#E66262" : "#F4B65E";
+            const color = isSelected ? selectedColor : "#FFFFFF";
             return (
             <div
               key={label}
               className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-[18px] py-1 transition ${isSelected ? "text-white" : "text-white/88"}`}
             >
               <IconMask src={overlayIcons[type]} color={color} className="h-9 w-9" glow={isSelected && type === "uv"} />
-              <span className="text-3xl font-medium">{label}</span>
-              <span className={`text-3xl leading-none transition ${isSelected ? "opacity-100" : "opacity-0"}`}>✓</span>
+              <span className="text-3xl font-medium transition" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
+              <span className={`text-3xl leading-none transition ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
             </div>
             );
           })}
@@ -688,7 +689,7 @@ function DownloadFooter() {
   return (
     <section className="relative z-20 px-5 pb-12 pt-8 md:px-10 lg:px-16">
       <div className="mx-auto max-w-7xl border-t border-white/10 pt-16">
-        <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:items-end">
+        <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:items-center">
           <div className="max-w-2xl">
             <h2 className="text-4xl font-semibold leading-tight tracking-normal text-weather-text md:text-6xl">Try Weather Map today, completely free.</h2>
           </div>
