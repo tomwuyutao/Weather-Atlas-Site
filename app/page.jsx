@@ -603,9 +603,9 @@ function NativeMapPreview() {
         >
           {selected ? (
             <span className="relative inline-flex h-10 w-10 items-center justify-center">
-              <span className="absolute h-24 w-24 rounded-full bg-[#FF8A65]/24 blur-3xl" />
-              <span className="absolute h-14 w-14 rounded-full bg-[#FF8A65]/16 blur-xl" />
-              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_34px_rgba(255,138,101,0.7)]" />
+              <span className="absolute h-32 w-32 rounded-full bg-[radial-gradient(circle,rgba(255,138,101,0.34)_0%,rgba(255,138,101,0.16)_32%,rgba(255,138,101,0)_72%)] blur-sm" />
+              <span className="absolute h-20 w-20 rounded-full bg-[#FF8A65]/20 blur-2xl" />
+              <span className="relative h-4 w-4 rounded-full border border-white/35 bg-[#FF8A65] shadow-[0_0_38px_rgba(255,138,101,0.78)]" />
             </span>
           ) : (
             <span
