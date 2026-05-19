@@ -81,8 +81,8 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
-  overlays: 0.46,
-  uv: 0.56
+  overlays: 0.42,
+  uv: 0.58
 };
 
 const overlayIcons = {
@@ -200,9 +200,7 @@ function StoryMap({ progress, activeStep }) {
   const isUvOverlay = selectedOverlay === "uv";
   const dateLabels = ["Thu, May 21", "Sun, May 24", "Thu, May 28"];
   const selectedDateLabel = dateLabels[dateFrame];
-  const nextDateLabel = dateLabels[Math.min(dateFrame + 1, dateLabels.length - 1)];
   const dateSliderTop = ["10%", "36%", "62%"][dateFrame];
-  const nextDateTop = ["72%", "90%", "104%"][dateFrame];
   const forecastPalettes = [
     ["#F4B65E", "#D3E3EC", "#D3E3EC", "#FF8A65", "#F4B65E", "#65ABE3", "#D3E3EC", "#F4B65E", "#D3E3EC", "#F4B65E"],
     ["#D3E3EC", "#65ABE3", "#F4B65E", "#D3E3EC", "#FF8A65", "#D3E3EC", "#F4B65E", "#D3E3EC", "#65ABE3", "#FF8A65"],
@@ -449,14 +447,6 @@ function StoryMap({ progress, activeStep }) {
             {selectedDateLabel}
           </motion.div>
           <div className="absolute -right-5 h-12 w-28 rounded-full bg-[#211E49]/76 shadow-atmospheric backdrop-blur-xl" style={{ top: dateSliderTop }} />
-          <motion.div
-            className="absolute left-[96px] text-3xl font-semibold text-white/50"
-            animate={{ opacity: dateFrame === 2 ? 0 : 0.62, top: nextDateTop }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {nextDateLabel}
-          </motion.div>
-          <div className="absolute -right-5 h-12 w-28 rounded-full bg-[#211E49]/60 shadow-atmospheric backdrop-blur-xl" style={{ top: nextDateTop }} />
         </div>
       </motion.div>
       <motion.div
@@ -742,7 +732,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[620vh]" />
+      <div className="relative z-10 h-[700vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
