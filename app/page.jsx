@@ -324,7 +324,7 @@ function StoryMap({ progress, activeStep }) {
       className="fixed inset-0 z-0 overflow-hidden bg-weather-night"
       style={{ scale: mapScale, opacity: mapOpacity }}
     >
-      <div className="absolute inset-y-0 opacity-100" style={{ left: "14vw", right: "-14vw" }}>
+      <div className="absolute bottom-[24vh] left-[-56vw] right-[-18vw] top-[-16vh] opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
         <div ref={mapNode} className="absolute inset-0" />
         <div className="cinematic-noise pointer-events-none absolute inset-0 mix-blend-soft-light opacity-[0.06]" />
         <motion.div
@@ -401,7 +401,7 @@ function StoryMap({ progress, activeStep }) {
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 />
                 <motion.div
-                  className="absolute left-8 top-8 w-[min(78vw,260px)] rounded-[24px] border border-white/10 bg-[#2E2961]/66 p-4 text-weather-text shadow-atmospheric backdrop-blur-2xl"
+                  className="absolute left-4 top-[-124px] w-[min(72vw,230px)] rounded-[24px] border border-white/10 bg-[#2E2961]/66 p-4 text-weather-text shadow-atmospheric backdrop-blur-2xl md:left-8 md:top-8 md:w-[min(78vw,260px)]"
                   initial={false}
                   animate={{
                     opacity: isActive ? 1 : 0,
