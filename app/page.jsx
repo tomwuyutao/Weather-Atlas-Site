@@ -80,8 +80,8 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
-  overlays: 0.52,
-  uv: 0.68
+  overlays: 0.58,
+  uv: 0.74
 };
 
 const overlayIcons = {
@@ -238,7 +238,7 @@ function StoryMap({ progress, activeStep }) {
     const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
     const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
     const heldProgress = Math.max(0, (timeProgress - 0.24) / 0.76);
-    const nextFrame = heldProgress < 0.42 ? 0 : heldProgress < 0.72 ? 1 : 2;
+    const nextFrame = heldProgress < 0.36 ? 0 : heldProgress < 0.62 ? 1 : 2;
     setDateFrame(nextFrame);
   });
 
