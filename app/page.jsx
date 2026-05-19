@@ -209,16 +209,16 @@ function StoryMap({ progress, activeStep }) {
     ["#FF8A65", "#F4B65E", "#D3E3EC", "#F4B65E", "#D3E3EC", "#D3E3EC", "#FF8A65", "#65ABE3", "#F4B65E", "#D3E3EC"]
   ];
   const uvPalette = [
-    "rgba(230, 98, 98, 0.34)",
-    "rgba(230, 98, 98, 0.68)",
-    "rgba(230, 98, 98, 0.44)",
-    "rgba(230, 98, 98, 0.94)",
-    "rgba(230, 98, 98, 0.52)",
-    "rgba(230, 98, 98, 0.78)",
-    "rgba(230, 98, 98, 0.38)",
-    "rgba(230, 98, 98, 0.9)",
-    "rgba(230, 98, 98, 0.58)",
-    "rgba(230, 98, 98, 0.72)"
+    "#F8F4F1",
+    "#F1B9B9",
+    "#F8F4F1",
+    "#E66262",
+    "#F3D8D8",
+    "#EA8383",
+    "#F8F4F1",
+    "#E66262",
+    "#F0A0A0",
+    "#EC7777"
   ];
   const allDotColors = isUvOverlay
     ? uvPalette
@@ -347,13 +347,20 @@ function StoryMap({ progress, activeStep }) {
               className={`absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 ${isUvOverlay ? "" : "grayscale"}`}
               style={{
                 left: x,
-                top: y,
-                background: dotColor,
+                top: y
+              }}
+              animate={{
+                scale: [0.92, 1.02, 0.92],
+                backgroundColor: dotColor,
                 boxShadow: isUvOverlay ? "0 0 24px rgba(230, 98, 98, 0.34)" : "0 0 18px rgba(211, 227, 236, 0.22)",
                 opacity: isUvOverlay ? 0.88 : activeStep === 0 || activeStep === 2 ? 0.38 : 0.2
               }}
-              animate={{ scale: [0.92, 1.02, 0.92] }}
-              transition={{ duration: 5 + (index % 5), repeat: Infinity, ease: "easeInOut", delay: index * 0.12 }}
+              transition={{
+                scale: { duration: 5 + (index % 5), repeat: Infinity, ease: "easeInOut", delay: index * 0.12 },
+                backgroundColor: { duration: 0.95, ease: [0.22, 1, 0.36, 1] },
+                boxShadow: { duration: 0.95, ease: [0.22, 1, 0.36, 1] },
+                opacity: { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
+              }}
             />
             );
           })}
@@ -383,15 +390,17 @@ function StoryMap({ progress, activeStep }) {
                     height: isActive ? 180 : 54,
                     x: isActive ? -90 : -27,
                     y: isActive ? -90 : -27,
-                    opacity: isActive ? 0.7 : 0.22
+                    opacity: isActive ? 0.7 : 0.22,
+                    backgroundColor: activeStep === 2 || isUvOverlay ? dotColor : city.tone
                   }}
-                  style={{ background: activeStep === 2 || isUvOverlay ? dotColor : city.tone }}
                   transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
                 />
                 <motion.div
                   className="relative h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/35 shadow-bloom"
-                  style={{ background: dotColor }}
-                  animate={{ boxShadow: isActive ? `0 0 0 26px ${city.tone}, 0 0 68px ${dotColor}` : `0 0 0 9px ${isUvOverlay ? "rgba(230, 98, 98, 0.16)" : city.tone}` }}
+                  animate={{
+                    backgroundColor: dotColor,
+                    boxShadow: isActive ? `0 0 0 26px ${city.tone}, 0 0 68px ${dotColor}` : `0 0 0 9px ${isUvOverlay ? "rgba(230, 98, 98, 0.16)" : city.tone}`
+                  }}
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 />
                 <motion.div
@@ -419,13 +428,6 @@ function StoryMap({ progress, activeStep }) {
           })}
         </div>
       </div>
-      <motion.div
-        className="absolute left-1/2 top-10 hidden -translate-x-1/2 items-center gap-3 rounded-full bg-[#2E2961]/28 px-5 py-3 text-xl font-semibold text-weather-text backdrop-blur-xl md:flex"
-        style={{ opacity: uiOpacity, y: uiY }}
-      >
-        Europe
-        <span className="h-2 w-2 rotate-45 border-b-2 border-r-2 border-weather-text/80" />
-      </motion.div>
       <motion.div
         className="absolute right-[7vw] top-[18vh] hidden rounded-full border border-[#6F67C8]/70 bg-[#211E49]/72 px-8 py-4 text-2xl font-semibold text-weather-text shadow-atmospheric backdrop-blur-2xl lg:block"
         style={{ opacity: uiOpacity, y: uiY }}
@@ -487,22 +489,18 @@ function ScrollCopy({ activeStep }) {
   const copy = useMemo(
     () => [
       {
-        kicker: "Opening layer",
         title: "Weather, spatially.",
         body: "Quickly compare weather conditions across the places you care about."
       },
       {
-        kicker: "Sun at a glance",
         title: "Find where it is sunny.",
         body: "Zoom from the wider map into a place that looks good, then check the simple forecast."
       },
       {
-        kicker: "Time",
         title: "See how weather changes.",
         body: "Move through the date slider and the dots change together, helping you find a time and place that should be sunny."
       },
       {
-        kicker: "Overlays",
         title: "Choose what the map shows.",
         body: "Switch from weather to temperature, cloud cover, wind speed, UV index, humidity, visibility, and more."
       }
@@ -519,7 +517,6 @@ function ScrollCopy({ activeStep }) {
         transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
         className={activeStep === 0 ? "max-w-[720px]" : "max-w-[560px]"}
       >
-        <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-weather-cloud/62">{copy[activeStep].kicker}</p>
         <h1
           className={`font-semibold tracking-normal text-weather-text ${
             activeStep === 0
@@ -644,15 +641,14 @@ function NativeMapPreview() {
 
 function AppReveal() {
   return (
-    <section className="relative z-20 -mt-[16vh] px-5 pb-24 md:px-10 lg:px-16">
+    <section className="relative z-20 -mt-[16vh] px-5 pb-24 pt-28 md:px-10 md:pt-36 lg:px-16">
       <div className="mx-auto max-w-7xl">
         <div className="mb-12 max-w-3xl">
-          <p className="mb-4 text-[11px] font-semibold uppercase tracking-[0.2em] text-weather-cloud/58">Native weather map</p>
           <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">
-            Minimal weather, made for Apple devices.
+            A native weather app that stays fast.
           </h2>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-weather-muted/68">
-            A small, fast app for saved places, map-based weather dots, and quick forecast checks across iPhone, iPad, and Mac.
+            Save places, check the map, and compare simple forecasts without a heavy dashboard. Built for iPhone, iPad, and Mac.
           </p>
         </div>
 
@@ -705,7 +701,6 @@ function DownloadFooter() {
       <div className="mx-auto max-w-7xl border-t border-white/10 pt-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:items-end">
           <div className="max-w-2xl">
-            <p className="mb-5 text-[11px] font-semibold uppercase tracking-[0.2em] text-weather-cloud/58">Download</p>
             <h2 className="text-5xl font-semibold leading-none tracking-normal text-weather-text md:text-7xl">A quiet weather map for your places.</h2>
           </div>
           <div className="rounded-[28px] border border-white/10 bg-[#423D74]/44 p-5 shadow-atmospheric backdrop-blur-2xl">
