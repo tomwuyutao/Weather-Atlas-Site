@@ -79,10 +79,10 @@ const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const publicAsset = (path) => `${publicBasePath}${path}`;
 
 const storyBreakpoints = {
-  sun: 0.045,
-  time: 0.145,
-  overlays: 0.38,
-  uv: 0.47
+  sun: 0.06,
+  time: 0.2,
+  overlays: 0.46,
+  uv: 0.56
 };
 
 const overlayIcons = {
@@ -190,10 +190,10 @@ function StoryMap({ progress, activeStep }) {
   const [dateFrame, setDateFrame] = useState(0);
   const [storyProgress, setStoryProgress] = useState(0);
   const mapScale = useTransform(progress, [0, 0.72, 0.9], [1.03, 1.01, 0.98]);
-  const mapOpacity = useTransform(progress, [0.74, 0.84], [1, 0]);
-  const uiOpacity = useTransform(progress, [0.57, 0.76], [0, 1]);
-  const uiY = useTransform(progress, [0.57, 0.76], [28, 0]);
-  const atmosphereOpacity = useTransform(progress, [0.05, 0.56], [0.42, 0.9]);
+  const mapOpacity = useTransform(progress, [0.78, 0.88], [1, 0]);
+  const uiOpacity = useTransform(progress, [0.6, 0.8], [0, 1]);
+  const uiY = useTransform(progress, [0.6, 0.8], [28, 0]);
+  const atmosphereOpacity = useTransform(progress, [0.06, 0.62], [0.42, 0.9]);
   const dateSliderOpacity = activeStep === 2 ? 1 : 0;
   const overlaySwitcherOpacity = activeStep === 3 ? 1 : 0;
   const selectedOverlay = activeStep === 3 && storyProgress >= storyBreakpoints.uv ? "uv" : "weather";
@@ -742,7 +742,7 @@ export default function LandingPage() {
     <main id="top" className="relative min-h-screen overflow-hidden">
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[470vh]" />
+      <div className="relative z-10 h-[620vh]" />
       <div id="app" className="relative z-20 bg-[#17152F]">
         <AppReveal />
         <DownloadFooter />
