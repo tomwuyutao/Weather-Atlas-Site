@@ -1,0 +1,7 @@
+.DS_Store
+node_modules/
+.next/
+.npm-cache/
+out/
+landing-screenshots/
+app/page 2.jsx
