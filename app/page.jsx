@@ -692,7 +692,6 @@ function AppReveal() {
 
 function DownloadFooter() {
   const links = [
-    ["Request a feature", "#"],
     ["Contact", publicAsset("/contact/")],
     ["Privacy Policy", publicAsset("/privacy/")]
   ];
