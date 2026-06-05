@@ -271,7 +271,7 @@ function StoryMap({ progress, activeStep }) {
       });
     };
 
-    const initialView = isCompactMap ? { center: [10, 48.5], zoom: 2.72 } : { center: [12, 48.5], zoom: 3.55 };
+    const initialView = isCompactMap ? { center: [10, 47.5], zoom: 2.28 } : { center: [12, 48.5], zoom: 3.55 };
 
     try {
       map.current = new maplibregl.Map({
@@ -323,10 +323,10 @@ function StoryMap({ progress, activeStep }) {
 
     const views = isCompactMap
       ? [
-          { center: [10, 48.5], zoom: 2.72 },
-          { center: [-8.4, 40.2], zoom: 3.95 },
-          { center: [10, 49], zoom: 2.86 },
-          { center: [12, 50], zoom: 2.78 }
+          { center: [10, 47.5], zoom: 2.28 },
+          { center: [-8.9, 39.5], zoom: 3.38 },
+          { center: [10, 48.4], zoom: 2.36 },
+          { center: [12, 49.2], zoom: 2.32 }
         ]
       : [
           { center: [12, 48.5], zoom: 3.55 },
@@ -350,7 +350,7 @@ function StoryMap({ progress, activeStep }) {
       className="fixed inset-0 z-0 overflow-hidden bg-weather-night"
       style={{ scale: mapScale, opacity: mapOpacity }}
     >
-      <div className="absolute bottom-[34vh] left-[-14vw] right-[-14vw] top-[4vh] opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
+      <div className="absolute inset-0 opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
         <div ref={mapNode} className="absolute inset-0" />
         <div className="cinematic-noise pointer-events-none absolute inset-0 mix-blend-soft-light opacity-[0.06]" />
         <motion.div
@@ -428,7 +428,7 @@ function StoryMap({ progress, activeStep }) {
                   transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
                 />
                 <motion.div
-                  className="absolute left-4 top-[-124px] w-[min(72vw,230px)] rounded-[24px] border border-white/10 bg-[#2E2961]/66 p-4 text-weather-text shadow-atmospheric backdrop-blur-2xl md:left-8 md:top-8 md:w-[min(78vw,260px)]"
+                  className="absolute left-1/2 top-[-156px] w-[min(72vw,230px)] -translate-x-1/2 rounded-[24px] border border-white/10 bg-[#2E2961]/66 p-4 text-weather-text shadow-atmospheric backdrop-blur-2xl md:left-8 md:top-8 md:w-[min(78vw,260px)] md:translate-x-0"
                   initial={false}
                   animate={{
                     opacity: isActive ? 1 : 0,
@@ -461,14 +461,14 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-300px] top-[31vh] z-20 hidden h-[54vh] w-[560px] lg:block"
+        className="absolute right-[-190px] top-[22vh] z-20 h-[46vh] w-[410px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
         animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative h-full w-full">
           <div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(90deg,rgba(46,41,97,0),rgba(46,41,97,0.14))]" />
           <motion.div
-            className="absolute left-0 flex h-16 min-w-[320px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-8 text-3xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl"
+            className="absolute left-0 flex h-14 min-w-[260px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-7 text-2xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:h-16 lg:min-w-[320px] lg:px-8 lg:text-3xl"
             animate={{ top: dateSliderTop }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
@@ -478,11 +478,11 @@ function StoryMap({ progress, activeStep }) {
         </div>
       </motion.div>
       <motion.div
-        className="absolute right-14 top-24 z-20 hidden w-[390px] rounded-[34px] border border-[#6F67C8]/55 bg-[#211E49]/88 p-8 text-weather-text shadow-atmospheric backdrop-blur-2xl lg:block"
+        className="absolute right-4 top-[10vh] z-20 w-[min(88vw,340px)] rounded-[28px] border border-[#6F67C8]/55 bg-[#211E49]/88 p-5 text-weather-text shadow-atmospheric backdrop-blur-2xl lg:right-14 lg:top-24 lg:w-[390px] lg:rounded-[34px] lg:p-8"
         animate={{ opacity: overlaySwitcherOpacity, x: overlaySwitcherOpacity ? 0 : 26, filter: overlaySwitcherOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
-        <div className="space-y-6">
+        <div className="space-y-2 lg:space-y-6">
           {overlayOptions.map(([type, label]) => {
             const isSelected = selectedOverlay === type;
             const selectedColor = type === "uv" ? "#E66262" : "#F4B65E";
@@ -491,15 +491,15 @@ function StoryMap({ progress, activeStep }) {
             return (
             <div
               key={label}
-              className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-full px-4 py-3 transition duration-700 ${isSelected ? "text-white" : "text-white/88"}`}
+              className={`grid grid-cols-[38px_1fr_28px] items-center gap-3 rounded-full px-3 py-2 transition duration-700 lg:grid-cols-[54px_1fr_32px] lg:gap-4 lg:px-4 lg:py-3 ${isSelected ? "text-white" : "text-white/88"}`}
               style={{
                 backgroundColor: isSelected ? selectedBg : "rgba(255, 255, 255, 0)",
                 boxShadow: isSelected ? `0 0 36px ${selectedBg}` : "none"
               }}
             >
-              <IconMask src={overlayIcons[type]} color={color} className="h-9 w-9" glow={isSelected && type === "uv"} />
-              <span className="text-3xl font-medium transition" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
-              <span className={`text-3xl leading-none transition ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
+              <IconMask src={overlayIcons[type]} color={color} className="h-6 w-6 lg:h-9 lg:w-9" glow={isSelected && type === "uv"} />
+              <span className="text-xl font-medium transition lg:text-3xl" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
+              <span className={`text-2xl leading-none transition lg:text-3xl ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
             </div>
             );
           })}
