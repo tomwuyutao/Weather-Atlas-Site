@@ -522,16 +522,16 @@ function ScrollCopy({ activeStep }) {
         body: ""
       },
       {
-        title: "Quickly find where it is sunny.",
-        body: "Instead of opening forecasts for dozens of cities one by one, see where conditions look good at a glance."
+        title: "Find sunshine instantly.",
+        body: "Compare weather conditions without opening forecasts one by one."
       },
       {
-        title: "See how weather changes.",
-        body: "Use the date slider to find a good time for your trip."
+        title: "Plan ahead for your trip.",
+        body: "See when conditions improve before you travel."
       },
       {
-        title: "Choose what the map shows.",
-        body: "Switch from weather conditions to cloud cover, UV index, visibility, and more."
+        title: "Focus on what matters.",
+        body: "Weather, cloud cover, UV index, visibility, and more..."
       }
     ],
     []
