@@ -1,8 +1,8 @@
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 
 export const metadata = {
-  title: "Contact | Weather Map",
-  description: "Contact Weather Map support."
+  title: "Contact | Weather Atlas",
+  description: "Contact Weather Atlas support."
 };
 
 export default function ContactPage() {
@@ -11,7 +11,7 @@ export default function ContactPage() {
       <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl flex-col">
         <nav className="mb-16">
           <a href={`${publicBasePath}/`} className="text-sm font-medium text-weather-cloud/68 transition hover:text-weather-text">
-            Weather Map
+            Weather Atlas
           </a>
         </nav>
 

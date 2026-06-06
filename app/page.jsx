@@ -71,7 +71,7 @@ const backgroundDots = [
 const appNotes = [
   ["Free", "Completely free to use."],
   ["Fast", "Native performance on iPhone, iPad, and Mac."],
-  ["Private", "Weather Map does not collect any personal information."]
+  ["Private", "Weather Atlas does not collect any personal information."]
 ];
 
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
@@ -743,7 +743,7 @@ function DownloadFooter() {
       <div className="mx-auto max-w-7xl border-t border-white/10 pt-16">
         <div className="grid gap-12 lg:grid-cols-[1fr_360px] lg:items-center">
           <div className="max-w-2xl">
-            <h2 className="text-4xl font-semibold leading-tight tracking-normal text-weather-text md:text-6xl">Try Weather Map today, completely free.</h2>
+            <h2 className="text-4xl font-semibold leading-tight tracking-normal text-weather-text md:text-6xl">Try Weather Atlas today, completely free.</h2>
           </div>
           <div className="rounded-[28px] border border-white/10 bg-[#423D74]/44 p-5 shadow-atmospheric backdrop-blur-2xl">
             <a
