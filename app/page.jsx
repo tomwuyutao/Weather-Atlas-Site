@@ -209,8 +209,10 @@ function StoryMap({ progress, activeStep }) {
   const selectedOverlay = activeStep === 3 && storyProgress >= storyBreakpoints.uv ? "uv" : "weather";
   const isUvOverlay = selectedOverlay === "uv";
   const dateLabels = ["Thu, May 21", "Sun, May 24", "Thu, May 28"];
+  const dateStopLabels = ["May 21", "May 24", "May 28"];
+  const dateSliderStops = ["10%", "36%", "62%"];
   const selectedDateLabel = dateLabels[dateFrame];
-  const dateSliderTop = ["10%", "36%", "62%"][dateFrame];
+  const dateSliderTop = dateSliderStops[dateFrame];
   const forecastPalettes = [
     ["#F4B65E", "#FF8A65", "#65ABE3", "#4D70D4", "#F4B65E", "#65ABE3", "#F4B65E", "#65ABE3", "#FF8A65", "#F4B65E"],
     ["#4D70D4", "#65ABE3", "#F4B65E", "#F4B65E", "#4D70D4", "#FF8A65", "#65ABE3", "#F4B65E", "#4D70D4", "#FF8A65"],
@@ -471,20 +473,46 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute right-[-270px] top-[28vh] z-20 h-[42vh] w-[430px] lg:right-[-300px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
+        className="absolute right-[-210px] top-[28vh] z-20 h-[42vh] w-[430px] lg:right-[-220px] lg:top-[31vh] lg:h-[54vh] lg:w-[560px]"
         animate={{ opacity: dateSliderOpacity, x: dateSliderOpacity ? 0 : 64, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="relative h-full w-full">
           <div className="absolute left-0 top-0 h-full w-full bg-[linear-gradient(90deg,rgba(46,41,97,0),rgba(46,41,97,0.14))]" />
+          <div className="absolute left-2 top-[10%] h-[52%] w-1 rounded-full bg-gradient-to-b from-white/18 via-[#8E83F5]/76 to-white/18 shadow-[0_0_22px_rgba(142,131,245,0.32)] lg:left-4" />
+          {dateStopLabels.map((label, index) => {
+            const isSelected = dateFrame === index;
+            return (
+              <div
+                key={label}
+                className="absolute left-2 flex -translate-y-1/2 items-center gap-3 lg:left-4"
+                style={{ top: dateSliderStops[index] }}
+              >
+                <span
+                  className={`h-3 w-3 rounded-full border transition duration-500 ${
+                    isSelected
+                      ? "border-[#F8F4F1] bg-[#F8F4F1] shadow-[0_0_18px_rgba(248,244,241,0.58)]"
+                      : "border-[#8E83F5]/50 bg-[#211E49]/82"
+                  }`}
+                />
+                <span className={`text-sm font-semibold transition duration-500 lg:text-base ${isSelected ? "text-white/0" : "text-weather-muted/70"}`}>
+                  {label}
+                </span>
+              </div>
+            );
+          })}
           <motion.div
-            className="absolute left-0 flex h-12 min-w-[220px] items-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-6 text-xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:h-16 lg:min-w-[320px] lg:px-8 lg:text-3xl"
+            className="absolute left-16 flex h-12 min-w-[220px] -translate-y-1/2 items-center justify-between gap-4 rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-5 text-xl font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:left-24 lg:h-16 lg:min-w-[320px] lg:px-7 lg:text-3xl"
             animate={{ top: dateSliderTop }}
             transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
           >
-            {selectedDateLabel}
+            <span>{selectedDateLabel}</span>
+            <span className="grid gap-1">
+              <span className="h-0.5 w-4 rounded-full bg-white/70 lg:w-5" />
+              <span className="h-0.5 w-4 rounded-full bg-white/42 lg:w-5" />
+            </span>
           </motion.div>
-          <div className="absolute -right-5 h-12 w-28 rounded-full bg-[#211E49]/76 shadow-atmospheric backdrop-blur-xl" style={{ top: dateSliderTop }} />
+          <div className="absolute -right-5 h-12 w-28 -translate-y-1/2 rounded-full bg-[#211E49]/76 shadow-atmospheric backdrop-blur-xl lg:h-16" style={{ top: dateSliderTop }} />
         </div>
       </motion.div>
       <motion.div
@@ -546,7 +574,7 @@ function ScrollCopy({ activeStep }) {
       },
       {
         title: "Plan ahead for your trip.",
-        body: "See when conditions improve before you travel."
+        body: "Scroll through dates to see when conditions improve before you travel."
       },
       {
         title: "Focus on what matters.",
