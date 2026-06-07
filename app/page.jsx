@@ -74,8 +74,8 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
-  overlays: 0.58,
-  uv: 0.68
+  overlays: 0.66,
+  uv: 0.8
 };
 
 const overlayIcons = {
