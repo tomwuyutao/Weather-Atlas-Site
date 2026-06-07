@@ -75,7 +75,7 @@ const storyBreakpoints = {
   sun: 0.06,
   time: 0.2,
   overlays: 0.66,
-  uv: 0.8
+  uv: 0.74
 };
 
 const overlayIcons = {
