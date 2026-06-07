@@ -63,7 +63,7 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-[#17152F] text-weather-text">
+    <main className="flex min-h-screen flex-col bg-[#17152F] text-weather-text">
       <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
         <header className="mb-16">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-weather-cloud/58">Privacy Policy</p>
@@ -91,7 +91,9 @@ export default function PrivacyPolicyPage() {
           ))}
         </div>
       </div>
-      <SiteFooter />
+      <div className="mt-auto">
+        <SiteFooter />
+      </div>
     </main>
   );
 }

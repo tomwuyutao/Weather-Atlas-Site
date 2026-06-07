@@ -7,7 +7,7 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-[#17152F] text-weather-text">
+    <main className="flex min-h-screen flex-col bg-[#17152F] text-weather-text">
       <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
         <section className="max-w-3xl">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-weather-cloud/58">Contact</p>
@@ -23,7 +23,9 @@ export default function ContactPage() {
           </a>
         </section>
       </div>
-      <SiteFooter />
+      <div className="mt-auto">
+        <SiteFooter />
+      </div>
     </main>
   );
 }
