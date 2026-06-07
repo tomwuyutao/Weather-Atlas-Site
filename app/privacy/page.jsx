@@ -1,4 +1,4 @@
-const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+import SiteFooter from "../SiteFooter";
 
 export const metadata = {
   title: "Privacy Policy | Weather Atlas",
@@ -63,14 +63,8 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="min-h-screen bg-[#17152F] px-5 py-8 text-weather-text md:px-10 lg:px-16">
-      <div className="mx-auto max-w-4xl">
-        <nav className="mb-16">
-          <a href={`${publicBasePath}/`} className="text-sm font-medium text-weather-cloud/68 transition hover:text-weather-text">
-            Weather Atlas
-          </a>
-        </nav>
-
+    <main className="min-h-screen bg-[#17152F] text-weather-text">
+      <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
         <header className="mb-16">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-weather-cloud/58">Privacy Policy</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Weather Atlas Privacy Policy</h1>
@@ -96,11 +90,8 @@ export default function PrivacyPolicyPage() {
             </section>
           ))}
         </div>
-
-        <footer className="mt-16 border-t border-white/10 py-8 text-sm leading-6 text-weather-cloud/52">
-          <p>Weather, on a map.</p>
-        </footer>
       </div>
+      <SiteFooter />
     </main>
   );
 }

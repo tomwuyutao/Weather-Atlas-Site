@@ -1,4 +1,4 @@
-const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
+import SiteFooter from "../SiteFooter";
 
 export const metadata = {
   title: "Contact | Weather Atlas",
@@ -7,15 +7,9 @@ export const metadata = {
 
 export default function ContactPage() {
   return (
-    <main className="min-h-screen bg-[#17152F] px-5 py-8 text-weather-text md:px-10 lg:px-16">
-      <div className="mx-auto flex min-h-[calc(100vh-4rem)] max-w-4xl flex-col">
-        <nav className="mb-16">
-          <a href={`${publicBasePath}/`} className="text-sm font-medium text-weather-cloud/68 transition hover:text-weather-text">
-            Weather Atlas
-          </a>
-        </nav>
-
-        <section className="my-auto max-w-3xl">
+    <main className="min-h-screen bg-[#17152F] text-weather-text">
+      <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
+        <section className="max-w-3xl">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-weather-cloud/58">Contact</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Say hello.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-weather-muted/72">
@@ -28,11 +22,8 @@ export default function ContactPage() {
             yutao5726@gmail.com
           </a>
         </section>
-
-        <footer className="mt-16 border-t border-white/10 py-8 text-sm leading-6 text-weather-cloud/52">
-          <p>Weather, on a map.</p>
-        </footer>
       </div>
+      <SiteFooter />
     </main>
   );
 }
