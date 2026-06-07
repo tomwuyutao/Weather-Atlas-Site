@@ -598,17 +598,10 @@ function DownloadFooter() {
               <span className="h-10 w-10 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_28px_rgba(244,182,94,0.45)]" />
               <p className="text-4xl font-semibold tracking-normal">Weather Atlas</p>
             </div>
-            <a
-              className="mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-weather-light px-7 text-base font-semibold text-[#2E2961] shadow-bloom"
-              href="#"
-              aria-label="Download on the App Store"
-            >
-              Download on the App Store
-            </a>
           </div>
 
           <div className="md:pt-2">
-            <nav className="flex flex-col gap-5 text-lg text-weather-muted/70">
+            <nav className="flex flex-wrap items-center gap-x-10 gap-y-4 text-lg text-weather-muted/70">
               {links.map(([label, href]) => (
                 <a key={label} href={href} className="transition hover:text-weather-text">
                   {label}
