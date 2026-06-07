@@ -142,6 +142,22 @@ function WeatherIcon({ type, color = "#D3E3EC", size = "large" }) {
   );
 }
 
+function BrandLockup({ progress }) {
+  const opacity = useTransform(progress, [0, 0.9, 0.96], [1, 1, 0]);
+  const y = useTransform(progress, [0, 0.96], [0, -18]);
+
+  return (
+    <motion.div
+      aria-label="Weather Atlas"
+      className="pointer-events-none fixed left-5 top-6 z-30 flex items-center gap-4 text-weather-text md:left-12 md:top-10 md:gap-6 lg:left-20 lg:top-14"
+      style={{ opacity, y }}
+    >
+      <span className="h-11 w-11 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_30px_rgba(244,182,94,0.5)] md:h-16 md:w-16 lg:h-20 lg:w-20" />
+      <span className="text-3xl font-semibold tracking-normal md:text-5xl lg:text-6xl">Weather Atlas</span>
+    </motion.div>
+  );
+}
+
 function applyMinimalMapStyle(mapInstance) {
   const style = mapInstance.getStyle();
   style.layers?.forEach((layer) => {
@@ -625,6 +641,7 @@ export default function LandingPage() {
 
   return (
     <main id="top" className="relative min-h-screen overflow-hidden">
+      <BrandLockup progress={scrollYProgress} />
       <StoryMap progress={scrollYProgress} activeStep={activeStep} />
       <ScrollCopy activeStep={activeStep} />
       <div className="relative z-10 h-[1200vh]" />
