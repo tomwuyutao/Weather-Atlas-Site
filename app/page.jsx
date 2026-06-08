@@ -210,7 +210,7 @@ function StoryMap({ progress, activeStep }) {
   const isUvOverlay = selectedOverlay === "uv";
   const dateLabels = ["Thu, May 21", "Sun, May 24", "Thu, May 28"];
   const selectedDateLabel = dateLabels[dateFrame];
-  const dateControlY = [0, 82, 164][dateFrame];
+  const dateControlY = [-82, 0, 82][dateFrame];
   const forecastPalettes = [
     ["#F4B65E", "#FF8A65", "#65ABE3", "#4D70D4", "#F4B65E", "#65ABE3", "#F4B65E", "#65ABE3", "#FF8A65", "#F4B65E"],
     ["#4D70D4", "#65ABE3", "#F4B65E", "#F4B65E", "#4D70D4", "#FF8A65", "#65ABE3", "#F4B65E", "#4D70D4", "#FF8A65"],
@@ -471,14 +471,14 @@ function StoryMap({ progress, activeStep }) {
         Now
       </motion.div>
       <motion.div
-        className="absolute left-[calc(50%-110px)] top-[10vh] z-20 w-[220px] text-weather-text lg:left-auto lg:right-14 lg:top-24 lg:w-[300px]"
+        className="absolute left-[calc(50%-95px)] top-[calc(50%-26px)] z-20 w-[190px] text-weather-text lg:left-auto lg:right-14 lg:w-[260px]"
         animate={{ opacity: dateSliderOpacity, y: dateControlY, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
         transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
       >
         <AnimatePresence mode="wait">
           <motion.div
             key={selectedDateLabel}
-            className="flex items-center justify-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-4 py-3 text-lg font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:text-2xl"
+            className="flex items-center justify-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-4 py-3 text-base font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:text-xl"
             initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
             animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
             exit={{ opacity: 0, y: -10, filter: "blur(6px)" }}
