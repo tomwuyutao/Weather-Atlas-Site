@@ -1,13 +1,22 @@
 import SiteFooter from "../SiteFooter";
 
+// -----------------------------------------------------------------------------
+// Contact page metadata
+// -----------------------------------------------------------------------------
+// Gives the browser/search result a specific title for the support page.
 export const metadata = {
   title: "Contact | Weather Atlas",
   description: "Contact Weather Atlas support."
 };
 
+// -----------------------------------------------------------------------------
+// Contact page
+// -----------------------------------------------------------------------------
+// A simple support page that points users to the developer email address.
 export default function ContactPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#FBF8F2] text-[#003D99]">
+      {/* Main contact message */}
       <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
         <section className="max-w-3xl">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Contact</p>
@@ -23,6 +32,7 @@ export default function ContactPage() {
           </a>
         </section>
       </div>
+      {/* Shared footer keeps subpage navigation consistent */}
       <div className="mt-auto">
         <SiteFooter />
       </div>

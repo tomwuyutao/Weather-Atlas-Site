@@ -1,10 +1,18 @@
 import SiteFooter from "../SiteFooter";
 
+// -----------------------------------------------------------------------------
+// Privacy page metadata
+// -----------------------------------------------------------------------------
+// Gives the browser/search result a specific title for the legal page.
 export const metadata = {
   title: "Privacy Policy | Weather Atlas",
   description: "Weather Atlas privacy policy."
 };
 
+// -----------------------------------------------------------------------------
+// Privacy policy content
+// -----------------------------------------------------------------------------
+// Stored as structured data so the rendered page stays easy to scan and update.
 const sections = [
   {
     title: "Overview",
@@ -61,16 +69,23 @@ const sections = [
   }
 ];
 
+// -----------------------------------------------------------------------------
+// Privacy policy page
+// -----------------------------------------------------------------------------
+// Explains that Weather Atlas stores app data locally and does not collect
+// personal information.
 export default function PrivacyPolicyPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#FBF8F2] text-[#003D99]">
       <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
+        {/* Page title and revision date */}
         <header className="mb-16">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Privacy Policy</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Weather Atlas Privacy Policy</h1>
           <p className="mt-6 text-base leading-8 text-[#2E2961]/62">Last updated: May 20, 2026</p>
         </header>
 
+        {/* Plain-language summary before the detailed policy sections */}
         <section className="mb-14 rounded-[28px] border border-[#E6E1D9] bg-white/72 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] md:p-8">
           <h2 className="text-2xl font-semibold tracking-normal">Short version</h2>
           <p className="mt-4 text-lg leading-8 text-[#2E2961]/72">
@@ -78,6 +93,7 @@ export default function PrivacyPolicyPage() {
           </p>
         </section>
 
+        {/* Detailed privacy sections generated from the structured content above */}
         <div className="space-y-12">
           {sections.map((section) => (
             <section key={section.title} className="border-t border-[#E6E1D9] pt-8">
@@ -91,6 +107,7 @@ export default function PrivacyPolicyPage() {
           ))}
         </div>
       </div>
+      {/* Shared footer keeps subpage navigation consistent */}
       <div className="mt-auto">
         <SiteFooter />
       </div>

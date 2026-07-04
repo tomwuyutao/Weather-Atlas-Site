@@ -1,6 +1,16 @@
+// -----------------------------------------------------------------------------
+// Shared path helpers
+// -----------------------------------------------------------------------------
+// GitHub Pages serves the site from a base path, so all internal links go
+// through this helper instead of hard-coding root-relative URLs.
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const publicAsset = (path) => `${publicBasePath}${path}`;
 
+// -----------------------------------------------------------------------------
+// Map mock data
+// -----------------------------------------------------------------------------
+// These dots recreate the app's signature map-first view without loading a full
+// interactive map on the marketing page.
 const cityDots = [
   { name: "London", x: "29%", y: "35%", color: "#65ABE3", muted: true },
   { name: "Paris", x: "42%", y: "48%", color: "#D3E3EC", muted: true },
@@ -11,6 +21,10 @@ const cityDots = [
   { name: "Rome", x: "53%", y: "63%", color: "#FF8A65" }
 ];
 
+// -----------------------------------------------------------------------------
+// Feature content
+// -----------------------------------------------------------------------------
+// The feature cards keep the page honest: they describe what the app does today.
 const features = [
   {
     title: "Map-first weather",
@@ -34,6 +48,10 @@ const features = [
   }
 ];
 
+// -----------------------------------------------------------------------------
+// Weather map dot
+// -----------------------------------------------------------------------------
+// A single softly glowing weather dot used by the mini map mockups.
 function WeatherDot({ dot, large = false }) {
   return (
     <span
@@ -49,6 +67,11 @@ function WeatherDot({ dot, large = false }) {
   );
 }
 
+// -----------------------------------------------------------------------------
+// Abstract map mockup
+// -----------------------------------------------------------------------------
+// A lightweight CSS-only map that suggests land, sea, and weather points while
+// keeping the page fast and dependency-free.
 function MiniMap({ className = "" }) {
   return (
     <div className={`relative overflow-hidden rounded-[28px] bg-[#F7F6F2] ${className}`}>
@@ -67,6 +90,11 @@ function MiniMap({ className = "" }) {
   );
 }
 
+// -----------------------------------------------------------------------------
+// Phone app mockup
+// -----------------------------------------------------------------------------
+// The phone frame highlights the core product idea: Weather Atlas starts from
+// the map and keeps forecast details secondary.
 function PhoneMockup() {
   return (
     <div className="relative mx-auto w-[250px] rounded-[42px] border border-[#2E2961]/18 bg-[#17152F] p-2 shadow-[0_28px_80px_rgba(46,41,97,0.24)] md:w-[292px]">
@@ -103,6 +131,11 @@ function PhoneMockup() {
   );
 }
 
+// -----------------------------------------------------------------------------
+// Floating weather summary card
+// -----------------------------------------------------------------------------
+// This card supports the hero composition and mirrors the compact information
+// style used in the app.
 function WeatherCard() {
   return (
     <div className="rounded-[28px] border border-[#E6E1D9] bg-white/76 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] backdrop-blur">
@@ -132,9 +165,14 @@ function WeatherCard() {
   );
 }
 
+// -----------------------------------------------------------------------------
+// Landing page
+// -----------------------------------------------------------------------------
+// The page is intentionally static and simple: header, hero, features, and footer.
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#FBF8F2] text-[#003D99]">
+      {/* Header and navigation */}
       <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
         <a href={publicAsset("/")} className="flex items-center gap-3" aria-label="Weather Atlas home">
           <span className="h-10 w-10 rounded-full bg-[#F4B65E] shadow-[0_0_26px_rgba(244,182,94,0.38)]" />
@@ -157,6 +195,7 @@ export default function LandingPage() {
         </a>
       </header>
 
+      {/* Hero section: product promise plus map-centered app mockups */}
       <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-16 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-24 md:pt-24">
         <div className="relative z-10">
           <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Free private weather map</p>
@@ -196,6 +235,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Feature strip: four short, factual product benefits */}
       <section id="features" className="border-y border-[#E6E1D9] bg-white/54 px-6 py-14 md:px-10">
         <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4">
           {features.map((feature, index) => (
@@ -210,6 +250,7 @@ export default function LandingPage() {
         </div>
       </section>
 
+      {/* Footer: brand reminder and utility links */}
       <footer id="download" className="px-6 py-12 md:px-10">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
           <div>
