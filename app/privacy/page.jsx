@@ -63,26 +63,26 @@ const sections = [
 
 export default function PrivacyPolicyPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#17152F] text-weather-text">
+    <main className="flex min-h-screen flex-col bg-[#FBF8F2] text-[#003D99]">
       <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
         <header className="mb-16">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-weather-cloud/58">Privacy Policy</p>
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Privacy Policy</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Weather Atlas Privacy Policy</h1>
-          <p className="mt-6 text-base leading-8 text-weather-muted/68">Last updated: May 20, 2026</p>
+          <p className="mt-6 text-base leading-8 text-[#2E2961]/62">Last updated: May 20, 2026</p>
         </header>
 
-        <section className="mb-14 rounded-[28px] border border-white/10 bg-[#2E2961]/54 p-6 shadow-atmospheric backdrop-blur-2xl md:p-8">
+        <section className="mb-14 rounded-[28px] border border-[#E6E1D9] bg-white/72 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] md:p-8">
           <h2 className="text-2xl font-semibold tracking-normal">Short version</h2>
-          <p className="mt-4 text-lg leading-8 text-weather-muted/76">
+          <p className="mt-4 text-lg leading-8 text-[#2E2961]/72">
             Weather Atlas does not collect your personal data. The app stores your saved places and preferences on your device, and uses weather and map services only to show the weather map.
           </p>
         </section>
 
         <div className="space-y-12">
           {sections.map((section) => (
-            <section key={section.title} className="border-t border-white/10 pt-8">
+            <section key={section.title} className="border-t border-[#E6E1D9] pt-8">
               <h2 className="text-2xl font-semibold tracking-normal">{section.title}</h2>
-              <div className="mt-4 space-y-4 text-base leading-8 text-weather-muted/72">
+              <div className="mt-4 space-y-4 text-base leading-8 text-[#2E2961]/72">
                 {section.body.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}

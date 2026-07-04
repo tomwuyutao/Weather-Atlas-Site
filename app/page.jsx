@@ -1,654 +1,231 @@
-"use client";
-
-import { AnimatePresence, motion, useMotionValueEvent, useScroll, useTransform } from "framer-motion";
-import maplibregl from "maplibre-gl";
-import { useEffect, useMemo, useRef, useState } from "react";
-
-const storyCities = [
-  {
-    name: "Lisbon",
-    temp: "24°",
-    condition: "Sunny",
-    forecast: "24° / 18° · clear",
-    story: "Check the weather around the places you might travel to before you decide.",
-    lng: -9.14,
-    lat: 38.72,
-    color: "#F4B65E",
-    tone: "rgba(244, 182, 94, 0.25)",
-    icon: "sun",
-    cardOffset: 420
-  },
-  {
-    name: "London",
-    temp: "16°",
-    condition: "Cloudy",
-    forecast: "16° / 11° · cloud",
-    story: "Keep saved cities visible together, without opening a dense forecast screen.",
-    lng: -0.13,
-    lat: 51.51,
-    color: "#65ABE3",
-    tone: "rgba(101, 171, 227, 0.2)",
-    icon: "cloud",
-    cardOffset: 390
-  },
-  {
-    name: "Berlin",
-    temp: "19°",
-    condition: "Partly cloudy",
-    forecast: "19° / 12° · mixed",
-    story: "Use the map to compare conditions by place, then open details only when needed.",
-    lng: 13.4,
-    lat: 52.52,
-    color: "#FF8A65",
-    tone: "rgba(255, 138, 101, 0.2)",
-    icon: "cloud",
-    cardOffset: 290
-  },
-  {
-    name: "Athens",
-    temp: "27°",
-    condition: "Clear",
-    forecast: "27° / 21° · clear",
-    story: "Europe is just one example. The same calm map view works for places around the world.",
-    lng: 23.73,
-    lat: 37.98,
-    color: "#F4B65E",
-    tone: "rgba(244, 182, 94, 0.22)",
-    icon: "sun",
-    cardOffset: 120
-  }
-];
-
-const backgroundDots = [
-  [-3.7, 40.42, "#F4B65E"],
-  [2.35, 48.86, "#65ABE3"],
-  [4.9, 52.37, "#4D70D4"],
-  [12.57, 55.68, "#F4B65E"],
-  [16.37, 48.21, "#FF8A65"],
-  [28.98, 41.01, "#65ABE3"]
-];
-
 const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const publicAsset = (path) => `${publicBasePath}${path}`;
 
-const storyBreakpoints = {
-  sun: 0.06,
-  time: 0.2,
-  overlays: 0.66,
-  uv: 0.74
-};
+const cityDots = [
+  { name: "London", x: "29%", y: "35%", color: "#65ABE3", muted: true },
+  { name: "Paris", x: "42%", y: "48%", color: "#D3E3EC", muted: true },
+  { name: "Berlin", x: "58%", y: "38%", color: "#FF8A65" },
+  { name: "Lisbon", x: "22%", y: "67%", color: "#F4B65E" },
+  { name: "Athens", x: "70%", y: "70%", color: "#F4B65E" },
+  { name: "Oslo", x: "52%", y: "19%", color: "#D3E3EC", muted: true },
+  { name: "Rome", x: "53%", y: "63%", color: "#FF8A65" }
+];
 
-const overlayIcons = {
-  weather: publicAsset("/icons/cloud.sun.fill.svg"),
-  temperature: publicAsset("/icons/thermometer.medium.svg"),
-  cloud: publicAsset("/icons/cloud.fill.svg"),
-  precipitation: publicAsset("/icons/drop.fill.svg"),
-  wind: publicAsset("/icons/wind.svg"),
-  uv: publicAsset("/icons/sun.max.fill.svg"),
-  humidity: publicAsset("/icons/humidity.fill.svg"),
-  visibility: publicAsset("/icons/eye.fill.svg")
-};
+const features = [
+  {
+    title: "Map-first weather",
+    body: "Compare conditions across saved places without opening forecasts one by one.",
+    icon: "⌖"
+  },
+  {
+    title: "Plan ahead",
+    body: "Use the date slider to see when conditions improve before you travel.",
+    icon: "◷"
+  },
+  {
+    title: "Weather layers",
+    body: "Switch between weather, cloud cover, UV index, visibility, and more.",
+    icon: "☼"
+  },
+  {
+    title: "Private and free",
+    body: "Weather Atlas is free and does not collect your personal information.",
+    icon: "○"
+  }
+];
 
-function clampStep(progress) {
-  if (progress < storyBreakpoints.sun) return 0;
-  if (progress < storyBreakpoints.time) return 1;
-  if (progress < storyBreakpoints.overlays) return 2;
-  return 3;
-}
-
-function IconMask({ src, color = "#FFFFFF", className = "h-8 w-8", glow = false }) {
+function WeatherDot({ dot, large = false }) {
   return (
     <span
-      className={`inline-block ${className}`}
+      className={`absolute rounded-full border border-white/70 ${large ? "h-4 w-4" : "h-3 w-3"}`}
       style={{
-        background: color,
-        filter: glow ? `drop-shadow(0 0 16px ${color})` : undefined,
-        WebkitMask: `url('${src}') center / contain no-repeat`,
-        mask: `url('${src}') center / contain no-repeat`
+        left: dot.x,
+        top: dot.y,
+        backgroundColor: dot.color,
+        opacity: dot.muted ? 0.5 : 1,
+        boxShadow: dot.muted ? `0 0 18px ${dot.color}66` : `0 0 0 18px ${dot.color}24, 0 0 42px ${dot.color}`
       }}
     />
   );
 }
 
-function WeatherIcon({ type, color = "#D3E3EC", size = "large" }) {
-  const scale = size === "small" ? "h-8 w-8" : "h-12 w-12";
-
-  if (type === "sun") {
-    return (
-      <span className={`relative inline-flex ${scale} items-center justify-center`}>
-        <span className="absolute h-full w-full rounded-full blur-md" style={{ background: color, opacity: 0.18 }} />
-        <IconMask src={publicAsset("/icons/sun.max.fill.svg")} color={color} className="relative h-full w-full" glow />
-      </span>
-    );
-  }
-
-  if (type === "rain") {
-    return (
-      <span className={`relative inline-flex ${scale} items-center justify-center`}>
-        <span className="absolute h-[34%] w-[64%] translate-y-[-18%] rounded-full bg-weather-cloud/90" />
-        <span className="absolute h-[42%] w-[42%] translate-x-[-25%] translate-y-[-24%] rounded-full bg-weather-cloud/90" />
-        <span className="absolute bottom-[18%] h-[20%] w-[8%] rotate-12 rounded-full" style={{ background: color }} />
-        <span className="absolute bottom-[12%] h-[20%] w-[8%] rotate-12 rounded-full" style={{ left: "58%", background: color }} />
-      </span>
-    );
-  }
-
+function MiniMap({ className = "" }) {
   return (
-    <span className={`relative inline-flex ${scale} items-center justify-center`}>
-      <span className="absolute h-[34%] w-[70%] translate-y-[5%] rounded-full bg-weather-cloud/90" />
-      <span className="absolute h-[44%] w-[44%] translate-x-[-26%] translate-y-[-12%] rounded-full bg-weather-cloud/90" />
-      <span className="absolute h-[38%] w-[38%] translate-x-[18%] translate-y-[-16%] rounded-full bg-weather-cloud/80" />
-    </span>
-  );
-}
-
-function BrandLockup({ progress }) {
-  const opacity = useTransform(progress, [0, 0.8, 0.86], [1, 1, 0]);
-  const visibility = useTransform(progress, (latest) => (latest >= 0.86 ? "hidden" : "visible"));
-
-  return (
-    <motion.div
-      aria-label="Weather Atlas"
-      className="pointer-events-none fixed left-5 top-5 z-30 flex items-center gap-3 text-weather-text md:left-8 md:top-8 md:gap-4 lg:left-10 lg:top-10"
-      style={{ opacity, visibility }}
-    >
-      <span className="h-8 w-8 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_22px_rgba(244,182,94,0.48)] md:h-10 md:w-10 lg:h-11 lg:w-11" />
-      <span className="text-xl font-semibold tracking-normal md:text-2xl lg:text-3xl">Weather Atlas</span>
-    </motion.div>
-  );
-}
-
-function applyMinimalMapStyle(mapInstance) {
-  const style = mapInstance.getStyle();
-  style.layers?.forEach((layer) => {
-    const id = layer.id.toLowerCase();
-    const source = `${layer["source-layer"] || ""}`.toLowerCase();
-    const signature = `${id} ${source}`;
-
-    try {
-      if (layer.type === "background") {
-        mapInstance.setPaintProperty(layer.id, "background-color", "#4A457D");
-      }
-
-      if (layer.type === "fill") {
-        const isWater = signature.includes("water") || signature.includes("ocean") || signature.includes("sea");
-        mapInstance.setPaintProperty(layer.id, "fill-color", isWater ? "#2E2961" : "#4A457D");
-        mapInstance.setPaintProperty(layer.id, "fill-opacity", isWater ? 0.98 : 1);
-        if (isWater) {
-          mapInstance.setFilter(layer.id, [
-            "all",
-            ["match", ["geometry-type"], ["MultiPolygon", "Polygon"], true, false],
-            ["match", ["get", "class"], ["river", "lake", "reservoir", "stream", "canal"], false, true]
-          ]);
-        }
-      }
-
-      if (layer.type === "line" || layer.type === "symbol") {
-        mapInstance.setLayoutProperty(layer.id, "visibility", "none");
-      }
-    } catch {
-      // Some imported style layers do not support every paint/filter property.
-    }
-  });
-}
-
-function StoryMap({ progress, activeStep }) {
-  const mapNode = useRef(null);
-  const map = useRef(null);
-  const [isCompactMap, setIsCompactMap] = useState(() => (typeof window === "undefined" ? false : window.matchMedia("(max-width: 767px)").matches));
-  const [projectedDots, setProjectedDots] = useState({ background: [], cities: [] });
-  const [dateFrame, setDateFrame] = useState(0);
-  const [storyProgress, setStoryProgress] = useState(0);
-  const mapScale = useTransform(progress, [0, 0.86, 0.99], [1.03, 1.01, 0.98]);
-  const mapOpacity = useTransform(progress, [0.91, 0.98], [1, 0]);
-  const uiOpacity = useTransform(progress, [0.6, 0.8], [0, 1]);
-  const uiY = useTransform(progress, [0.6, 0.8], [28, 0]);
-  const atmosphereOpacity = useTransform(progress, [0.06, 0.62], [0.42, 0.9]);
-  const dateSliderOpacity = activeStep === 2 ? 1 : 0;
-  const overlaySwitcherOpacity = activeStep === 3 ? 1 : 0;
-  const selectedOverlay = activeStep === 3 && storyProgress >= storyBreakpoints.uv ? "uv" : "weather";
-  const isUvOverlay = selectedOverlay === "uv";
-  const dateLabels = ["Thu, May 21", "Sun, May 24", "Thu, May 28"];
-  const selectedDateLabel = dateLabels[dateFrame];
-  const dateControlY = [-82, 0, 82][dateFrame];
-  const forecastPalettes = [
-    ["#F4B65E", "#FF8A65", "#65ABE3", "#4D70D4", "#F4B65E", "#65ABE3", "#F4B65E", "#65ABE3", "#FF8A65", "#F4B65E"],
-    ["#4D70D4", "#65ABE3", "#F4B65E", "#F4B65E", "#4D70D4", "#FF8A65", "#65ABE3", "#F4B65E", "#4D70D4", "#FF8A65"],
-    ["#FF8A65", "#4D70D4", "#65ABE3", "#FF8A65", "#F4B65E", "#4D70D4", "#F4B65E", "#4D70D4", "#65ABE3", "#F4B65E"]
-  ];
-  const uvPalette = [
-    "#F8F4F1",
-    "#F1B9B9",
-    "#F8F4F1",
-    "#E66262",
-    "#F3D8D8",
-    "#EA8383",
-    "#F8F4F1",
-    "#E66262",
-    "#F0A0A0",
-    "#EC7777"
-  ];
-  const allDotColors = isUvOverlay
-    ? uvPalette
-    : activeStep === 2
-    ? forecastPalettes[dateFrame % forecastPalettes.length]
-    : [...backgroundDots.map((dot) => dot[2]), ...storyCities.map((city) => city.color)];
-  const overlayOptions = [
-    ["weather", "Weather"],
-    ["temperature", "Temperature"],
-    ["cloud", "Cloud Cover"],
-    ["precipitation", "Precipitation"],
-    ["wind", "Wind Speed"],
-    ["uv", "UV Index"],
-    ["humidity", "Humidity"],
-    ["visibility", "Visibility"]
-  ];
-  const selectedOverlayLabel = overlayOptions.find(([type]) => type === selectedOverlay)?.[1] ?? "Weather";
-  const selectedOverlayColor = selectedOverlay === "uv" ? "#E66262" : "#F4B65E";
-
-  useEffect(() => {
-    const media = window.matchMedia("(max-width: 767px)");
-    const update = () => setIsCompactMap(media.matches);
-    update();
-    media.addEventListener("change", update);
-    return () => media.removeEventListener("change", update);
-  }, []);
-
-  useMotionValueEvent(progress, "change", (latest) => {
-    setStoryProgress(latest);
-    const timeSpan = storyBreakpoints.overlays - storyBreakpoints.time;
-    const timeProgress = Math.min(0.999, Math.max(0, (latest - storyBreakpoints.time) / timeSpan));
-    const heldProgress = Math.max(0, (timeProgress - 0.1) / 0.9);
-    const nextFrame = heldProgress < 0.32 ? 0 : heldProgress < 0.64 ? 1 : 2;
-    setDateFrame(nextFrame);
-  });
-
-  useEffect(() => {
-    if (!mapNode.current || map.current) return;
-    const testCanvas = document.createElement("canvas");
-    const hasWebGl = Boolean(testCanvas.getContext("webgl") || testCanvas.getContext("experimental-webgl"));
-    if (!hasWebGl) return;
-
-    const projectDots = () => {
-      if (!map.current) return;
-      setProjectedDots({
-        background: backgroundDots.map(([lng, lat, color]) => {
-          const point = map.current.project([lng, lat]);
-          return { x: point.x, y: point.y, color };
-        }),
-        cities: storyCities.map((city) => {
-          const point = map.current.project([city.lng, city.lat]);
-          return { x: point.x, y: point.y };
-        })
-      });
-    };
-
-    const initialView = isCompactMap ? { center: [4, 48.4], zoom: 2.36 } : { center: [4, 48.4], zoom: 3.75 };
-
-    try {
-      map.current = new maplibregl.Map({
-        container: mapNode.current,
-        style: "https://tiles.openfreemap.org/styles/dark",
-        center: initialView.center,
-        zoom: initialView.zoom,
-        attributionControl: false,
-        scrollZoom: false,
-        doubleClickZoom: false,
-        dragRotate: false,
-        pitch: 0,
-        bearing: 0
-      });
-    } catch {
-      return;
-    }
-
-    map.current.once("load", () => {
-      applyMinimalMapStyle(map.current);
-      map.current.resize();
-      map.current.jumpTo({ ...initialView, bearing: 0, pitch: 0 });
-      projectDots();
-      window.setTimeout(() => map.current?.resize(), 250);
-      window.setTimeout(() => {
-        map.current?.resize();
-        projectDots();
-      }, 900);
-    });
-    map.current.once("idle", () => {
-      if (!map.current) return;
-      applyMinimalMapStyle(map.current);
-      map.current.resize();
-      projectDots();
-    });
-    map.current.on("move", projectDots);
-    map.current.on("resize", projectDots);
-
-    return () => {
-      map.current?.off("move", projectDots);
-      map.current?.off("resize", projectDots);
-      map.current?.remove();
-      map.current = null;
-    };
-  }, [isCompactMap]);
-
-  useEffect(() => {
-    if (!map.current) return;
-
-    const views = isCompactMap
-      ? [
-          { center: [4, 48.4], zoom: 2.36 },
-          { center: [-8.9, 39.5], zoom: 3.38 },
-          { center: [10, 48.4], zoom: 2.36 },
-          { center: [12, 49.2], zoom: 2.32 }
-        ]
-      : [
-          { center: [4, 48.4], zoom: 3.75 },
-          { center: [-9.14, 38.72], zoom: 5.25 },
-          { center: [8, 49], zoom: 3.75 },
-          { center: [12, 50], zoom: 3.55 }
-        ];
-
-    map.current.easeTo({
-      ...views[activeStep],
-      bearing: 0,
-      pitch: 0,
-      duration: 1250,
-      easing: (t) => 1 - Math.pow(1 - t, 3)
-    });
-  }, [activeStep, isCompactMap]);
-
-  return (
-    <motion.div
-      aria-hidden="true"
-      className="fixed inset-0 z-0 overflow-hidden bg-weather-night"
-      style={{ scale: mapScale, opacity: mapOpacity }}
-    >
-      <div className="absolute inset-0 opacity-100 md:inset-y-0 md:left-[14vw] md:right-[-14vw]">
-        <div ref={mapNode} className="absolute inset-0" />
-        <div className="cinematic-noise pointer-events-none absolute inset-0 mix-blend-soft-light opacity-[0.06]" />
-        <motion.div
-          className="pointer-events-none absolute inset-0"
-          style={{
-            background:
-              "radial-gradient(circle at 54% 42%, rgba(211, 227, 236, 0.05), transparent 24%), radial-gradient(circle at 26% 58%, rgba(255, 138, 101, 0.08), transparent 24%), linear-gradient(180deg, rgba(46,41,97,0.02), rgba(17,15,38,0.26))",
-            opacity: atmosphereOpacity
-          }}
-        />
-        <div className="absolute inset-0">
-          {projectedDots.background.map(({ x, y, color }, index) => {
-            const dotColor = allDotColors[index] ?? color;
-            const isDimmedByFocus = activeStep === 1;
-            return (
-            <motion.span
-              key={`${x}-${y}-${index}`}
-              className={`absolute h-3.5 w-3.5 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/10 ${isDimmedByFocus ? "grayscale" : ""}`}
-              style={{
-                left: x,
-                top: y
-              }}
-              animate={{
-                scale: [0.92, 1.02, 0.92],
-                backgroundColor: dotColor,
-                boxShadow: isUvOverlay ? "0 0 24px rgba(230, 98, 98, 0.34)" : `0 0 22px ${dotColor}66`,
-                opacity: isDimmedByFocus ? 0.24 : isUvOverlay ? 0.88 : 0.78
-              }}
-              transition={{
-                scale: { duration: 5 + (index % 5), repeat: Infinity, ease: "easeInOut", delay: index * 0.12 },
-                backgroundColor: { duration: 0.95, ease: [0.22, 1, 0.36, 1] },
-                boxShadow: { duration: 0.95, ease: [0.22, 1, 0.36, 1] },
-                opacity: { duration: 0.55, ease: [0.22, 1, 0.36, 1] }
-              }}
-            />
-            );
-          })}
-
-          {storyCities.map((city, index) => {
-            const isActive = activeStep === 1 && index === 0;
-            const point = projectedDots.cities[index];
-            const dotColor = allDotColors[backgroundDots.length + index] ?? city.color;
-            if (!point) return null;
-
-            return (
-              <motion.div
-                key={city.name}
-                className="absolute"
-                style={{ left: point.x, top: point.y }}
-                animate={{
-                  scale: isActive ? 1.08 : 1,
-                  opacity: activeStep === 1 ? (isActive ? 1 : 0.24) : 0.82,
-                  filter: activeStep === 1 && !isActive ? "saturate(0.18)" : "saturate(1)"
-                }}
-                transition={{ duration: 0.9, ease: [0.22, 1, 0.36, 1] }}
-              >
-                <motion.div
-                  className="absolute left-1/2 top-1/2 rounded-full blur-xl"
-                  animate={{
-                    width: isActive ? 180 : 54,
-                    height: isActive ? 180 : 54,
-                    x: isActive ? -90 : -27,
-                    y: isActive ? -90 : -27,
-                    opacity: isActive ? 0.7 : 0.22,
-                    backgroundColor: activeStep === 2 || isUvOverlay ? dotColor : city.tone
-                  }}
-                  transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1] }}
-                />
-                <motion.div
-                  className="relative h-4 w-4 -translate-x-1/2 -translate-y-1/2 rounded-full border border-white/35 shadow-bloom"
-                  animate={{
-                    backgroundColor: dotColor,
-                    boxShadow: isActive ? `0 0 0 26px ${city.tone}, 0 0 68px ${dotColor}` : `0 0 0 9px ${isUvOverlay ? "rgba(230, 98, 98, 0.16)" : city.tone}`
-                  }}
-                  transition={{ duration: 1.1, ease: [0.22, 1, 0.36, 1] }}
-                />
-                <motion.div
-                  className="absolute left-1/2 top-[-156px] w-[min(72vw,230px)] -translate-x-1/2 rounded-[24px] border border-white/10 bg-[#2E2961]/66 p-4 text-weather-text shadow-atmospheric backdrop-blur-2xl md:left-8 md:top-8 md:w-[min(78vw,260px)] md:translate-x-0"
-                  initial={false}
-                  animate={{
-                    opacity: isActive ? 1 : 0,
-                    filter: isActive ? "blur(0px)" : "blur(8px)",
-                    pointerEvents: isActive ? "auto" : "none"
-                  }}
-                  transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-                >
-                  <div className="flex items-start justify-between gap-5">
-                    <div>
-                      <p className="text-sm font-medium text-weather-cloud/68">{city.name}</p>
-                      <p className="mt-1 text-3xl font-semibold tracking-normal text-weather-text">{city.temp}</p>
-                    </div>
-                    <span className="translate-y-2">
-                      <WeatherIcon type={city.icon} color={city.color} />
-                    </span>
-                  </div>
-                </motion.div>
-              </motion.div>
-            );
-          })}
-        </div>
+    <div className={`relative overflow-hidden rounded-[28px] bg-[#F7F6F2] ${className}`}>
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_38%,rgba(244,182,94,0.15),transparent_26%),radial-gradient(circle_at_28%_62%,rgba(101,171,227,0.14),transparent_28%)]" />
+      <div className="absolute inset-0">
+        <div className="absolute left-[3%] top-[13%] h-[76%] w-[42%] rounded-[50%_36%_46%_40%] bg-[#E5E0D9]" />
+        <div className="absolute left-[40%] top-[8%] h-[82%] w-[50%] rounded-[45%_55%_42%_48%] bg-[#E9E4DE]" />
+        <div className="absolute left-[54%] top-[14%] h-[35%] w-[16%] rounded-full bg-[#F7F6F2]" />
+        <div className="absolute left-[46%] top-[58%] h-[23%] w-[16%] rounded-full bg-[#F7F6F2]" />
+        <div className="absolute left-[72%] top-[58%] h-[25%] w-[22%] rounded-[50%] bg-[#E5E0D9]" />
       </div>
-      <motion.div
-        className="absolute right-[7vw] top-[18vh] hidden rounded-full border border-[#6F67C8]/70 bg-[#211E49]/72 px-8 py-4 text-2xl font-semibold text-weather-text shadow-atmospheric backdrop-blur-2xl lg:block"
-        style={{ opacity: uiOpacity, y: uiY }}
-      >
-        Now
-      </motion.div>
-      <motion.div
-        className="absolute left-[calc(50%-95px)] top-[calc(50%-26px)] z-20 w-[190px] text-weather-text lg:left-auto lg:right-14 lg:w-[260px]"
-        animate={{ opacity: dateSliderOpacity, y: dateControlY, filter: dateSliderOpacity ? "blur(0px)" : "blur(8px)" }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedDateLabel}
-            className="flex items-center justify-center rounded-full border border-[#8E83F5]/70 bg-[linear-gradient(100deg,rgba(33,30,73,0.92),rgba(138,121,255,0.95))] px-4 py-3 text-base font-semibold text-white shadow-[0_16px_46px_rgba(113,95,235,0.34)] backdrop-blur-2xl lg:text-xl"
-            initial={{ opacity: 0, y: 10, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -10, filter: "blur(6px)" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          >
-            {selectedDateLabel}
-          </motion.div>
-        </AnimatePresence>
-      </motion.div>
-      <motion.div
-        className="absolute left-1/2 top-[10vh] z-20 w-auto -translate-x-1/2 rounded-full border border-[#6F67C8]/55 bg-[#211E49]/88 px-5 py-3 text-weather-text shadow-atmospheric backdrop-blur-2xl lg:left-auto lg:right-14 lg:top-24 lg:w-[390px] lg:translate-x-0 lg:rounded-[34px] lg:p-8"
-        animate={{ opacity: overlaySwitcherOpacity, filter: overlaySwitcherOpacity ? "blur(0px)" : "blur(8px)" }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1] }}
-      >
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={selectedOverlay}
-            className="flex items-center gap-3 lg:hidden"
-            initial={{ opacity: 0, y: 8, filter: "blur(6px)" }}
-            animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-            exit={{ opacity: 0, y: -8, filter: "blur(6px)" }}
-            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
-          >
-            <IconMask src={overlayIcons[selectedOverlay]} color={selectedOverlayColor} className="h-6 w-6" glow={selectedOverlay === "uv"} />
-            <span className="whitespace-nowrap text-xl font-semibold" style={{ color: selectedOverlayColor }}>{selectedOverlayLabel}</span>
-            <span className="text-2xl leading-none" style={{ color: selectedOverlayColor }}>✓</span>
-          </motion.div>
-        </AnimatePresence>
-        <div className="hidden space-y-6 lg:block">
-          {overlayOptions.map(([type, label]) => {
-            const isSelected = selectedOverlay === type;
-            const selectedColor = type === "uv" ? "#E66262" : "#F4B65E";
-            const selectedBg = type === "uv" ? "rgba(230, 98, 98, 0.16)" : "rgba(244, 182, 94, 0.16)";
-            const color = isSelected ? selectedColor : "#FFFFFF";
-            return (
-            <div
-              key={label}
-              className={`grid grid-cols-[54px_1fr_32px] items-center gap-4 rounded-full px-4 py-3 transition duration-700 ${isSelected ? "text-white" : "text-white/88"}`}
-              style={{
-                backgroundColor: isSelected ? selectedBg : "rgba(255, 255, 255, 0)",
-                boxShadow: isSelected ? `0 0 36px ${selectedBg}` : "none"
-              }}
-            >
-              <IconMask src={overlayIcons[type]} color={color} className="h-9 w-9" glow={isSelected && type === "uv"} />
-              <span className="text-3xl font-medium transition" style={{ color: isSelected ? selectedColor : undefined }}>{label}</span>
-              <span className={`text-3xl leading-none transition ${isSelected ? "opacity-100" : "opacity-0"}`} style={{ color: selectedColor }}>✓</span>
-            </div>
-            );
-          })}
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
-function ScrollCopy({ activeStep }) {
-  const copy = useMemo(
-    () => [
-      {
-        title: "Weather, on a map.",
-        body: ""
-      },
-      {
-        title: "Find sunshine instantly.",
-        body: "Compare weather conditions without opening forecasts one by one."
-      },
-      {
-        title: "Plan ahead for your trip.",
-        body: "See when conditions improve before you travel."
-      },
-      {
-        title: "Focus on what matters.",
-        body: "Weather, cloud cover, UV index, visibility, and more..."
-      }
-    ],
-    []
-  );
-
-  return (
-    <div className="pointer-events-none fixed inset-x-0 top-0 z-10 flex h-screen items-end px-5 pb-12 md:items-center md:px-12 md:pb-0 lg:px-20">
-      <motion.div
-        key={activeStep}
-        initial={{ opacity: 0, y: 28, filter: "blur(10px)" }}
-        animate={{ opacity: 1, y: 0, filter: "blur(0px)" }}
-        transition={{ duration: 0.85, ease: [0.22, 1, 0.36, 1] }}
-        className={activeStep === 0 ? "max-w-[720px]" : "max-w-[560px]"}
-      >
-        <h1
-          className={`font-semibold tracking-normal text-weather-text ${
-            activeStep === 0
-              ? "max-w-[11ch] text-6xl leading-[0.86] md:text-8xl lg:text-9xl"
-              : "max-w-[13ch] text-5xl leading-[0.92] md:text-6xl lg:text-7xl"
-          }`}
-        >
-          {copy[activeStep].title}
-        </h1>
-        {copy[activeStep].body ? (
-          <p className="mt-7 max-w-[540px] text-lg leading-8 text-weather-muted/74 md:text-xl md:leading-9">{copy[activeStep].body}</p>
-        ) : null}
-      </motion.div>
+      {cityDots.map((dot) => (
+        <WeatherDot key={dot.name} dot={dot} large={dot.name === "Berlin"} />
+      ))}
     </div>
   );
 }
 
-function DownloadFooter() {
-  const links = [
-    ["Contact", publicAsset("/contact/")],
-    ["Privacy Policy", publicAsset("/privacy/")]
-  ];
-
+function PhoneMockup() {
   return (
-    <section className="relative z-20 flex min-h-screen flex-col overflow-hidden bg-[#17152F] text-weather-text">
-      <div className="relative flex min-h-[52vh] items-center justify-center overflow-hidden px-5 py-24 text-center md:px-10">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_18%,rgba(244,182,94,0.16),transparent_30%),radial-gradient(circle_at_28%_62%,rgba(101,171,227,0.14),transparent_34%),linear-gradient(180deg,#211E49_0%,#17152F_100%)]" />
-        <div className="relative mx-auto max-w-4xl">
-          <h2 className="text-4xl font-semibold leading-[1.02] tracking-normal md:text-6xl lg:text-7xl">
-            Try Weather Atlas today, completely free.
-          </h2>
-          <a
-            className="mx-auto mt-10 inline-flex min-h-14 items-center justify-center rounded-full bg-weather-light px-8 text-base font-semibold text-[#2E2961] shadow-bloom transition hover:bg-white"
-            href="#"
-            aria-label="Download on the App Store"
-          >
-            Download on the App Store
-          </a>
-          <p className="mt-4 text-sm leading-6 text-weather-muted/58">App Store link placeholder.</p>
+    <div className="relative mx-auto w-[250px] rounded-[42px] border border-[#2E2961]/18 bg-[#17152F] p-2 shadow-[0_28px_80px_rgba(46,41,97,0.24)] md:w-[292px]">
+      <div className="overflow-hidden rounded-[34px] bg-[#FBFAF7]">
+        <div className="flex items-center justify-between px-5 pt-4 text-[10px] font-semibold text-[#2E2961]">
+          <span>9:41</span>
+          <span className="h-4 w-16 rounded-full bg-[#17152F]" />
+          <span>80%</span>
         </div>
-      </div>
-
-      <footer className="flex flex-1 items-center px-5 py-16 md:px-10 lg:px-16">
-        <div className="mx-auto grid w-full max-w-7xl gap-12 md:grid-cols-[1.2fr_1fr_1fr] md:items-start">
-          <div>
-            <div className="flex items-center gap-4">
-              <span className="h-10 w-10 rounded-full border border-white/20 bg-[#F4B65E] shadow-[0_0_28px_rgba(244,182,94,0.45)]" />
-              <p className="text-4xl font-semibold tracking-normal">Weather Atlas</p>
+        <div className="px-5 pb-5 pt-8">
+          <div className="mb-5 flex items-center justify-center gap-2 text-lg font-semibold text-[#2E2961]">
+            Europe
+            <span className="text-[#6F67C8]">⌄</span>
+          </div>
+          <MiniMap className="h-[300px] border border-[#E6E1D9]" />
+          <div className="mt-5 rounded-[26px] border border-[#E3DDD2] bg-white/88 p-5 shadow-[0_18px_45px_rgba(46,41,97,0.08)]">
+            <div className="flex items-start justify-between">
+              <div>
+                <p className="text-5xl font-semibold tracking-normal text-[#111111]">20°</p>
+                <p className="mt-3 text-sm font-medium text-[#6C675F]">Current Temperature</p>
+                <p className="mt-3 text-2xl font-semibold text-[#111111]">Berlin</p>
+              </div>
+              <span className="mt-1 h-11 w-11 rounded-full bg-[#FF8A65] shadow-[0_0_0_14px_rgba(255,138,101,0.16),0_0_30px_rgba(255,138,101,0.42)]" />
+            </div>
+            <div className="mt-5 grid w-24 grid-cols-5 gap-1.5">
+              {["#F4B65E", "#65ABE3", "#D3E3EC", "#D3E3EC", "#FF8A65", "#FF8A65", "#F4B65E", "#FF8A65", "#FF8A65", "#F4B65E"].map((color, index) => (
+                <span key={index} className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
+              ))}
             </div>
           </div>
-
-          <div className="md:pt-2">
-            <nav className="flex flex-wrap items-center gap-x-10 gap-y-4 text-lg text-weather-muted/70">
-              {links.map(([label, href]) => (
-                <a key={label} href={href} className="transition hover:text-weather-text">
-                  {label}
-                </a>
-              ))}
-            </nav>
-          </div>
         </div>
-      </footer>
-    </section>
+      </div>
+    </div>
+  );
+}
+
+function WeatherCard() {
+  return (
+    <div className="rounded-[28px] border border-[#E6E1D9] bg-white/76 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] backdrop-blur">
+      <div className="flex items-start justify-between">
+        <div>
+          <p className="text-sm font-semibold text-[#003D99]">Berlin</p>
+          <p className="mt-4 text-5xl font-semibold text-[#FF8A65]">20°</p>
+          <p className="mt-2 text-sm text-[#6C675F]">Clear, comfortable</p>
+        </div>
+        <span className="h-16 w-16 rounded-full bg-[#F4B65E] shadow-[0_0_0_14px_rgba(244,182,94,0.18),0_0_34px_rgba(244,182,94,0.35)]" />
+      </div>
+      <div className="mt-8 grid grid-cols-3 gap-3 border-t border-[#E6E1D9] pt-5 text-sm text-[#2E2961]">
+        <div>
+          <p className="text-[#6C675F]">Cloud</p>
+          <p className="mt-1 font-semibold">22%</p>
+        </div>
+        <div>
+          <p className="text-[#6C675F]">UV</p>
+          <p className="mt-1 font-semibold">Moderate</p>
+        </div>
+        <div>
+          <p className="text-[#6C675F]">View</p>
+          <p className="mt-1 font-semibold">Map</p>
+        </div>
+      </div>
+    </div>
   );
 }
 
 export default function LandingPage() {
-  const { scrollYProgress } = useScroll();
-  const [activeStep, setActiveStep] = useState(0);
-
-  useMotionValueEvent(scrollYProgress, "change", (latest) => {
-    setActiveStep(clampStep(latest));
-  });
-
   return (
-    <main id="top" className="relative min-h-screen overflow-hidden">
-      <BrandLockup progress={scrollYProgress} />
-      <StoryMap progress={scrollYProgress} activeStep={activeStep} />
-      <ScrollCopy activeStep={activeStep} />
-      <div className="relative z-10 h-[1200vh]" />
-      <div id="app" className="relative z-20 bg-[#17152F]">
-        <DownloadFooter />
-      </div>
+    <main className="min-h-screen bg-[#FBF8F2] text-[#003D99]">
+      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
+        <a href={publicAsset("/")} className="flex items-center gap-3" aria-label="Weather Atlas home">
+          <span className="h-10 w-10 rounded-full bg-[#F4B65E] shadow-[0_0_26px_rgba(244,182,94,0.38)]" />
+          <span>
+            <span className="block text-2xl font-semibold leading-none tracking-normal text-[#003D99]">Weather Atlas</span>
+            <span className="mt-1 block text-[10px] font-semibold uppercase tracking-[0.42em] text-[#FF8A65]">Weather Map</span>
+          </span>
+        </a>
+        <nav className="hidden items-center gap-9 text-sm font-medium text-[#003D99] md:flex">
+          <a href="#features" className="transition hover:text-[#FF8A65]">Features</a>
+          <a href="#map" className="transition hover:text-[#FF8A65]">Map</a>
+          <a href={publicAsset("/privacy/")} className="transition hover:text-[#FF8A65]">Privacy</a>
+          <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Support</a>
+        </nav>
+        <a
+          href="#download"
+          className="rounded-2xl bg-[#F4B65E] px-5 py-3 text-sm font-semibold text-[#2E2961] shadow-[0_14px_36px_rgba(244,182,94,0.26)] transition hover:bg-[#FFD071]"
+        >
+          Get the App
+        </a>
+      </header>
+
+      <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-16 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-24 md:pt-24">
+        <div className="relative z-10">
+          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Free private weather map</p>
+          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[#003D99] md:text-7xl">
+            Weather, on a map.
+          </h1>
+          <p className="mt-7 max-w-xl text-lg leading-8 text-[#2E2961]/72">
+            Weather Atlas is a simple map-first weather app for comparing conditions across places, planning trips, and keeping saved cities easy to understand.
+          </p>
+          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+            <a
+              href="#download"
+              className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#F4B65E] px-7 text-base font-semibold text-[#2E2961] shadow-[0_18px_45px_rgba(244,182,94,0.28)] transition hover:bg-[#FFD071]"
+            >
+              Download on the App Store
+            </a>
+            <a
+              href="#features"
+              className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[#003D99]/20 bg-white/50 px-7 text-base font-semibold text-[#003D99] transition hover:bg-white"
+            >
+              See features
+            </a>
+          </div>
+        </div>
+
+        <div id="map" className="relative min-h-[560px]">
+          <div className="absolute left-[8%] top-[10%] hidden w-[360px] md:block">
+            <WeatherCard />
+          </div>
+          <div className="absolute bottom-[4%] right-0 hidden w-[420px] rounded-[30px] border border-[#E6E1D9] bg-white/64 p-4 shadow-[0_22px_70px_rgba(46,41,97,0.08)] backdrop-blur md:block">
+            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#003D99]">Map view</p>
+            <MiniMap className="h-[210px]" />
+          </div>
+          <div className="relative z-10 mx-auto pt-8 md:pt-0">
+            <PhoneMockup />
+          </div>
+        </div>
+      </section>
+
+      <section id="features" className="border-y border-[#E6E1D9] bg-white/54 px-6 py-14 md:px-10">
+        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4">
+          {features.map((feature, index) => (
+            <div key={feature.title} className={`${index ? "md:border-l md:border-[#E6E1D9] md:pl-8" : ""}`}>
+              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#FBF8F2] text-3xl text-[#FF8A65] shadow-[0_16px_40px_rgba(46,41,97,0.06)]">
+                {feature.icon}
+              </div>
+              <h2 className="text-xl font-semibold text-[#003D99]">{feature.title}</h2>
+              <p className="mt-3 text-sm leading-6 text-[#2E2961]/70">{feature.body}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <footer id="download" className="px-6 py-12 md:px-10">
+        <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
+          <div>
+            <div className="flex items-center gap-3">
+              <span className="h-8 w-8 rounded-full bg-[#F4B65E]" />
+              <p className="text-2xl font-semibold text-[#003D99]">Weather Atlas</p>
+            </div>
+            <p className="mt-4 max-w-md text-sm leading-6 text-[#2E2961]/66">A small, private weather map for iPhone, iPad, and Mac.</p>
+          </div>
+          <nav className="flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-[#003D99]">
+            <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Contact</a>
+            <a href={publicAsset("/privacy/")} className="transition hover:text-[#FF8A65]">Privacy Policy</a>
+            <a href="#" className="transition hover:text-[#FF8A65]">Download</a>
+          </nav>
+        </div>
+      </footer>
     </main>
   );
 }
