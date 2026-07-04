@@ -1,3 +1,7 @@
+"use client";
+
+import { useState } from "react";
+
 // -----------------------------------------------------------------------------
 // Shared path helpers
 // -----------------------------------------------------------------------------
@@ -193,22 +197,31 @@ function WeatherCard() {
 // -----------------------------------------------------------------------------
 // A compact product story showing how a tracked list becomes a weather discovery
 // surface for upcoming travel.
-function EuropeListExample() {
-  const cities = [
+function EuropeListExample({ activeStep }) {
+  const isDateDiscovery = activeStep === 1;
+  const cities = isDateDiscovery ? [
+    ["Lisbon", "Sunny on 4 upcoming days", "#F7AB3E", "4"],
+    ["Barcelona", "Sunny this weekend", "#F8D152", "2"],
+    ["Athens", "Brightest late week", "#F7AB3E", "3"],
+    ["London", "Cloudier window", "#8790C4", "0"]
+  ] : [
     ["Lisbon", "Sunny", "#F7AB3E", "92"],
     ["Barcelona", "Partly sunny", "#F8D152", "84"],
     ["Berlin", "Clearing", "#FF8A65", "76"],
     ["London", "Rain later", "#8790C4", "42"]
   ];
+  const eyebrow = isDateDiscovery ? "Sunny dates" : "Tracked list";
+  const title = isDateDiscovery ? "Next 10 days" : "Europe";
+  const badge = isDateDiscovery ? "Best windows" : "Next 10 days";
 
   return (
     <div className="relative overflow-hidden rounded-[34px] border border-[#E6E1D9] bg-white/72 p-5 shadow-[0_24px_80px_rgba(46,41,97,0.08)] backdrop-blur">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FF8A65]">Tracked list</p>
-          <h3 className="mt-2 text-3xl font-semibold tracking-normal text-[#0F4A9C]">Europe</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FF8A65]">{eyebrow}</p>
+          <h3 className="mt-2 text-3xl font-semibold tracking-normal text-[#0F4A9C]">{title}</h3>
         </div>
-        <span className="rounded-full bg-[#F7AB3E]/18 px-4 py-2 text-sm font-semibold text-[#0F4A9C]">Next 10 days</span>
+        <span className="rounded-full bg-[#F7AB3E]/18 px-4 py-2 text-sm font-semibold text-[#0F4A9C]">{badge}</span>
       </div>
 
       <div className="mt-6 grid gap-3">
@@ -242,6 +255,8 @@ function EuropeListExample() {
 // -----------------------------------------------------------------------------
 // The page is intentionally static and simple: header, hero, features, and footer.
 export default function LandingPage() {
+  const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
+
   return (
     <main className="min-h-screen bg-[#FBF8F2] text-[#0F4A9C]">
       {/* Header and navigation */}
@@ -301,20 +316,33 @@ export default function LandingPage() {
             </h2>
             <div className="mt-9 grid gap-3">
               {workflowSteps.map((step) => (
-                <div key={step.title} className="flex items-center gap-4 rounded-[24px] border border-[#E6E1D9] bg-white/52 p-4">
-                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F7AB3E] text-sm font-semibold text-[#2E2961]">
+                <button
+                  key={step.title}
+                  type="button"
+                  onClick={() => setActiveWorkflowIndex(Number(step.label) - 1)}
+                  className={`flex items-center gap-4 rounded-[24px] border p-4 text-left transition ${
+                    activeWorkflowIndex === Number(step.label) - 1
+                      ? "border-[#F7AB3E]/60 bg-white shadow-[0_18px_45px_rgba(46,41,97,0.08)]"
+                      : "border-[#E6E1D9] bg-white/52 hover:bg-white/76"
+                  }`}
+                >
+                  <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-semibold ${
+                    activeWorkflowIndex === Number(step.label) - 1
+                      ? "bg-[#F7AB3E] text-[#2E2961]"
+                      : "bg-[#F7AB3E]/22 text-[#0F4A9C]"
+                  }`}>
                     {step.label}
                   </span>
                   <div>
                     <h3 className="text-lg font-semibold text-[#0F4A9C]">{step.title}</h3>
                     <p className="mt-0.5 text-sm leading-6 text-[#2E2961]/64">{step.body}</p>
                   </div>
-                </div>
+                </button>
               ))}
             </div>
           </div>
 
-          <EuropeListExample />
+          <EuropeListExample activeStep={activeWorkflowIndex} />
         </div>
       </section>
 
