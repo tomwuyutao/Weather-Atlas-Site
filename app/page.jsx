@@ -33,24 +33,47 @@ const cityDots = [
 // The feature cards keep the page honest: they describe what the app does today.
 const features = [
   {
-    title: "Find sunny places",
-    body: "See which saved places look brightest without checking every forecast one by one.",
+    title: "Weather discovery",
+    body: "Start with the places you may travel to, then let the app surface where conditions look good.",
     icon: "☼"
   },
   {
-    title: "Compare days",
-    body: "Move through upcoming days and spot when sunshine is likely to return.",
+    title: "Next 10 days",
+    body: "Check which tracked cities are sunny on any upcoming date without opening each forecast.",
     icon: "◷"
   },
   {
-    title: "Rank by sunshine",
+    title: "Sunny ranking",
     body: "Weather Atlas scores conditions using weather type, cloud cover, and daylight.",
     icon: "1"
   },
   {
-    title: "Saved places",
-    body: "Keep the places you care about close, then compare them by sunshine at a glance.",
+    title: "List maps",
+    body: "Visualize a tracked list on a map to understand the weather pattern across a region.",
     icon: "•"
+  }
+];
+
+// -----------------------------------------------------------------------------
+// Discovery workflow content
+// -----------------------------------------------------------------------------
+// These steps explain the main use case: tracking possible destinations instead
+// of checking traditional city-by-city forecasts.
+const workflowSteps = [
+  {
+    label: "1",
+    title: "Create a travel list",
+    body: "Say you want to travel in Europe. Make a list called Europe and add the cities you are considering."
+  },
+  {
+    label: "2",
+    title: "Scan for sunshine",
+    body: "Weather Atlas looks across your tracked cities and the next 10 days to show where sunny conditions appear."
+  },
+  {
+    label: "3",
+    title: "Read the map",
+    body: "Switch to the map view for that list and see the weather pattern spatially, instead of reading forecasts one by one."
   }
 ];
 
@@ -171,6 +194,55 @@ function WeatherCard() {
 }
 
 // -----------------------------------------------------------------------------
+// Europe list example
+// -----------------------------------------------------------------------------
+// A compact product story showing how a tracked list becomes a weather discovery
+// surface for upcoming travel.
+function EuropeListExample() {
+  const cities = [
+    ["Lisbon", "Sunny", "#F7AB3E", "92"],
+    ["Barcelona", "Partly sunny", "#F8D152", "84"],
+    ["Berlin", "Clearing", "#FF8A65", "76"],
+    ["London", "Rain later", "#8790C4", "42"]
+  ];
+
+  return (
+    <div className="relative overflow-hidden rounded-[34px] border border-[#E6E1D9] bg-white/72 p-5 shadow-[0_24px_80px_rgba(46,41,97,0.08)] backdrop-blur">
+      <div className="flex items-center justify-between">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FF8A65]">Tracked list</p>
+          <h3 className="mt-2 text-3xl font-semibold tracking-normal text-[#0F4A9C]">Europe</h3>
+        </div>
+        <span className="rounded-full bg-[#F7AB3E]/18 px-4 py-2 text-sm font-semibold text-[#0F4A9C]">Next 10 days</span>
+      </div>
+
+      <div className="mt-6 grid gap-3">
+        {cities.map(([city, condition, color, score]) => (
+          <div key={city} className="flex items-center justify-between rounded-[22px] border border-[#E6E1D9] bg-[#FDF9F3]/72 px-4 py-3">
+            <div className="flex items-center gap-3">
+              <span
+                className="h-4 w-4 rounded-full border border-white/70"
+                style={{
+                  backgroundColor: color,
+                  boxShadow: `0 0 22px ${color}80`
+                }}
+              />
+              <div>
+                <p className="text-base font-semibold text-[#2E2961]">{city}</p>
+                <p className="text-sm text-[#5E6CB3]">{condition}</p>
+              </div>
+            </div>
+            <p className="text-xl font-semibold text-[#0F4A9C]">{score}</p>
+          </div>
+        ))}
+      </div>
+
+      <MiniMap className="mt-5 h-[230px] border border-[#E6E1D9]" />
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
 // Landing page
 // -----------------------------------------------------------------------------
 // The page is intentionally static and simple: header, hero, features, and footer.
@@ -222,6 +294,36 @@ export default function LandingPage() {
           <div className="relative z-10 mx-auto pt-8 md:pt-0">
             <PhoneMockup />
           </div>
+        </div>
+      </section>
+
+      {/* How it works: explain tracked lists, sunshine discovery, and map context */}
+      <section className="px-6 py-20 md:px-10 md:py-24">
+        <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-center">
+          <div>
+            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">How it works</p>
+            <h2 className="max-w-xl text-4xl font-semibold leading-[1.02] tracking-normal text-[#0F4A9C] md:text-6xl">
+              Build a list. Find the sunny dates.
+            </h2>
+            <p className="mt-6 max-w-xl text-lg leading-8 text-[#2E2961]/72">
+              Weather Atlas is for discovering weather across places you care about. Instead of opening forecasts for every city, track a list and see where sunshine appears across the next 10 days.
+            </p>
+            <div className="mt-9 grid gap-4">
+              {workflowSteps.map((step) => (
+                <div key={step.title} className="flex gap-4">
+                  <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#F7AB3E] text-sm font-semibold text-[#2E2961]">
+                    {step.label}
+                  </span>
+                  <div>
+                    <h3 className="text-lg font-semibold text-[#0F4A9C]">{step.title}</h3>
+                    <p className="mt-1 text-base leading-7 text-[#2E2961]/70">{step.body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <EuropeListExample />
         </div>
       </section>
 
