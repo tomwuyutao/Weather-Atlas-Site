@@ -183,20 +183,6 @@ export default function LandingPage() {
           <span className="h-10 w-10 rounded-full bg-[#F7AB3E] shadow-[0_0_26px_rgba(247,171,62,0.38)]" />
           <span className="block text-2xl font-semibold leading-none tracking-normal text-[#0F4A9C]">Weather Atlas</span>
         </a>
-        <nav className="hidden items-center gap-9 text-sm font-medium text-[#0F4A9C] md:flex">
-          <a href="#features" className="transition hover:text-[#FF8A65]">Features</a>
-          <a href="#sunny" className="transition hover:text-[#FF8A65]">Sunny places</a>
-          <a href={publicAsset("/privacy/")} className="transition hover:text-[#FF8A65]">Privacy</a>
-          <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Support</a>
-        </nav>
-        <a
-          href={appStoreUrl}
-          target="_blank"
-          rel="noreferrer"
-          className="rounded-2xl bg-[#F7AB3E] px-5 py-3 text-sm font-semibold text-[#2E2961] shadow-[0_14px_36px_rgba(247,171,62,0.26)] transition hover:bg-[#FFD071]"
-        >
-          Get the App
-        </a>
       </header>
 
       {/* Hero section: product promise plus map-centered app mockups */}
@@ -208,7 +194,7 @@ export default function LandingPage() {
           <p className="mt-7 max-w-xl text-lg leading-8 text-[#2E2961]/72">
             Weather Atlas helps you compare saved places by sunshine, cloud cover, and forecast conditions, so you can decide where to go at a glance.
           </p>
-          <div className="mt-10 flex flex-col gap-4 sm:flex-row">
+          <div className="mt-10 flex">
             <a
               href={appStoreUrl}
               target="_blank"
@@ -221,12 +207,6 @@ export default function LandingPage() {
                 alt="Download on the App Store"
                 className="h-14 w-auto"
               />
-            </a>
-            <a
-              href="#features"
-              className="inline-flex min-h-14 items-center justify-center rounded-2xl border border-[#0F4A9C]/20 bg-white/50 px-7 text-base font-semibold text-[#0F4A9C] transition hover:bg-white"
-            >
-              See features
             </a>
           </div>
         </div>
