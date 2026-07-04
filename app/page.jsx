@@ -62,18 +62,13 @@ const features = [
 const workflowSteps = [
   {
     label: "1",
-    title: "Create a Europe list",
-    body: "Add the cities you might visit."
+    title: "Create a list of cities you would like to visit",
+    body: "For example, make a Europe list for possible holiday destinations."
   },
   {
     label: "2",
-    title: "Find sunny dates",
-    body: "Scan the next 10 days at once."
-  },
-  {
-    label: "3",
-    title: "See the pattern",
-    body: "View the whole list on a map."
+    title: "Find sunny dates across the next 10 days",
+    body: "See which cities look bright without checking each forecast one by one."
   }
 ];
 
@@ -297,17 +292,13 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works: explain tracked lists, sunshine discovery, and map context */}
+      {/* How it works: two-step tracked-list weather discovery */}
       <section className="px-6 py-20 md:px-10 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-center">
           <div>
-            <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">How it works</p>
             <h2 className="max-w-xl text-4xl font-semibold leading-[1.02] tracking-normal text-[#0F4A9C] md:text-6xl">
-              Plan from places, not forecasts.
+              How it works.
             </h2>
-            <p className="mt-6 max-w-md text-lg leading-8 text-[#2E2961]/72">
-              Make a list of possible destinations. Weather Atlas shows where sunshine appears in the next 10 days.
-            </p>
             <div className="mt-9 grid gap-3">
               {workflowSteps.map((step) => (
                 <div key={step.title} className="flex items-center gap-4 rounded-[24px] border border-[#E6E1D9] bg-white/52 p-4">
