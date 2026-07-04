@@ -15,7 +15,7 @@ export const metadata = {
 // A simple support page that points users to the developer email address.
 export default function ContactPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[#FBF8F2] text-[#003D99]">
+    <main className="flex min-h-screen flex-col bg-[#FBF8F2] text-[#0F4A9C]">
       {/* Main contact message */}
       <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
         <section className="max-w-3xl">
@@ -26,7 +26,7 @@ export default function ContactPage() {
           </p>
           <a
             href="mailto:yutao5726@gmail.com"
-            className="mt-8 inline-flex rounded-full bg-[#F4B65E] px-7 py-4 text-base font-semibold text-[#2E2961] shadow-[0_18px_45px_rgba(244,182,94,0.28)] transition hover:bg-[#FFD071]"
+            className="mt-8 inline-flex rounded-full bg-[#F7AB3E] px-7 py-4 text-base font-semibold text-[#2E2961] shadow-[0_18px_45px_rgba(247,171,62,0.28)] transition hover:bg-[#FFD071]"
           >
             yutao5726@gmail.com
           </a>

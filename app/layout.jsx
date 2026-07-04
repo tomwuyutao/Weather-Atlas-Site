@@ -6,7 +6,7 @@ import "./globals.css";
 // Used by Next.js to populate browser and search preview metadata.
 export const metadata = {
   title: "Weather Atlas",
-  description: "A simple private weather map app for comparing conditions across places."
+  description: "A simple sun-seeker weather app for comparing conditions across places."
 };
 
 // -----------------------------------------------------------------------------
