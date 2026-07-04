@@ -7,6 +7,12 @@ const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 const publicAsset = (path) => `${publicBasePath}${path}`;
 
 // -----------------------------------------------------------------------------
+// External app links
+// -----------------------------------------------------------------------------
+// Kept in one place so every download CTA points to the same App Store listing.
+const appStoreUrl = "https://apps.apple.com/gb/app/weather-atlas/id6759912603";
+
+// -----------------------------------------------------------------------------
 // Map mock data
 // -----------------------------------------------------------------------------
 // These dots recreate the app's sunny-place comparison view without loading a
@@ -184,7 +190,9 @@ export default function LandingPage() {
           <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Support</a>
         </nav>
         <a
-          href="#download"
+          href={appStoreUrl}
+          target="_blank"
+          rel="noreferrer"
           className="rounded-2xl bg-[#F7AB3E] px-5 py-3 text-sm font-semibold text-[#2E2961] shadow-[0_14px_36px_rgba(247,171,62,0.26)] transition hover:bg-[#FFD071]"
         >
           Get the App
@@ -202,10 +210,17 @@ export default function LandingPage() {
           </p>
           <div className="mt-10 flex flex-col gap-4 sm:flex-row">
             <a
-              href="#download"
-              className="inline-flex min-h-14 items-center justify-center rounded-2xl bg-[#F7AB3E] px-7 text-base font-semibold text-[#2E2961] shadow-[0_18px_45px_rgba(247,171,62,0.28)] transition hover:bg-[#FFD071]"
+              href={appStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-fit transition hover:opacity-90"
+              aria-label="Download Weather Atlas on the App Store"
             >
-              Download on the App Store
+              <img
+                src={publicAsset("/badges/download-on-the-app-store.svg")}
+                alt="Download on the App Store"
+                className="h-14 w-auto"
+              />
             </a>
             <a
               href="#features"
@@ -258,7 +273,7 @@ export default function LandingPage() {
           <nav className="flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-[#0F4A9C]">
             <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Contact</a>
             <a href={publicAsset("/privacy/")} className="transition hover:text-[#FF8A65]">Privacy Policy</a>
-            <a href="#" className="transition hover:text-[#FF8A65]">Download</a>
+            <a href={appStoreUrl} target="_blank" rel="noreferrer" className="transition hover:text-[#FF8A65]">Download</a>
           </nav>
         </div>
       </footer>
