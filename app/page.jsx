@@ -264,7 +264,7 @@ export default function LandingPage() {
             Find where it's sunny.
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-8 text-[#2E2961]/72">
-            Weather Atlas helps you compare saved places by sunshine, cloud cover, and forecast conditions, so you can decide where to go at a glance.
+            Planning your next holiday? Weather Atlas helps you find sunny destinations and plan ahead.
           </p>
           <div className="mt-10 flex">
             <a
