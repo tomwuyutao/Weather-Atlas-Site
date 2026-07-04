@@ -62,18 +62,18 @@ const features = [
 const workflowSteps = [
   {
     label: "1",
-    title: "Create a travel list",
-    body: "Say you want to travel in Europe. Make a list called Europe and add the cities you are considering."
+    title: "Create a Europe list",
+    body: "Add the cities you might visit."
   },
   {
     label: "2",
-    title: "Scan for sunshine",
-    body: "Weather Atlas looks across your tracked cities and the next 10 days to show where sunny conditions appear."
+    title: "Find sunny dates",
+    body: "Scan the next 10 days at once."
   },
   {
     label: "3",
-    title: "Read the map",
-    body: "Switch to the map view for that list and see the weather pattern spatially, instead of reading forecasts one by one."
+    title: "See the pattern",
+    body: "View the whole list on a map."
   }
 ];
 
@@ -303,20 +303,20 @@ export default function LandingPage() {
           <div>
             <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">How it works</p>
             <h2 className="max-w-xl text-4xl font-semibold leading-[1.02] tracking-normal text-[#0F4A9C] md:text-6xl">
-              Build a list. Find the sunny dates.
+              Plan from places, not forecasts.
             </h2>
-            <p className="mt-6 max-w-xl text-lg leading-8 text-[#2E2961]/72">
-              Weather Atlas is for discovering weather across places you care about. Instead of opening forecasts for every city, track a list and see where sunshine appears across the next 10 days.
+            <p className="mt-6 max-w-md text-lg leading-8 text-[#2E2961]/72">
+              Make a list of possible destinations. Weather Atlas shows where sunshine appears in the next 10 days.
             </p>
-            <div className="mt-9 grid gap-4">
+            <div className="mt-9 grid gap-3">
               {workflowSteps.map((step) => (
-                <div key={step.title} className="flex gap-4">
-                  <span className="mt-1 flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-[#F7AB3E] text-sm font-semibold text-[#2E2961]">
+                <div key={step.title} className="flex items-center gap-4 rounded-[24px] border border-[#E6E1D9] bg-white/52 p-4">
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[#F7AB3E] text-sm font-semibold text-[#2E2961]">
                     {step.label}
                   </span>
                   <div>
                     <h3 className="text-lg font-semibold text-[#0F4A9C]">{step.title}</h3>
-                    <p className="mt-1 text-base leading-7 text-[#2E2961]/70">{step.body}</p>
+                    <p className="mt-0.5 text-sm leading-6 text-[#2E2961]/64">{step.body}</p>
                   </div>
                 </div>
               ))}
