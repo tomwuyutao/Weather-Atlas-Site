@@ -260,7 +260,7 @@ export default function LandingPage() {
       {/* Hero section: product promise plus map-centered app mockups */}
       <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-16 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-24 md:pt-24">
         <div className="relative z-10">
-          <h1 className="max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[#0F4A9C] md:text-7xl">
+          <h1 className="app-serif max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[#0F4A9C] md:text-7xl">
             Find where it's sunny.
           </h1>
           <p className="mt-7 max-w-xl text-lg leading-8 text-[#2E2961]/72">

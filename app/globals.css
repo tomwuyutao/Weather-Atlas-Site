@@ -57,6 +57,15 @@ a {
   -webkit-tap-highlight-color: transparent;
 }
 
+/* -----------------------------------------------------------------------------
+   App typography matches
+   ----------------------------------------------------------------------------- */
+/* Mirrors SwiftUI's `.system(..., design: .serif)` used by the app's list
+   switcher, with platform fallbacks for non-Apple browsers. */
+.app-serif {
+  font-family: ui-serif, "New York", "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+}
+
 /* Selection color follows the warm accent used by the weather dots. */
 ::selection {
   color: #2e2961;
