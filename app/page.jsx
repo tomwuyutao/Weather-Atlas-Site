@@ -32,33 +32,6 @@ const cityDots = [
 ];
 
 // -----------------------------------------------------------------------------
-// Feature content
-// -----------------------------------------------------------------------------
-// The feature cards keep the page honest: they describe what the app does today.
-const features = [
-  {
-    title: "Weather discovery",
-    body: "Start with the places you may travel to, then let the app surface where conditions look good.",
-    icon: "☼"
-  },
-  {
-    title: "Next 10 days",
-    body: "Check which tracked cities are sunny on any upcoming date without opening each forecast.",
-    icon: "◷"
-  },
-  {
-    title: "Sunny ranking",
-    body: "Weather Atlas scores conditions using weather type, cloud cover, and daylight.",
-    icon: "1"
-  },
-  {
-    title: "List maps",
-    body: "Visualize a tracked list on a map to understand the weather pattern across a region.",
-    icon: "•"
-  }
-];
-
-// -----------------------------------------------------------------------------
 // Discovery workflow content
 // -----------------------------------------------------------------------------
 // These steps explain the main use case: tracking possible destinations instead
@@ -253,7 +226,7 @@ function EuropeListExample({ activeStep }) {
 // -----------------------------------------------------------------------------
 // Landing page
 // -----------------------------------------------------------------------------
-// The page is intentionally static and simple: header, hero, features, and footer.
+// The page keeps a compact structure: header, hero, interactive workflow, footer.
 export default function LandingPage() {
   const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
 
@@ -346,21 +319,6 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Feature strip: four short, factual product benefits */}
-      <section id="features" className="border-y border-[#E6E1D9] bg-white/54 px-6 py-14 md:px-10">
-        <div className="mx-auto grid max-w-7xl gap-8 md:grid-cols-4">
-          {features.map((feature, index) => (
-            <div key={feature.title} className={`${index ? "md:border-l md:border-[#E6E1D9] md:pl-8" : ""}`}>
-              <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-full bg-[#FBF8F2] text-3xl text-[#FF8A65] shadow-[0_16px_40px_rgba(46,41,97,0.06)]">
-                {feature.icon}
-              </div>
-              <h2 className="text-xl font-semibold text-[#0F4A9C]">{feature.title}</h2>
-              <p className="mt-3 text-sm leading-6 text-[#2E2961]/70">{feature.body}</p>
-            </div>
-          ))}
-        </div>
-      </section>
-
       {/* Footer: brand reminder and utility links */}
       <footer id="download" className="px-6 py-12 md:px-10">
         <div className="mx-auto flex max-w-7xl flex-col gap-8 md:flex-row md:items-center md:justify-between">
@@ -369,12 +327,23 @@ export default function LandingPage() {
               <span className="h-8 w-8 rounded-full bg-[#F7AB3E]" />
               <p className="text-2xl font-semibold text-[#0F4A9C]">Weather Atlas</p>
             </div>
-            <p className="mt-4 max-w-md text-sm leading-6 text-[#2E2961]/66">A small sun-seeker weather app for iPhone, iPad, and Mac.</p>
           </div>
-          <nav className="flex flex-wrap gap-x-7 gap-y-3 text-sm font-medium text-[#0F4A9C]">
+          <nav className="flex flex-wrap items-center gap-x-7 gap-y-3 text-sm font-medium text-[#0F4A9C]">
             <a href={publicAsset("/contact/")} className="transition hover:text-[#FF8A65]">Contact</a>
             <a href={publicAsset("/privacy/")} className="transition hover:text-[#FF8A65]">Privacy Policy</a>
-            <a href={appStoreUrl} target="_blank" rel="noreferrer" className="transition hover:text-[#FF8A65]">Download</a>
+            <a
+              href={appStoreUrl}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex transition hover:opacity-90"
+              aria-label="Download Weather Atlas on the App Store"
+            >
+              <img
+                src={publicAsset("/badges/download-on-the-app-store.svg")}
+                alt="Download on the App Store"
+                className="h-10 w-auto"
+              />
+            </a>
           </nav>
         </div>
       </footer>
