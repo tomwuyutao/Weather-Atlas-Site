@@ -13,11 +13,56 @@
   --ink: #0f4a9c;
   --body: #2e2961;
   --muted: #5e6cb3;
-  --line: #c9c4b8;
+  --line: #e6e1d9;
+  --map-line: #c9c4b8;
   --sun: #f7ab3e;
+  --partly: #f8d152;
   --warm: #ff8a65;
-  --cloud: #e3e0d6;
-  --drizzle: #8790c4;
+  --cloud: #c8c2b5;
+  --drizzle: #62b9d2;
+  --rain: #4d70d4;
+  --surface: rgba(255, 255, 255, 0.72);
+  --surface-soft: rgba(255, 255, 255, 0.52);
+  --surface-strong: rgba(253, 249, 243, 0.86);
+  --site-bg:
+    radial-gradient(circle at 88% 18%, rgba(247, 171, 62, 0.18), transparent 26vw),
+    radial-gradient(circle at 8% 36%, rgba(135, 144, 196, 0.13), transparent 24vw),
+    linear-gradient(180deg, #fffdf9 0%, #fdf9f3 58%, #f6ede4 100%);
+  --map-bg: #f7f6f2;
+  --map-land: #e5e0d9;
+  --map-land-active: #e9e4de;
+  --shadow: rgba(46, 41, 97, 0.08);
+  --hero-shadow: rgba(46, 41, 97, 0.24);
+}
+
+/* Dark-mode colors mirror `ThemeColors.dark` in the Xcode app:
+   map ocean #040C1A, land #0B1628, accent #6F86FF, sun #DD8019. */
+.site-shell[data-theme="dark"] {
+  color-scheme: dark;
+  --paper: #040c1a;
+  --ink: #f7f3ea;
+  --body: #f7f3ea;
+  --muted: #8ea0f8;
+  --line: #223a5c;
+  --map-line: #223a5c;
+  --sun: #dd8019;
+  --partly: #dd9128;
+  --warm: #ff4940;
+  --cloud: #8792a8;
+  --drizzle: #5ec4da;
+  --rain: #6f86ff;
+  --surface: rgba(12, 24, 40, 0.82);
+  --surface-soft: rgba(12, 24, 40, 0.58);
+  --surface-strong: rgba(12, 24, 40, 0.94);
+  --site-bg:
+    radial-gradient(circle at 82% 12%, rgba(111, 134, 255, 0.22), transparent 28vw),
+    radial-gradient(circle at 18% 34%, rgba(221, 128, 25, 0.14), transparent 24vw),
+    linear-gradient(180deg, #040c1a 0%, #0b1628 56%, #040c1a 100%);
+  --map-bg: #040c1a;
+  --map-land: #0b1628;
+  --map-land-active: #10213a;
+  --shadow: rgba(0, 0, 0, 0.28);
+  --hero-shadow: rgba(0, 0, 0, 0.5);
 }
 
 /* -----------------------------------------------------------------------------
@@ -47,6 +92,17 @@ body {
   color: var(--body);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0;
+}
+
+/* -----------------------------------------------------------------------------
+   Theme surface
+   ----------------------------------------------------------------------------- */
+/* The homepage owns its light/dark background so the switcher can change the
+   entire marketing surface without touching support/legal pages. */
+.site-shell {
+  background: var(--site-bg);
+  color: var(--body);
+  transition: background 320ms ease, color 320ms ease;
 }
 
 /* -----------------------------------------------------------------------------
