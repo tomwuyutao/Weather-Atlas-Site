@@ -242,11 +242,14 @@ export default function LandingPage() {
         </div>
 
         <div id="sunny" className="relative flex min-h-[560px] items-center justify-center">
-          <img
-            src={publicAsset("/images/app-screenshot.png")}
-            alt="Weather Atlas app showing sunny places on a map"
-            className="h-auto max-h-[720px] w-auto rounded-[42px] border border-[#2E2961]/12 shadow-[0_28px_90px_rgba(46,41,97,0.18)]"
-          />
+          <div className="relative rounded-[48px] bg-[#17152F] p-2 shadow-[0_32px_100px_rgba(46,41,97,0.24),inset_0_0_0_1px_rgba(255,255,255,0.14)]">
+            <div className="absolute left-1/2 top-4 z-10 h-6 w-24 -translate-x-1/2 rounded-full bg-[#17152F] shadow-[0_1px_0_rgba(255,255,255,0.16)]" />
+            <img
+              src={publicAsset("/images/app-screenshot.png")}
+              alt="Weather Atlas app showing sunny places on a map"
+              className="h-auto max-h-[720px] w-auto rounded-[40px] border border-white/10"
+            />
+          </div>
         </div>
       </section>
 
