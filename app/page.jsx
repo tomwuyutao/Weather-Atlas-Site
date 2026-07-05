@@ -208,7 +208,7 @@ export default function LandingPage() {
   return (
     <main className="min-h-screen bg-[#FBF8F2] text-[#0F4A9C]">
       {/* Header and navigation */}
-      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-7 md:px-10">
+      <header className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5 md:px-10">
         <a href={publicAsset("/")} className="flex items-center gap-3" aria-label="Weather Atlas home">
           <span className="h-10 w-10 rounded-full bg-[#F7AB3E] shadow-[0_0_26px_rgba(247,171,62,0.38)]" />
           <span className="block text-2xl font-semibold leading-none tracking-normal text-[#0F4A9C]">Weather Atlas</span>
@@ -216,7 +216,7 @@ export default function LandingPage() {
       </header>
 
       {/* Hero section: product promise plus real app screenshot */}
-      <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-16 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-24 md:pt-24">
+      <section className="relative mx-auto grid max-w-7xl items-center gap-10 px-6 pb-10 pt-6 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-12 md:pt-8">
         <div className="relative z-10">
           <h1 className="app-serif max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[#0F4A9C] md:text-7xl">
             Find where it's sunny.
@@ -241,12 +241,13 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div id="sunny" className="relative flex min-h-[560px] items-center justify-center">
+        <div id="sunny" className="relative flex min-h-[500px] items-center justify-center">
           <div className="relative rounded-[48px] bg-black p-2 shadow-[0_32px_100px_rgba(46,41,97,0.24),inset_0_0_0_1px_rgba(255,255,255,0.14)]">
             <img
               src={publicAsset("/images/app-screenshot.png")}
               alt="Weather Atlas app showing sunny places on a map"
-              className="h-auto max-h-[720px] w-auto rounded-[40px] border border-white/10"
+              className="h-auto w-auto rounded-[40px] border border-white/10"
+              style={{ maxHeight: "min(640px, calc(100vh - 190px))" }}
             />
           </div>
         </div>
