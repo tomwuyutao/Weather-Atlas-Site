@@ -44,8 +44,13 @@ const workflowSteps = [
   },
   {
     label: "2",
-    title: "Find sunny dates across the next 10 days",
-    body: "See which cities look bright without checking each forecast one by one."
+    title: "See cities ranked by sunniness",
+    body: "The list view shows which places look brightest across the next 10 days."
+  },
+  {
+    label: "3",
+    title: "Use map mode for a quick glance",
+    body: "See where sunny places are distributed across your tracked cities."
   }
 ];
 
@@ -171,54 +176,98 @@ function WeatherCard() {
 // A compact product story showing how a tracked list becomes a weather discovery
 // surface for upcoming travel.
 function EuropeListExample({ activeStep }) {
-  const isDateDiscovery = activeStep === 1;
-  const cities = isDateDiscovery ? [
-    ["Lisbon", "Sunny on 4 upcoming days", "#F7AB3E", "4"],
-    ["Barcelona", "Sunny this weekend", "#F8D152", "2"],
-    ["Athens", "Brightest late week", "#F7AB3E", "3"],
-    ["London", "Cloudier window", "#8790C4", "0"]
-  ] : [
-    ["Lisbon", "Sunny", "#F7AB3E", "92"],
-    ["Barcelona", "Partly sunny", "#F8D152", "84"],
-    ["Berlin", "Clearing", "#FF8A65", "76"],
-    ["London", "Rain later", "#8790C4", "42"]
+  const previewStates = [
+    {
+      eyebrow: "Tracked list",
+      title: "Europe",
+      badge: "Saved cities",
+      cities: [
+        ["Lisbon", "Portugal", "#F7AB3E", "24°"],
+        ["Barcelona", "Spain", "#F8D152", "22°"],
+        ["Berlin", "Germany", "#FF8A65", "19°"],
+        ["London", "United Kingdom", "#8790C4", "16°"]
+      ],
+      mapLabel: "List map"
+    },
+    {
+      eyebrow: "List ranking",
+      title: "Sunny places",
+      badge: "Next 10 days",
+      cities: [
+        ["Lisbon", "Sunny on 4 upcoming days", "#F7AB3E", "92"],
+        ["Barcelona", "Sunny this weekend", "#F8D152", "84"],
+        ["Athens", "Brightest late week", "#F7AB3E", "81"],
+        ["London", "Cloudier window", "#8790C4", "42"]
+      ],
+      mapLabel: "Ranked by sunniness"
+    },
+    {
+      eyebrow: "Map mode",
+      title: "Sunny at a glance",
+      badge: "Spatial view",
+      cities: [
+        ["Lisbon", "Sunny", "#F7AB3E", "92"],
+        ["Athens", "Sunny", "#F7AB3E", "81"],
+        ["Berlin", "Clearing", "#FF8A65", "76"],
+        ["London", "Cloudier", "#8790C4", "42"]
+      ],
+      mapLabel: "Weather dots"
+    }
   ];
-  const eyebrow = isDateDiscovery ? "Sunny dates" : "Tracked list";
-  const title = isDateDiscovery ? "Next 10 days" : "Europe";
-  const badge = isDateDiscovery ? "Best windows" : "Next 10 days";
+  const preview = previewStates[activeStep] ?? previewStates[0];
+  const mapFirst = activeStep === 2;
+  const list = (
+    <div className="grid gap-3">
+      {preview.cities.map(([city, condition, color, score]) => (
+        <div key={city} className="flex items-center justify-between rounded-[22px] border border-[#E6E1D9] bg-[#FDF9F3]/72 px-4 py-3">
+          <div className="flex items-center gap-3">
+            <span
+              className="h-4 w-4 rounded-full border border-white/70"
+              style={{
+                backgroundColor: color,
+                boxShadow: `0 0 22px ${color}80`
+              }}
+            />
+            <div>
+              <p className="text-base font-semibold text-[#2E2961]">{city}</p>
+              <p className="text-sm text-[#5E6CB3]">{condition}</p>
+            </div>
+          </div>
+          <p className="text-xl font-semibold text-[#0F4A9C]">{score}</p>
+        </div>
+      ))}
+    </div>
+  );
+  const map = (
+    <div>
+      <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#0F4A9C]">{preview.mapLabel}</p>
+      <MiniMap className={`${mapFirst ? "h-[360px]" : "h-[230px]"} border border-[#E6E1D9]`} />
+    </div>
+  );
 
   return (
     <div className="relative overflow-hidden rounded-[34px] border border-[#E6E1D9] bg-white/72 p-5 shadow-[0_24px_80px_rgba(46,41,97,0.08)] backdrop-blur">
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FF8A65]">{eyebrow}</p>
-          <h3 className="mt-2 text-3xl font-semibold tracking-normal text-[#0F4A9C]">{title}</h3>
+          <p className="text-xs font-semibold uppercase tracking-[0.24em] text-[#FF8A65]">{preview.eyebrow}</p>
+          <h3 className="mt-2 text-3xl font-semibold tracking-normal text-[#0F4A9C]">{preview.title}</h3>
         </div>
-        <span className="rounded-full bg-[#F7AB3E]/18 px-4 py-2 text-sm font-semibold text-[#0F4A9C]">{badge}</span>
+        <span className="rounded-full bg-[#F7AB3E]/18 px-4 py-2 text-sm font-semibold text-[#0F4A9C]">{preview.badge}</span>
       </div>
 
-      <div className="mt-6 grid gap-3">
-        {cities.map(([city, condition, color, score]) => (
-          <div key={city} className="flex items-center justify-between rounded-[22px] border border-[#E6E1D9] bg-[#FDF9F3]/72 px-4 py-3">
-            <div className="flex items-center gap-3">
-              <span
-                className="h-4 w-4 rounded-full border border-white/70"
-                style={{
-                  backgroundColor: color,
-                  boxShadow: `0 0 22px ${color}80`
-                }}
-              />
-              <div>
-                <p className="text-base font-semibold text-[#2E2961]">{city}</p>
-                <p className="text-sm text-[#5E6CB3]">{condition}</p>
-              </div>
-            </div>
-            <p className="text-xl font-semibold text-[#0F4A9C]">{score}</p>
-          </div>
-        ))}
+      <div className="mt-6 grid gap-5">
+        {mapFirst ? (
+          <>
+            {map}
+            {list}
+          </>
+        ) : (
+          <>
+            {list}
+            {map}
+          </>
+        )}
       </div>
-
-      <MiniMap className="mt-5 h-[230px] border border-[#E6E1D9]" />
     </div>
   );
 }
@@ -280,7 +329,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* How it works: two-step tracked-list weather discovery */}
+      {/* How it works: three-step tracked-list weather discovery */}
       <section className="px-6 py-20 md:px-10 md:py-24">
         <div className="mx-auto grid max-w-7xl gap-12 md:grid-cols-[0.9fr_1.1fr] md:items-center">
           <div>
