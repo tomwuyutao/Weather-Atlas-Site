@@ -97,80 +97,6 @@ function MiniMap({ className = "" }) {
 }
 
 // -----------------------------------------------------------------------------
-// Phone app mockup
-// -----------------------------------------------------------------------------
-// The phone frame highlights the core product idea: Weather Atlas helps you
-// find where conditions are sunny while still keeping the map visible.
-function PhoneMockup() {
-  return (
-    <div className="relative mx-auto w-[250px] rounded-[42px] border border-[#2E2961]/18 bg-[#17152F] p-2 shadow-[0_28px_80px_rgba(46,41,97,0.24)] md:w-[292px]">
-      <div className="overflow-hidden rounded-[34px] bg-[#FBFAF7]">
-        <div className="flex items-center justify-between px-5 pt-4 text-[10px] font-semibold text-[#2E2961]">
-          <span>9:41</span>
-          <span className="h-4 w-16 rounded-full bg-[#17152F]" />
-          <span>80%</span>
-        </div>
-        <div className="px-5 pb-5 pt-8">
-          <div className="mb-5 flex items-center justify-center gap-2 text-lg font-semibold text-[#2E2961]">
-            Europe
-            <span className="text-[#6F67C8]">⌄</span>
-          </div>
-          <MiniMap className="h-[300px] border border-[#E6E1D9]" />
-          <div className="mt-5 rounded-[26px] border border-[#E3DDD2] bg-white/88 p-5 shadow-[0_18px_45px_rgba(46,41,97,0.08)]">
-            <div className="flex items-start justify-between">
-              <div>
-                <p className="text-5xl font-semibold tracking-normal text-[#111111]">24°</p>
-                <p className="mt-3 text-sm font-medium text-[#5E6CB3]">Best sunny place</p>
-                <p className="mt-3 text-2xl font-semibold text-[#111111]">Lisbon</p>
-              </div>
-              <span className="mt-1 h-11 w-11 rounded-full bg-[#F7AB3E] shadow-[0_0_0_14px_rgba(247,171,62,0.18),0_0_30px_rgba(247,171,62,0.44)]" />
-            </div>
-            <div className="mt-5 grid w-24 grid-cols-5 gap-1.5">
-              {["#F7AB3E", "#8790C4", "#E3E0D6", "#E3E0D6", "#FF8A65", "#FF8A65", "#F7AB3E", "#FF8A65", "#FF8A65", "#F7AB3E"].map((color, index) => (
-                <span key={index} className="h-2 w-2 rounded-full" style={{ backgroundColor: color }} />
-              ))}
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
-// Floating sunny-place summary card
-// -----------------------------------------------------------------------------
-// This card supports the hero composition with the new sun-seeker product focus.
-function WeatherCard() {
-  return (
-    <div className="rounded-[28px] border border-[#E6E1D9] bg-white/76 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] backdrop-blur">
-      <div className="flex items-start justify-between">
-        <div>
-          <p className="text-sm font-semibold text-[#0F4A9C]">Lisbon</p>
-          <p className="mt-4 text-5xl font-semibold text-[#F7AB3E]">92</p>
-          <p className="mt-2 text-sm text-[#5E6CB3]">Sunny score</p>
-        </div>
-        <span className="h-16 w-16 rounded-full bg-[#F7AB3E] shadow-[0_0_0_14px_rgba(247,171,62,0.18),0_0_34px_rgba(247,171,62,0.35)]" />
-      </div>
-      <div className="mt-8 grid grid-cols-3 gap-3 border-t border-[#E6E1D9] pt-5 text-sm text-[#2E2961]">
-        <div>
-          <p className="text-[#5E6CB3]">Cloud</p>
-          <p className="mt-1 font-semibold">12%</p>
-        </div>
-        <div>
-          <p className="text-[#5E6CB3]">Rain</p>
-          <p className="mt-1 font-semibold">Low</p>
-        </div>
-        <div>
-          <p className="text-[#5E6CB3]">Rank</p>
-          <p className="mt-1 font-semibold">#1</p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
-// -----------------------------------------------------------------------------
 // Europe list example
 // -----------------------------------------------------------------------------
 // A compact product story showing how a tracked list becomes a weather discovery
@@ -289,7 +215,7 @@ export default function LandingPage() {
         </a>
       </header>
 
-      {/* Hero section: product promise plus map-centered app mockups */}
+      {/* Hero section: product promise plus real app screenshot */}
       <section className="relative mx-auto grid max-w-7xl items-center gap-12 px-6 pb-16 pt-16 md:grid-cols-[0.9fr_1.1fr] md:px-10 md:pb-24 md:pt-24">
         <div className="relative z-10">
           <h1 className="app-serif max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[#0F4A9C] md:text-7xl">
@@ -315,17 +241,12 @@ export default function LandingPage() {
           </div>
         </div>
 
-        <div id="sunny" className="relative min-h-[560px]">
-          <div className="absolute left-[8%] top-[10%] hidden w-[360px] md:block">
-            <WeatherCard />
-          </div>
-          <div className="absolute bottom-[4%] right-0 hidden w-[420px] rounded-[30px] border border-[#E6E1D9] bg-white/64 p-4 shadow-[0_22px_70px_rgba(46,41,97,0.08)] backdrop-blur md:block">
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.22em] text-[#0F4A9C]">Sunny places</p>
-            <MiniMap className="h-[210px]" />
-          </div>
-          <div className="relative z-10 mx-auto pt-8 md:pt-0">
-            <PhoneMockup />
-          </div>
+        <div id="sunny" className="relative flex min-h-[560px] items-center justify-center">
+          <img
+            src={publicAsset("/images/app-screenshot.png")}
+            alt="Weather Atlas app showing sunny places on a map"
+            className="h-auto max-h-[720px] w-auto rounded-[42px] border border-[#2E2961]/12 shadow-[0_28px_90px_rgba(46,41,97,0.18)]"
+          />
         </div>
       </section>
 
