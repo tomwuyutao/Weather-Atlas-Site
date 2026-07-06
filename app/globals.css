@@ -24,15 +24,20 @@
   --surface: rgba(255, 255, 255, 0.72);
   --surface-soft: rgba(255, 255, 255, 0.52);
   --surface-strong: rgba(253, 249, 243, 0.86);
-  --site-bg:
-    radial-gradient(circle at 88% 18%, rgba(247, 171, 62, 0.18), transparent 26vw),
-    radial-gradient(circle at 8% 36%, rgba(135, 144, 196, 0.13), transparent 24vw),
-    linear-gradient(180deg, #fffdf9 0%, #fdf9f3 58%, #f6ede4 100%);
+  --body-strong-alpha: rgba(46, 41, 97, 0.72);
+  --body-soft-alpha: rgba(46, 41, 97, 0.64);
+  --sun-weak-alpha: rgba(247, 171, 62, 0.12);
+  --sun-soft-alpha: rgba(247, 171, 62, 0.18);
+  --sun-faint-alpha: rgba(247, 171, 62, 0.22);
+  --sun-glow-alpha: rgba(247, 171, 62, 0.38);
+  --sun-knob-glow-alpha: rgba(247, 171, 62, 0.42);
+  --muted-track-alpha: rgba(94, 108, 179, 0.22);
+  --rain-soft-alpha: rgba(77, 112, 212, 0.14);
+  --download-blue: #0f4a9c;
+  --site-bg: #fdf9f3;
   --map-bg: #f7f6f2;
   --map-land: #e5e0d9;
   --map-land-active: #e9e4de;
-  --shadow: rgba(46, 41, 97, 0.08);
-  --hero-shadow: rgba(46, 41, 97, 0.24);
 }
 
 /* Dark-mode colors mirror `ThemeColors.dark` in the Xcode app:
@@ -54,15 +59,20 @@
   --surface: rgba(12, 24, 40, 0.82);
   --surface-soft: rgba(12, 24, 40, 0.58);
   --surface-strong: rgba(12, 24, 40, 0.94);
-  --site-bg:
-    radial-gradient(circle at 82% 12%, rgba(111, 134, 255, 0.22), transparent 28vw),
-    radial-gradient(circle at 18% 34%, rgba(221, 128, 25, 0.14), transparent 24vw),
-    linear-gradient(180deg, #040c1a 0%, #0b1628 56%, #040c1a 100%);
+  --body-strong-alpha: rgba(247, 243, 234, 0.72);
+  --body-soft-alpha: rgba(247, 243, 234, 0.64);
+  --sun-weak-alpha: rgba(221, 128, 25, 0.12);
+  --sun-soft-alpha: rgba(221, 128, 25, 0.18);
+  --sun-faint-alpha: rgba(221, 128, 25, 0.22);
+  --sun-glow-alpha: rgba(221, 128, 25, 0.38);
+  --sun-knob-glow-alpha: rgba(221, 128, 25, 0.42);
+  --muted-track-alpha: rgba(142, 160, 248, 0.22);
+  --rain-soft-alpha: rgba(111, 134, 255, 0.14);
+  --download-blue: #6f86ff;
+  --site-bg: #040c1a;
   --map-bg: #040c1a;
   --map-land: #0b1628;
   --map-land-active: #10213a;
-  --shadow: rgba(0, 0, 0, 0.28);
-  --hero-shadow: rgba(0, 0, 0, 0.5);
 }
 
 /* -----------------------------------------------------------------------------
@@ -85,10 +95,7 @@ body {
   margin: 0;
   min-height: 100vh;
   overflow-x: hidden;
-  background:
-    radial-gradient(circle at 88% 18%, rgba(247, 171, 62, 0.18), transparent 26vw),
-    radial-gradient(circle at 8% 36%, rgba(135, 144, 196, 0.13), transparent 24vw),
-    linear-gradient(180deg, #fffdf9 0%, #fdf9f3 58%, #f6ede4 100%);
+  background: var(--paper);
   color: var(--body);
   font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
   letter-spacing: 0;
@@ -103,6 +110,86 @@ body {
   background: var(--site-bg);
   color: var(--body);
   transition: background 320ms ease, color 320ms ease;
+}
+
+/* Keeps the opening header + hero as one complete first viewport, so the next
+   narrative section does not peek in on normal medium or large browser windows. */
+.first-screen {
+  min-height: 100vh;
+  min-height: 100svh;
+}
+
+/* One shared page container keeps the left and right gutters identical across
+   the hero, narrative section, and footer. */
+.site-container {
+  width: min(100% - 4rem, 80rem);
+  margin-inline: auto;
+}
+
+@media (min-width: 768px) {
+  .site-container {
+    width: min(100% - 8rem, 80rem);
+  }
+}
+
+@media (min-width: 1280px) {
+  .site-container {
+    width: min(100% - 12rem, 80rem);
+  }
+}
+
+/* Reusable semantic effects used by the React markup. Keeping these effects in
+   CSS avoids fragile Tailwind arbitrary values for complex color functions. */
+.body-text {
+  color: var(--body-strong-alpha);
+}
+
+.soft-text {
+  color: var(--body-soft-alpha);
+}
+
+.sun-soft-bg {
+  background: var(--sun-soft-alpha);
+}
+
+.sun-faint-bg {
+  background: var(--sun-faint-alpha);
+}
+
+/* Custom iOS download capsule used instead of the official App Store badge. */
+.download-pill {
+  background: var(--download-blue);
+  color: #f7f3ea;
+}
+
+/* Closing CTA keeps the same warm surface as the rest of the light site. */
+.download-cta {
+  background: transparent;
+}
+
+.site-footer {
+  background: #0f4a9c;
+}
+
+/* -----------------------------------------------------------------------------
+   Small content transitions
+   ----------------------------------------------------------------------------- */
+/* Used by the staged product story so switching between steps feels deliberate
+   without becoming a heavy animated landing page again. */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.stage-preview {
+  animation: fadeIn 260ms ease-out;
 }
 
 /* -----------------------------------------------------------------------------

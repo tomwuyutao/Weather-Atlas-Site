@@ -21,7 +21,7 @@ export default function SiteFooter() {
         {/* Brand link back to the homepage */}
         <div>
           <a href={`${publicBasePath}/`} className="flex w-fit items-center gap-3 transition hover:text-[#FF8A65]">
-            <span className="h-8 w-8 rounded-full bg-[#F7AB3E] shadow-[0_0_22px_rgba(247,171,62,0.32)]" />
+            <span className="h-8 w-8 rounded-full bg-[#F7AB3E]" />
             <p className="text-2xl font-semibold tracking-normal">Weather Atlas</p>
           </a>
         </div>

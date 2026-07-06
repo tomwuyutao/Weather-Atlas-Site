@@ -86,7 +86,7 @@ export default function PrivacyPolicyPage() {
         </header>
 
         {/* Plain-language summary before the detailed policy sections */}
-        <section className="mb-14 rounded-[28px] border border-[#E6E1D9] bg-white/72 p-6 shadow-[0_22px_70px_rgba(46,41,97,0.08)] md:p-8">
+        <section className="mb-14 rounded-[28px] border border-[#E6E1D9] bg-white/72 p-6 md:p-8">
           <h2 className="text-2xl font-semibold tracking-normal">Short version</h2>
           <p className="mt-4 text-lg leading-8 text-[#2E2961]/72">
             Weather Atlas does not collect your personal data. The app stores your saved places and preferences on your device, and uses weather and map services only to show forecasts and map views you choose.

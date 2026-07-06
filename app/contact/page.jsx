@@ -26,7 +26,7 @@ export default function ContactPage() {
           </p>
           <a
             href="mailto:yutao5726@gmail.com"
-            className="mt-8 inline-flex rounded-full bg-[#F7AB3E] px-7 py-4 text-base font-semibold text-[#2E2961] shadow-[0_18px_45px_rgba(247,171,62,0.28)] transition hover:bg-[#FFD071]"
+            className="mt-8 inline-flex rounded-full bg-[#F7AB3E] px-7 py-4 text-base font-semibold text-[#2E2961] transition hover:bg-[#FFD071]"
           >
             yutao5726@gmail.com
           </a>
