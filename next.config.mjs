@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const isGitHubPages = process.env.GITHUB_ACTIONS === "true";
-const basePath = isGitHubPages ? "/Weather-app-website" : "";
+const basePath = isGitHubPages ? "/Weather-Atlas" : "";
 
 const nextConfig = {
   output: "export",
