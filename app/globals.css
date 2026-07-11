@@ -10,13 +10,13 @@
 :root {
   color-scheme: light;
   --paper: #fdf9f3;
-  --ink: #0f4a9c;
-  --body: #2e2961;
-  --muted: #5e6cb3;
+  --ink: #1b3f73;
+  --body: #516071;
+  --muted: #7a8492;
   --line: #e6e1d9;
   --map-line: #c9c4b8;
-  --sun: #f7ab3e;
-  --partly: #f8d152;
+  --sun: #ffb84d;
+  --partly: #ffdf91;
   --warm: #ff8a65;
   --cloud: #c8c2b5;
   --drizzle: #62b9d2;
@@ -24,16 +24,17 @@
   --surface: rgba(255, 255, 255, 0.72);
   --surface-soft: rgba(255, 255, 255, 0.52);
   --surface-strong: rgba(253, 249, 243, 0.86);
-  --body-strong-alpha: rgba(46, 41, 97, 0.72);
-  --body-soft-alpha: rgba(46, 41, 97, 0.64);
-  --sun-weak-alpha: rgba(247, 171, 62, 0.12);
-  --sun-soft-alpha: rgba(247, 171, 62, 0.18);
-  --sun-faint-alpha: rgba(247, 171, 62, 0.22);
-  --sun-glow-alpha: rgba(247, 171, 62, 0.38);
-  --sun-knob-glow-alpha: rgba(247, 171, 62, 0.42);
-  --muted-track-alpha: rgba(94, 108, 179, 0.22);
+  --body-strong-alpha: rgba(81, 96, 113, 0.78);
+  --body-soft-alpha: rgba(81, 96, 113, 0.66);
+  --sun-weak-alpha: rgba(255, 184, 77, 0.12);
+  --sun-soft-alpha: rgba(255, 184, 77, 0.18);
+  --sun-faint-alpha: rgba(255, 184, 77, 0.22);
+  --sun-glow-alpha: rgba(255, 184, 77, 0.38);
+  --sun-knob-glow-alpha: rgba(255, 184, 77, 0.42);
+  --muted-track-alpha: rgba(81, 96, 113, 0.18);
   --rain-soft-alpha: rgba(77, 112, 212, 0.14);
-  --download-blue: #0f4a9c;
+  --download-blue: #1b3f73;
+  --download-text: #fdf9f3;
   --site-bg: #fdf9f3;
   --map-bg: #f7f6f2;
   --map-land: #e5e0d9;
@@ -41,36 +42,37 @@
 }
 
 /* Dark-mode colors mirror `ThemeColors.dark` in the Xcode app:
-   map ocean #040C1A, land #0B1628, accent #6F86FF, sun #DD8019. */
+   background #08111F, panels #0C1828, text #F5F6F8, sun #FFB84D. */
 .site-shell[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #040c1a;
-  --ink: #f7f3ea;
-  --body: #f7f3ea;
-  --muted: #8ea0f8;
-  --line: #223a5c;
-  --map-line: #223a5c;
-  --sun: #dd8019;
-  --partly: #dd9128;
-  --warm: #ff4940;
-  --cloud: #8792a8;
+  --paper: #08111f;
+  --ink: #f5f6f8;
+  --body: #b9c6dd;
+  --muted: #8391a8;
+  --line: #2d3b50;
+  --map-line: #2d3b50;
+  --sun: #ffb84d;
+  --partly: #ffdf91;
+  --warm: #ff7a5f;
+  --cloud: #c8c2b5;
   --drizzle: #5ec4da;
-  --rain: #6f86ff;
+  --rain: #8fa8e8;
   --surface: rgba(12, 24, 40, 0.82);
   --surface-soft: rgba(12, 24, 40, 0.58);
   --surface-strong: rgba(12, 24, 40, 0.94);
-  --body-strong-alpha: rgba(247, 243, 234, 0.72);
-  --body-soft-alpha: rgba(247, 243, 234, 0.64);
-  --sun-weak-alpha: rgba(221, 128, 25, 0.12);
-  --sun-soft-alpha: rgba(221, 128, 25, 0.18);
-  --sun-faint-alpha: rgba(221, 128, 25, 0.22);
-  --sun-glow-alpha: rgba(221, 128, 25, 0.38);
-  --sun-knob-glow-alpha: rgba(221, 128, 25, 0.42);
-  --muted-track-alpha: rgba(142, 160, 248, 0.22);
-  --rain-soft-alpha: rgba(111, 134, 255, 0.14);
-  --download-blue: #6f86ff;
-  --site-bg: #040c1a;
-  --map-bg: #040c1a;
+  --body-strong-alpha: rgba(185, 198, 221, 0.82);
+  --body-soft-alpha: rgba(185, 198, 221, 0.68);
+  --sun-weak-alpha: rgba(255, 184, 77, 0.12);
+  --sun-soft-alpha: rgba(255, 184, 77, 0.18);
+  --sun-faint-alpha: rgba(255, 184, 77, 0.22);
+  --sun-glow-alpha: rgba(255, 184, 77, 0.38);
+  --sun-knob-glow-alpha: rgba(255, 184, 77, 0.42);
+  --muted-track-alpha: rgba(185, 198, 221, 0.2);
+  --rain-soft-alpha: rgba(143, 168, 232, 0.14);
+  --download-blue: #b9c6dd;
+  --download-text: #08111f;
+  --site-bg: #08111f;
+  --map-bg: #08111f;
   --map-land: #0b1628;
   --map-land-active: #10213a;
 }
@@ -110,6 +112,20 @@ body {
   background: var(--site-bg);
   color: var(--body);
   transition: background 320ms ease, color 320ms ease;
+}
+
+/* The brand mark floats above the page, keeping the app identity visible while
+   the user scrolls through the product story. */
+.floating-header {
+  pointer-events: none;
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+}
+
+.floating-header a,
+.floating-header button {
+  pointer-events: auto;
 }
 
 /* Keeps the opening header + hero as one complete first viewport, so the next
@@ -159,7 +175,7 @@ body {
 /* Custom iOS download capsule used instead of the official App Store badge. */
 .download-pill {
   background: var(--download-blue);
-  color: #f7f3ea;
+  color: var(--download-text);
 }
 
 /* Closing CTA keeps the same warm surface as the rest of the light site. */
@@ -168,7 +184,7 @@ body {
 }
 
 .site-footer {
-  background: #0f4a9c;
+  background: transparent;
 }
 
 /* -----------------------------------------------------------------------------

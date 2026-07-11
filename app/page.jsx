@@ -168,10 +168,9 @@ export default function LandingPage() {
 
   return (
     <main className="site-shell min-h-screen text-[var(--ink)]" data-theme={colorMode}>
-      {/* First viewport: header and hero stay together so the story starts cleanly. */}
-      <div className="first-screen flex flex-col">
-        {/* Header and navigation */}
-        <header className="site-container flex shrink-0 items-center justify-between py-5">
+      {/* Floating brand header: always visible while the visitor scrolls. */}
+      <header className="floating-header py-5">
+        <div className="site-container flex items-center justify-between">
           <a href={publicAsset("/")} className="flex items-center gap-3" aria-label="Weather Atlas home">
             <span className="brand-dot h-10 w-10 rounded-full bg-[var(--sun)]" />
             <span className="block text-2xl font-semibold leading-none tracking-normal text-[var(--ink)]">Weather Atlas</span>
@@ -179,16 +178,19 @@ export default function LandingPage() {
           <button
             type="button"
             onClick={() => setColorMode(isDarkMode ? "light" : "dark")}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[var(--surface)] text-[var(--ink)] transition hover:scale-[1.04]"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--line)] bg-[var(--paper)] text-[var(--ink)] transition hover:scale-[1.04]"
             aria-label={`Switch to ${isDarkMode ? "light" : "dark"} mode`}
             aria-pressed={isDarkMode}
           >
             <ThemeIcon mode={isDarkMode ? "dark" : "light"} />
           </button>
-        </header>
+        </div>
+      </header>
 
+      {/* First viewport: header and hero stay together so the story starts cleanly. */}
+      <div className="first-screen flex flex-col">
         {/* Hero section: product promise plus real app screenshot */}
-        <section className="site-container relative grid flex-1 items-center gap-10 pb-10 pt-6 md:grid-cols-[0.9fr_1.1fr] md:pb-12 md:pt-8">
+        <section className="site-container relative grid flex-1 items-center gap-10 pb-10 pt-24 md:grid-cols-[0.9fr_1.1fr] md:pb-12 md:pt-28">
           <div className="relative z-10">
             <h1 className="app-serif max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[var(--ink)] md:text-7xl">
               Find where it's sunny.
@@ -269,7 +271,7 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Download close: light CTA band plus dark footer, inspired by app sites. */}
+      {/* Download close: quiet final call-to-action on the same page surface. */}
       <section id="download" className="download-cta py-28 md:py-36">
         <div className="site-container text-center">
           <h2 className="text-5xl font-black leading-none tracking-normal text-[var(--ink)] md:text-7xl">
@@ -281,17 +283,12 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Footer: dark brand panel with simple legal/support links */}
-      <footer className="site-footer py-16 md:py-24">
-        <div className="site-container flex flex-col gap-12 md:flex-row md:items-start md:justify-between">
-          <a href={publicAsset("/")} className="flex w-fit items-center gap-4 transition hover:opacity-80">
-            <span className="h-12 w-12 rounded-full bg-[var(--sun)]" />
-            <span className="text-3xl font-semibold text-[#F7F3EA]">Weather Atlas</span>
-          </a>
-
-          <nav className="grid gap-4 text-xl font-medium text-[#F7F3EA] md:justify-items-end md:text-right">
-            <a href={publicAsset("/contact/")} className="transition hover:text-white">Support</a>
-            <a href={publicAsset("/privacy/")} className="transition hover:text-white">Privacy policy</a>
+      {/* Footer: plain support/legal links on the same warm background. */}
+      <footer className="site-footer py-10 md:py-12">
+        <div className="site-container flex justify-end">
+          <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)] md:text-base">
+            <a href={publicAsset("/contact/")} className="transition hover:text-[var(--ink)]">Support</a>
+            <a href={publicAsset("/privacy/")} className="transition hover:text-[var(--ink)]">Privacy policy</a>
           </nav>
         </div>
       </footer>
