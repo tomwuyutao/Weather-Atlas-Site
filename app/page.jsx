@@ -173,7 +173,7 @@ function SunnyHoursPreview() {
   const hours = ["06", "08", "10", "12", "14", "16", "18", "20"];
 
   return (
-    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:-translate-x-14 md:p-7">
+    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:p-7">
       <div className="flex items-center gap-3">
         <SfSymbol name="sun.max.fill" className="h-8 w-8 bg-[var(--ink)] md:h-10 md:w-10" />
         <h3 className="text-2xl font-semibold tracking-normal md:text-3xl">Sunny Hours</h3>
@@ -235,7 +235,7 @@ function SunnyHoursPreview() {
 // is deliberately built in code so its content remains clear and editable.
 function MapStoryPreview() {
   return (
-    <div className="stage-preview relative h-[500px] w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--map-bg)] md:-translate-x-14 md:h-[560px]">
+    <div className="stage-preview relative h-[500px] w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--map-bg)] md:h-[560px]">
       <img
         src={publicAsset("/images/map-view-background-july-12.png")}
         alt="Weather Atlas map of Europe showing sunny places"
@@ -261,7 +261,7 @@ function MapStoryPreview() {
 function EuropeListExample({ activeStep }) {
   if (activeStep === 0) {
     return (
-      <div className="relative flex justify-center md:-translate-x-14">
+      <div className="relative flex justify-start">
         <DesktopTravelList />
       </div>
     );
@@ -269,7 +269,7 @@ function EuropeListExample({ activeStep }) {
 
   if (activeStep === 1) {
     return (
-      <div className="relative flex justify-center">
+      <div className="relative flex justify-start">
         <SunnyHoursPreview />
       </div>
     );
@@ -277,7 +277,7 @@ function EuropeListExample({ activeStep }) {
 
   if (activeStep === 2) {
     return (
-      <div className="relative flex justify-center">
+      <div className="relative flex justify-start">
         <MapStoryPreview />
       </div>
     );
@@ -385,11 +385,11 @@ export default function LandingPage() {
           </div>
 
           <div id="sunny" className="relative flex min-h-[500px] items-center justify-center">
-            <div className="relative rounded-[48px] bg-black p-2">
+            <div className="hero-phone-shell relative rounded-[48px] bg-black p-2">
               <img
-                src={publicAsset("/images/hero-screenshot.png")}
+                src={publicAsset(isDarkMode ? "/images/hero-dark.png" : "/images/hero-light.png")}
                 alt="Weather Atlas app showing sunny places on a map"
-                className="h-auto w-auto rounded-[40px] border border-white/10"
+                className="hero-screenshot h-auto w-auto rounded-[40px] border border-white/10"
                 style={{ maxHeight: "min(640px, calc(100vh - 190px))" }}
               />
             </div>
