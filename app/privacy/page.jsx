@@ -1,4 +1,5 @@
 import SiteFooter from "../SiteFooter";
+import SiteBrand from "../SiteBrand";
 
 // -----------------------------------------------------------------------------
 // Privacy page metadata
@@ -77,10 +78,11 @@ const sections = [
 export default function PrivacyPolicyPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#FDF9F3] text-[#1B3F73]">
+      {/* Shared floating brand keeps navigation back to the main site available. */}
+      <SiteBrand />
       <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
         {/* Page title and revision date */}
         <header className="mb-16">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Privacy Policy</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Weather Atlas Privacy Policy</h1>
           <p className="mt-6 text-base leading-8 text-[#516071]">Last updated: May 20, 2026</p>
         </header>

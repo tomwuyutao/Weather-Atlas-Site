@@ -27,26 +27,53 @@ const workflowSteps = [
     label: "1",
     navTitle: "Create lists",
     title: "Build your travel list",
-    body: "Add the places you’re thinking about visiting.",
-    screenshot: "/images/create-lists-screenshot.png",
-    screenshotAlt: "Weather Atlas showing a saved travel list"
+    body: "Add the places you’re thinking about visiting."
   },
   {
     label: "2",
     navTitle: "Find sunny dates",
     title: "See when each place shines",
-    body: "Skip opening forecasts one by one.",
-    screenshot: "/images/sunny-dates-screenshot.png",
-    screenshotAlt: "Weather Atlas ranking places by sunny dates"
+    body: "Skip opening forecasts day by day."
   },
   {
     label: "3",
     navTitle: "Visualise on map",
     title: "Spot sunshine instantly",
-    body: "See weather patterns across your saved places.",
-    screenshot: "/images/map-view-screenshot.png",
-    screenshotAlt: "Weather Atlas map view for saved places"
+    body: "See weather patterns across your saved places."
   }
+];
+
+// -----------------------------------------------------------------------------
+// Europe list example data
+// -----------------------------------------------------------------------------
+// Mirrors the sunny-city list in the provided app reference. Step one uses this
+// data in a desktop-style window rather than showing a phone screenshot.
+const europePlaces = [
+  { city: "Rome", temperature: "36°", cloud: "0%" },
+  { city: "Athens", temperature: "33°", cloud: "0%" },
+  { city: "Antalya", temperature: "35°", cloud: "3%" },
+  { city: "Ankara", temperature: "29°", cloud: "3%" },
+  { city: "Hamburg", temperature: "27°", cloud: "4%" },
+  { city: "Bursa", temperature: "29°", cloud: "6%" },
+  { city: "Berlin", temperature: "28°", cloud: "9%" }
+];
+
+// -----------------------------------------------------------------------------
+// Sunny-hours example data
+// -----------------------------------------------------------------------------
+// Each segment uses a percentage position across the 06:00-20:00 timeline.
+// This keeps the visual timeline data-driven and easy to adjust later.
+const sunnyHoursRows = [
+  { date: "Today", segments: [["sun", 0, 74], ["partly", 74, 7], ["sun", 81, 19]] },
+  { date: "Jul 13", segments: [["sun", 0, 27], ["partly", 27, 13]] },
+  { date: "Jul 14", segments: [["partly", 13, 27], ["sun", 40, 14], ["partly", 54, 13], ["sun", 94, 6]] },
+  { date: "Jul 15", segments: [["sun", 0, 7], ["partly", 7, 40], ["sun", 47, 14], ["partly", 61, 13]] },
+  { date: "Jul 16", segments: [["sun", 0, 100]] },
+  { date: "Jul 17", segments: [["sun", 0, 60], ["partly", 60, 13], ["partly", 94, 6]] },
+  { date: "Jul 18", segments: [["partly", 0, 20], ["partly", 47, 13]] },
+  { date: "Jul 19", segments: [["partly", 7, 47]] },
+  { date: "Jul 20", segments: [["partly", 74, 7], ["sun", 81, 19]] },
+  { date: "Jul 21", segments: [["sun", 0, 27], ["partly", 27, 47], ["sun", 74, 26]] }
 ];
 
 // -----------------------------------------------------------------------------
@@ -84,25 +111,179 @@ function ThemeIcon({ mode }) {
 }
 
 // -----------------------------------------------------------------------------
-// Europe list example
+// SF Symbol renderer
 // -----------------------------------------------------------------------------
-// Shows the matching app screenshot for each narrative step.
-function EuropeListExample({ activeStep }) {
-  const preview = workflowSteps[activeStep] ?? workflowSteps[0];
+// Uses the exported SF Symbols as CSS masks. This preserves their vector shape
+// while letting the site apply its own app-palette colours at any size.
+function SfSymbol({ name, className = "" }) {
+  const iconPath = publicAsset(`/icons/${name}.svg`);
 
   return (
-    <div className="relative flex justify-center">
-      <div className="relative rounded-[48px] bg-black p-2 md:-translate-x-14">
-        <img
-          key={preview.screenshot}
-          src={publicAsset(preview.screenshot)}
-          alt={preview.screenshotAlt}
-          className="stage-preview h-auto w-auto rounded-[40px] border border-white/10"
-          style={{ maxHeight: "min(560px, 72vh)" }}
-        />
+    <span
+      aria-hidden="true"
+      className={`inline-block shrink-0 ${className}`}
+      style={{
+        WebkitMask: `url("${iconPath}") center / contain no-repeat`,
+        mask: `url("${iconPath}") center / contain no-repeat`
+      }}
+    />
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Desktop travel-list preview
+// -----------------------------------------------------------------------------
+// The first story step is intentionally rendered as a clean macOS-style app
+// window. It keeps the focus on the ranked places and omits phone hardware and
+// the app's sort, edit, and add toolbar controls.
+function DesktopTravelList() {
+  return (
+    <div className="stage-preview w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:p-6">
+      <h3 className="app-serif text-3xl font-semibold leading-none tracking-normal md:text-4xl">Europe</h3>
+      <ol className="mt-6 grid gap-1 md:mt-7">
+        {europePlaces.map((place, index) => (
+          <li
+            key={place.city}
+            className="grid grid-cols-[2rem_minmax(0,1fr)_auto_auto_auto] items-center gap-3 border-b border-[var(--line)] py-2.5 text-sm md:grid-cols-[2.25rem_minmax(0,1fr)_auto_auto_auto] md:gap-3 md:py-3 md:text-base"
+          >
+            <span className="font-medium text-[var(--muted)]">{index + 1}</span>
+            <span className="text-lg font-semibold md:text-xl">{place.city}</span>
+            <span className="flex items-center gap-1 text-[var(--sun)]">
+              <SfSymbol name="thermometer.medium" className="h-4 w-3 bg-[var(--sun)]" />
+              {place.temperature}
+            </span>
+            <span className="flex items-center gap-1 text-[var(--body)]">
+              <SfSymbol name="cloud" className="h-4 w-4 bg-[var(--body)]" />
+              {place.cloud}
+            </span>
+            <SfSymbol name="sun.max.fill" className="h-5 w-5 bg-[var(--sun)]" />
+          </li>
+        ))}
+      </ol>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Sunny-hours preview
+// -----------------------------------------------------------------------------
+// Recreates the second app view with real layout elements rather than a flat
+// screenshot: dates, hour markers, and colour-coded sunshine ranges.
+function SunnyHoursPreview() {
+  const hours = ["06", "08", "10", "12", "14", "16", "18", "20"];
+
+  return (
+    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:-translate-x-14 md:p-7">
+      <div className="flex items-center gap-3">
+        <SfSymbol name="sun.max.fill" className="h-8 w-8 bg-[var(--ink)] md:h-10 md:w-10" />
+        <h3 className="text-2xl font-semibold tracking-normal md:text-3xl">Sunny Hours</h3>
+      </div>
+
+      <div className="mt-6 text-xs font-semibold text-[var(--body)] md:mt-8 md:text-sm">
+        <div className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-2.5 md:grid-cols-[4.75rem_minmax(0,1fr)] md:gap-x-3">
+          <span aria-hidden="true" />
+          <div className="grid grid-cols-8">
+            {hours.map((hour) => (
+              <span key={hour} className="text-center">{hour}</span>
+            ))}
+          </div>
+
+          <div className="mt-1 grid gap-y-1 md:gap-y-1.5">
+            {sunnyHoursRows.map((row) => (
+              <span key={row.date} className={`flex h-7 items-center ${row.date === "Today" ? "font-semibold text-[var(--ink)]" : "font-medium"}`}>
+                {row.date}
+              </span>
+            ))}
+          </div>
+
+          <div className="relative mt-1">
+            {/* One continuous grid layer prevents hour lines breaking between dates. */}
+            <div className="absolute inset-0 grid grid-cols-8" aria-hidden="true">
+              {hours.map((hour) => (
+                <span key={hour} className="border-l border-[var(--line)]" />
+              ))}
+            </div>
+            <div className="relative grid gap-y-1 md:gap-y-1.5">
+              {sunnyHoursRows.map((row) => (
+                <div key={row.date} className="relative h-7 overflow-hidden">
+                  {row.segments.map(([type, start, width], index) => (
+                    <span
+                      key={`${row.date}-${index}`}
+                      className={`absolute top-1/2 h-4 -translate-y-1/2 rounded-full ${type === "sun" ? "bg-[var(--sun)]" : "bg-[var(--partly)]"}`}
+                      style={{ left: `${start}%`, width: `${width}%` }}
+                    />
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div className="mt-6 flex items-center justify-center gap-5 text-sm font-medium text-[var(--body)]">
+        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--sun)]" />Sunny</span>
+        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--partly)]" />Partly Sunny</span>
       </div>
     </div>
   );
+}
+
+// -----------------------------------------------------------------------------
+// Map story preview
+// -----------------------------------------------------------------------------
+// Uses the supplied map screenshot as the cartographic backdrop. The Rome card
+// is deliberately built in code so its content remains clear and editable.
+function MapStoryPreview() {
+  return (
+    <div className="stage-preview relative h-[500px] w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--map-bg)] md:-translate-x-14 md:h-[560px]">
+      <img
+        src={publicAsset("/images/map-view-background-july-12.png")}
+        alt="Weather Atlas map of Europe showing sunny places"
+        className="absolute inset-0 h-full w-full object-cover object-[center_72%]"
+      />
+      <section className="absolute inset-x-5 bottom-5 flex items-center justify-between rounded-[26px] border border-[var(--line)] bg-[var(--surface-strong)] px-6 py-6 text-[var(--ink)] md:inset-x-6 md:bottom-6 md:px-8 md:py-7">
+        <div>
+          <p className="text-3xl font-semibold leading-none tracking-normal md:text-5xl">7 AM - 9 PM</p>
+          <p className="mt-4 text-base font-medium text-[var(--body)] md:text-lg">Sunny Hours</p>
+          <p className="mt-2 text-2xl font-semibold leading-none md:text-3xl">Rome</p>
+        </div>
+        <SfSymbol name="sun.max.fill" className="h-16 w-16 bg-[var(--sun)] md:h-20 md:w-20" />
+      </section>
+    </div>
+  );
+}
+
+// -----------------------------------------------------------------------------
+// Workflow preview
+// -----------------------------------------------------------------------------
+// Shows three distinct coded previews: a travel list, a sunshine timeline, and
+// a screenshot-backed map with an editable card.
+function EuropeListExample({ activeStep }) {
+  if (activeStep === 0) {
+    return (
+      <div className="relative flex justify-center md:-translate-x-14">
+        <DesktopTravelList />
+      </div>
+    );
+  }
+
+  if (activeStep === 1) {
+    return (
+      <div className="relative flex justify-center">
+        <SunnyHoursPreview />
+      </div>
+    );
+  }
+
+  if (activeStep === 2) {
+    return (
+      <div className="relative flex justify-center">
+        <MapStoryPreview />
+      </div>
+    );
+  }
+
+  return null;
 }
 
 // -----------------------------------------------------------------------------

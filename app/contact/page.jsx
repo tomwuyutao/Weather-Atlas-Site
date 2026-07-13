@@ -1,4 +1,5 @@
 import SiteFooter from "../SiteFooter";
+import SiteBrand from "../SiteBrand";
 
 // -----------------------------------------------------------------------------
 // Contact page metadata
@@ -16,10 +17,11 @@ export const metadata = {
 export default function ContactPage() {
   return (
     <main className="flex min-h-screen flex-col bg-[#FDF9F3] text-[#1B3F73]">
+      {/* Shared floating brand keeps navigation back to the main site available. */}
+      <SiteBrand />
       {/* Main contact message */}
       <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
         <section className="max-w-3xl">
-          <p className="mb-5 text-xs font-semibold uppercase tracking-[0.34em] text-[#FF8A65]">Contact</p>
           <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Say hello.</h1>
           <p className="mt-6 max-w-2xl text-lg leading-8 text-[#516071]">
             If you run into issues, want to suggest a feature, or just want to say hi, email:
