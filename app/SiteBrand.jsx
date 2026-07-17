@@ -11,7 +11,7 @@ export default function SiteBrand() {
       <div className="site-container">
         <a href={`${publicBasePath}/`} className="flex w-fit items-center gap-3" aria-label="Weather Atlas home">
           <span className="brand-dot h-10 w-10 rounded-full bg-[var(--sun)]" />
-          <span className="block text-2xl font-semibold leading-none tracking-normal text-[var(--ink)]">Weather Atlas</span>
+          <span className="app-serif block text-2xl font-semibold leading-none tracking-normal text-[var(--ink)]">Weather Atlas</span>
         </a>
       </div>
     </header>

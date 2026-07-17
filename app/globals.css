@@ -5,24 +5,23 @@
 /* -----------------------------------------------------------------------------
    Theme tokens
    ----------------------------------------------------------------------------- */
-/* Light-mode colors used across the marketing site. These mirror the app's
-   current AppTheme.light palette from the Xcode project. */
+/* Light-mode colors use the exact values from ThemeColors.light in the app. */
 :root {
   color-scheme: light;
   --paper: #fdf9f3;
   --ink: #1b3f73;
   --body: #516071;
-  --muted: #7a8492;
-  --line: #e6e1d9;
+  --muted: #516071;
+  --line: #c9c4b8;
   --map-line: #c9c4b8;
   --sun: #ffb84d;
   --partly: #ffdf91;
-  --warm: #ff8a65;
   --cloud: #c8c2b5;
   --drizzle: #62b9d2;
   --rain: #4d70d4;
-  --surface: rgba(255, 255, 255, 0.72);
-  --surface-soft: rgba(255, 255, 255, 0.52);
+  --destructive: #d03d3b;
+  --surface: rgba(253, 249, 243, 0.86);
+  --surface-soft: rgba(253, 249, 243, 0.52);
   --surface-strong: rgba(253, 249, 243, 0.86);
   --body-strong-alpha: rgba(81, 96, 113, 0.78);
   --body-soft-alpha: rgba(81, 96, 113, 0.66);
@@ -36,27 +35,26 @@
   --download-blue: #1b3f73;
   --download-text: #fdf9f3;
   --site-bg: #fdf9f3;
-  --map-bg: #f7f6f2;
-  --map-land: #e5e0d9;
-  --map-land-active: #e9e4de;
+  --map-bg: #fdf9f3;
+  --map-land: #fdf9f3;
+  --map-land-active: #fdf9f3;
 }
 
-/* Dark-mode colors mirror `ThemeColors.dark` in the Xcode app:
-   background #08111F, panels #0C1828, text #F5F6F8, sun #FFB84D. */
+/* Dark-mode colors use the exact values from ThemeColors.dark in the app. */
 .site-shell[data-theme="dark"] {
   color-scheme: dark;
   --paper: #08111f;
   --ink: #f5f6f8;
   --body: #b9c6dd;
-  --muted: #8391a8;
+  --muted: #b9c6dd;
   --line: #2d3b50;
   --map-line: #2d3b50;
   --sun: #ffb84d;
   --partly: #ffdf91;
-  --warm: #ff7a5f;
   --cloud: #c8c2b5;
-  --drizzle: #5ec4da;
+  --drizzle: #62b9d2;
   --rain: #8fa8e8;
+  --destructive: #d03d3b;
   --surface: rgba(12, 24, 40, 0.82);
   --surface-soft: rgba(12, 24, 40, 0.58);
   --surface-strong: rgba(12, 24, 40, 0.94);
@@ -73,8 +71,8 @@
   --download-text: #08111f;
   --site-bg: #08111f;
   --map-bg: #08111f;
-  --map-land: #0b1628;
-  --map-land-active: #10213a;
+  --map-land: #08111f;
+  --map-land-active: #08111f;
 }
 
 /* -----------------------------------------------------------------------------
@@ -228,6 +226,6 @@ a {
 
 /* Selection color follows the warm accent used by the weather dots. */
 ::selection {
-  color: #2e2961;
-  background: rgba(247, 171, 62, 0.45);
+  color: var(--ink);
+  background: rgba(255, 184, 77, 0.45);
 }
