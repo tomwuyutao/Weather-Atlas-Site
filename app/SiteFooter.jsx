@@ -16,12 +16,12 @@ export default function SiteFooter() {
   ];
 
   return (
-    <footer className="px-6 py-12 text-[#1B3F73] md:px-10">
+    <footer className="px-6 py-12 text-[var(--ink)] md:px-10">
       <div className="mx-auto flex w-full max-w-7xl justify-end">
         {/* Utility navigation for support/legal pages */}
-        <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[#516071]">
+        <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)]">
           {links.map(([label, href]) => (
-            <a key={label} href={href} className="transition hover:text-[#1B3F73]">
+            <a key={label} href={href} className="transition hover:text-[var(--ink)]">
               {label}
             </a>
           ))}

@@ -138,7 +138,7 @@ function SfSymbol({ name, className = "" }) {
 // the app's sort, edit, and add toolbar controls.
 function DesktopTravelList() {
   return (
-    <div className="stage-preview w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:p-6">
+    <div className="stage-preview w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--card-fill)] p-5 text-[var(--ink)] md:p-6">
       <h3 className="app-serif text-3xl font-semibold leading-none tracking-normal md:text-4xl">Europe</h3>
       <ol className="mt-6 grid gap-1 md:mt-7">
         {europePlaces.map((place, index) => (
@@ -173,7 +173,7 @@ function SunnyHoursPreview() {
   const hours = ["06", "08", "10", "12", "14", "16", "18", "20"];
 
   return (
-    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--paper)] p-5 text-[var(--ink)] md:p-7">
+    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--card-fill)] p-5 text-[var(--ink)] md:p-7">
       <div className="flex items-center gap-3">
         <SfSymbol name="sun.max.fill" className="h-8 w-8 bg-[var(--ink)] md:h-10 md:w-10" />
         <h3 className="text-2xl font-semibold tracking-normal md:text-3xl">Sunny Hours</h3>
@@ -206,6 +206,10 @@ function SunnyHoursPreview() {
             <div className="relative grid gap-y-1 md:gap-y-1.5">
               {sunnyHoursRows.map((row) => (
                 <div key={row.date} className="relative h-7 overflow-hidden">
+                  <span
+                    aria-hidden="true"
+                    className="absolute top-1/2 h-4 w-full -translate-y-1/2 rounded-full bg-[var(--chart-track)]"
+                  />
                   {row.segments.map(([type, start, width], index) => (
                     <span
                       key={`${row.date}-${index}`}
@@ -213,6 +217,12 @@ function SunnyHoursPreview() {
                       style={{ left: `${start}%`, width: `${width}%` }}
                     />
                   ))}
+                  {row.date === "Today" && (
+                    <span
+                      aria-hidden="true"
+                      className="absolute top-1/2 h-4 w-full -translate-y-1/2 rounded-full border-[1.5px] border-[var(--ink)]"
+                    />
+                  )}
                 </div>
               ))}
             </div>
@@ -223,6 +233,7 @@ function SunnyHoursPreview() {
       <div className="mt-6 flex items-center justify-center gap-5 text-sm font-medium text-[var(--body)]">
         <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--sun)]" />Sunny</span>
         <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--partly)]" />Partly Sunny</span>
+        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--chart-track)]" />No Sun</span>
       </div>
     </div>
   );
@@ -241,13 +252,12 @@ function MapStoryPreview() {
         alt="Weather Atlas map of Europe showing sunny places"
         className="absolute inset-0 h-full w-full object-cover object-[center_72%]"
       />
-      <section className="absolute inset-x-5 bottom-5 flex items-center justify-between rounded-[26px] border border-[var(--line)] bg-[var(--surface-strong)] px-6 py-6 text-[var(--ink)] md:inset-x-6 md:bottom-6 md:px-8 md:py-7">
-        <div>
-          <p className="text-3xl font-semibold leading-none tracking-normal md:text-5xl">7 AM - 9 PM</p>
-          <p className="mt-4 text-base font-medium text-[var(--body)] md:text-lg">Sunny Hours</p>
-          <p className="mt-2 text-2xl font-semibold leading-none md:text-3xl">Rome</p>
+      <section className="absolute inset-x-5 bottom-5 flex h-32 items-center justify-between gap-4 rounded-[24px] border border-[var(--line)] bg-[var(--surface-strong)] px-[22px] py-4 text-[var(--ink)] md:inset-x-6 md:bottom-6">
+        <div className="min-w-0">
+          <p className="text-[32px] font-semibold leading-none tracking-normal">7 AM - 9 PM</p>
+          <p className="mt-2 truncate text-base font-normal leading-tight">Rome · Sunny Hours</p>
         </div>
-        <SfSymbol name="sun.max.fill" className="h-16 w-16 bg-[var(--sun)] md:h-20 md:w-20" />
+        <SfSymbol name="sun.max.fill" className="h-10 w-10 bg-[var(--sun)]" />
       </section>
     </div>
   );
@@ -387,7 +397,7 @@ export default function LandingPage() {
           <div id="sunny" className="relative flex min-h-[500px] items-center justify-center">
             <div className="hero-phone-shell relative rounded-[48px] bg-black p-2">
               <img
-                src={publicAsset(isDarkMode ? "/images/hero-dark.png" : "/images/hero-light.png")}
+                src={publicAsset(isDarkMode ? "/images/hero-dark-july-28.png" : "/images/hero-light-july-28.png")}
                 alt="Weather Atlas app showing sunny places on a map"
                 className="hero-screenshot h-auto w-auto rounded-[40px] border border-white/10"
                 style={{ maxHeight: "min(640px, calc(100vh - 190px))" }}

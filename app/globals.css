@@ -5,74 +5,78 @@
 /* -----------------------------------------------------------------------------
    Theme tokens
    ----------------------------------------------------------------------------- */
-/* Light-mode colors use the exact values from ThemeColors.light in the app. */
+/* Light-mode colors mirror AppPalette.light in the Weather Atlas app. */
 :root {
   color-scheme: light;
-  --paper: #fdf9f3;
-  --ink: #1b3f73;
-  --body: #516071;
-  --muted: #516071;
-  --line: #c9c4b8;
-  --map-line: #c9c4b8;
-  --sun: #ffb84d;
-  --partly: #ffdf91;
-  --cloud: #c8c2b5;
-  --drizzle: #62b9d2;
-  --rain: #4d70d4;
-  --destructive: #d03d3b;
-  --surface: rgba(253, 249, 243, 0.86);
-  --surface-soft: rgba(253, 249, 243, 0.52);
-  --surface-strong: rgba(253, 249, 243, 0.86);
-  --body-strong-alpha: rgba(81, 96, 113, 0.78);
-  --body-soft-alpha: rgba(81, 96, 113, 0.66);
-  --sun-weak-alpha: rgba(255, 184, 77, 0.12);
-  --sun-soft-alpha: rgba(255, 184, 77, 0.18);
-  --sun-faint-alpha: rgba(255, 184, 77, 0.22);
-  --sun-glow-alpha: rgba(255, 184, 77, 0.38);
-  --sun-knob-glow-alpha: rgba(255, 184, 77, 0.42);
-  --muted-track-alpha: rgba(81, 96, 113, 0.18);
-  --rain-soft-alpha: rgba(77, 112, 212, 0.14);
-  --download-blue: #1b3f73;
-  --download-text: #fdf9f3;
-  --site-bg: #fdf9f3;
-  --map-bg: #fdf9f3;
-  --map-land: #fdf9f3;
-  --map-land-active: #fdf9f3;
+  --paper: #faf8f2;
+  --ink: #262626;
+  --body: #6d6d6d;
+  --muted: #6d6d6d;
+  --line: #f4efe4;
+  --map-line: #6d6d6d;
+  --sun: #fbc056;
+  --partly: #fae38e;
+  --cloud: #c8c8c8;
+  --drizzle: #67d1f0;
+  --rain: #5aa4f3;
+  --destructive: #d14d30;
+  --surface: rgba(250, 248, 242, 0.86);
+  --surface-soft: rgba(250, 248, 242, 0.52);
+  --surface-strong: rgba(250, 248, 242, 0.94);
+  --body-strong-alpha: rgba(109, 109, 109, 0.78);
+  --body-soft-alpha: rgba(109, 109, 109, 0.66);
+  --sun-weak-alpha: rgba(251, 192, 86, 0.12);
+  --sun-soft-alpha: rgba(251, 192, 86, 0.18);
+  --sun-faint-alpha: rgba(251, 192, 86, 0.22);
+  --sun-glow-alpha: rgba(251, 192, 86, 0.38);
+  --sun-knob-glow-alpha: rgba(251, 192, 86, 0.42);
+  --muted-track-alpha: rgba(109, 109, 109, 0.18);
+  --rain-soft-alpha: rgba(90, 164, 243, 0.14);
+  --download-blue: #262626;
+  --download-text: #faf8f2;
+  --site-bg: #faf8f2;
+  --card-fill: #f4efe4;
+  --chart-track: #faf8f2;
+  --map-bg: #f4efe4;
+  --map-land: #faf8f2;
+  --map-land-active: #f4efe4;
 }
 
-/* Dark-mode colors use the exact values from ThemeColors.dark in the app. */
+/* Dark-mode colors mirror AppPalette.dark in the Weather Atlas app. */
 .site-shell[data-theme="dark"] {
   color-scheme: dark;
-  --paper: #08111f;
-  --ink: #f5f6f8;
-  --body: #b9c6dd;
-  --muted: #b9c6dd;
-  --line: #2d3b50;
-  --map-line: #2d3b50;
-  --sun: #ffb84d;
-  --partly: #ffdf91;
-  --cloud: #c8c2b5;
-  --drizzle: #62b9d2;
-  --rain: #8fa8e8;
-  --destructive: #d03d3b;
-  --surface: rgba(12, 24, 40, 0.82);
-  --surface-soft: rgba(12, 24, 40, 0.58);
-  --surface-strong: rgba(12, 24, 40, 0.94);
-  --body-strong-alpha: rgba(185, 198, 221, 0.82);
-  --body-soft-alpha: rgba(185, 198, 221, 0.68);
-  --sun-weak-alpha: rgba(255, 184, 77, 0.12);
-  --sun-soft-alpha: rgba(255, 184, 77, 0.18);
-  --sun-faint-alpha: rgba(255, 184, 77, 0.22);
-  --sun-glow-alpha: rgba(255, 184, 77, 0.38);
-  --sun-knob-glow-alpha: rgba(255, 184, 77, 0.42);
-  --muted-track-alpha: rgba(185, 198, 221, 0.2);
-  --rain-soft-alpha: rgba(143, 168, 232, 0.14);
-  --download-blue: #b9c6dd;
-  --download-text: #08111f;
-  --site-bg: #08111f;
-  --map-bg: #08111f;
-  --map-land: #08111f;
-  --map-land-active: #08111f;
+  --paper: #262626;
+  --ink: #fefefe;
+  --body: #929292;
+  --muted: #929292;
+  --line: #303030;
+  --map-line: #929292;
+  --sun: #fbc056;
+  --partly: #fae38e;
+  --cloud: #c8c8c8;
+  --drizzle: #67d1f0;
+  --rain: #5aa4f3;
+  --destructive: #d14d30;
+  --surface: rgba(38, 38, 38, 0.82);
+  --surface-soft: rgba(38, 38, 38, 0.58);
+  --surface-strong: rgba(38, 38, 38, 0.94);
+  --body-strong-alpha: rgba(146, 146, 146, 0.82);
+  --body-soft-alpha: rgba(146, 146, 146, 0.68);
+  --sun-weak-alpha: rgba(251, 192, 86, 0.12);
+  --sun-soft-alpha: rgba(251, 192, 86, 0.18);
+  --sun-faint-alpha: rgba(251, 192, 86, 0.22);
+  --sun-glow-alpha: rgba(251, 192, 86, 0.38);
+  --sun-knob-glow-alpha: rgba(251, 192, 86, 0.42);
+  --muted-track-alpha: rgba(146, 146, 146, 0.2);
+  --rain-soft-alpha: rgba(90, 164, 243, 0.14);
+  --download-blue: #fefefe;
+  --download-text: #262626;
+  --site-bg: #262626;
+  --card-fill: #303030;
+  --chart-track: #262626;
+  --map-bg: #303030;
+  --map-land: #262626;
+  --map-land-active: #303030;
 }
 
 /* -----------------------------------------------------------------------------
@@ -227,5 +231,5 @@ a {
 /* Selection color follows the warm accent used by the weather dots. */
 ::selection {
   color: var(--ink);
-  background: rgba(255, 184, 77, 0.45);
+  background: rgba(251, 192, 86, 0.45);
 }
