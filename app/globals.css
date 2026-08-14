@@ -83,6 +83,12 @@ a { color: inherit; text-decoration: none; }
   transform-origin: top;
 }
 
+/* Desktop product stages settle like discrete editorial pages, not a long generic feed. */
+@media (min-width: 1024px) {
+  html { scroll-snap-type: y mandatory; }
+  .scroll-stage { scroll-snap-align: start; scroll-snap-stop: always; }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .stage-fade { transition: opacity 320ms ease, transform 320ms ease; }
 }

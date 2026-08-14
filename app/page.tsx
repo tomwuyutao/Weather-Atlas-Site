@@ -9,27 +9,28 @@ export default function HomePage() {
       <SiteHeader />
       {/* No overflow ancestor here: desktop product story relies on native `position: sticky`. */}
       <main className="pt-[68px]">
-        {/* Hero — the only large opening moment, anchored by a native-style product report. */}
-        <section className="px-5 pb-20 pt-14 sm:px-8 sm:pb-28 sm:pt-20 lg:px-12 lg:pb-32 lg:pt-28">
-          <div className="mx-auto grid max-w-[1280px] items-center gap-12 lg:grid-cols-[0.85fr_1.15fr] lg:gap-20">
-            <div className="max-w-[570px]">
-              <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted"><span className="h-2 w-2 rounded-full bg-[var(--sun)]" /> Weather discovery, for iPhone</p>
-              <h1 className="mt-6 font-display text-[clamp(3.5rem,7.4vw,7.2rem)] font-bold leading-[0.88] tracking-[-0.07em] text-foreground">Find the brighter way.</h1>
-              <p className="mt-7 max-w-[470px] text-lg leading-relaxed text-muted sm:text-xl">Weather Atlas helps you see the sun at your location, compare the places you care about, and go somewhere better when the forecast calls for it.</p>
-              <div className="mt-8 flex flex-wrap items-center gap-4">
-                <a href={appStoreUrl} className="rounded-full bg-[var(--foreground)] px-5 py-3.5 text-sm font-semibold text-[var(--canvas)] transition-transform hover:-translate-y-px">Download for iOS</a>
-                <a href="#how-it-works" className="text-sm font-medium text-foreground underline decoration-[var(--sun)] decoration-2 underline-offset-4">See how it works</a>
-              </div>
-              <p className="mt-5 text-xs text-muted">Built for the next good day.</p>
+        {/* Hero — centered, editorial, and visibly product-led from the opening viewport. */}
+        <section className="relative min-h-[calc(100svh-68px)] overflow-hidden px-5 pb-0 pt-32 sm:px-8 sm:pt-36 lg:px-12 lg:pt-40">
+          <div className="mx-auto flex max-w-[980px] flex-col items-center text-center">
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted"><span className="h-2 w-2 rounded-full bg-[var(--sun)]" /> Weather Atlas for iPhone</p>
+            <h1 className="mt-7 font-display text-[clamp(3.8rem,8vw,7.7rem)] font-normal leading-[0.86] tracking-[-0.065em] text-foreground">
+              Follow the forecast,<br /><em className="font-normal">find the sun.</em>
+            </h1>
+            <p className="mt-7 max-w-[510px] text-lg leading-[1.45] text-muted sm:text-xl">Weather Atlas shows where today is brightest, across the places you care about and the map in front of you.</p>
+            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
+              <a href={appStoreUrl} className="rounded-xl border border-[var(--foreground)] bg-[var(--sun-pale)] px-5 py-3.5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-px">Download for iOS</a>
+              <a href="#how-it-works" className="rounded-xl border border-rule px-5 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-panel">Explore the app</a>
             </div>
-            <div className="relative mx-auto w-full max-w-[650px] lg:max-w-none">
-              <div className="absolute -left-8 top-10 h-24 w-24 rounded-full bg-[var(--sun-pale)] opacity-45 blur-[1px]" aria-hidden="true" />
-              <ProductMockup view="location" />
-            </div>
+            <p className="mt-5 text-xs text-muted">A calmer way to make weather plans.</p>
+          </div>
+          <div className="relative mx-auto mt-12 w-full max-w-[850px] sm:mt-14">
+            <div className="absolute -left-14 top-12 h-32 w-32 rounded-full bg-[var(--sun-pale)] opacity-45 blur-[1px]" aria-hidden="true" />
+            <div className="absolute -right-12 bottom-10 h-24 w-24 rounded-full bg-[var(--drizzle)] opacity-20 blur-[1px]" aria-hidden="true" />
+            <ProductMockup view="location" />
           </div>
         </section>
 
-        <section className="border-y border-rule px-5 py-8 sm:px-8 lg:px-12">
+        <section className="border-y border-rule px-5 py-9 sm:px-8 lg:px-12">
           <div className="mx-auto grid max-w-[1280px] gap-5 sm:grid-cols-3 sm:gap-8">
             <SmallPromise label="Your Location" text="Know when today is at its brightest." />
             <SmallPromise label="Saved Places" text="Compare the places already on your mind." />

@@ -46,10 +46,13 @@ export function ProductStory() {
     const updateStory = () => {
       const root = rootRef.current;
       if (!root) return;
-      const totalTravel = Math.max(1, root.offsetHeight - window.innerHeight);
-      const position = Math.min(1, Math.max(0, -root.getBoundingClientRect().top / totalTravel));
+      const stageHeight = Math.max(1, window.innerHeight);
+      const stageOffset = Math.max(0, -root.getBoundingClientRect().top);
+      // Each trigger is one viewport tall, so the active product changes at
+      // clear, page-like resting points rather than at arbitrary percentages.
+      const position = Math.min(1, stageOffset / (stageHeight * (stages.length - 1)));
       setProgress(position);
-      setActiveIndex(Math.min(stages.length - 1, Math.floor(position * stages.length)));
+      setActiveIndex(Math.min(stages.length - 1, Math.floor(stageOffset / stageHeight)));
     };
     const onScroll = () => {
       if (frame) return;
@@ -77,9 +80,9 @@ export function ProductStory() {
           <h2 className="mt-4 font-display text-4xl font-bold leading-[0.98] tracking-[-0.055em] text-foreground sm:text-5xl">A forecast that helps you choose.</h2>
         </div>
 
-        {/* The three viewport-length triggers drive the desktop’s pinned interface. */}
-        <div ref={rootRef} className="relative mt-10 hidden h-[300vh] lg:block">
-          <div className="sticky top-[68px] grid h-[calc(100vh-68px)] grid-cols-[270px_minmax(0,1fr)] gap-12 py-12 xl:grid-cols-[300px_minmax(0,1fr)]">
+        {/* Three real viewport stages drive the desktop’s pinned product interface. */}
+        <div ref={rootRef} className="relative mt-10 hidden lg:block">
+          <div className="sticky top-[68px] z-10 -mb-[calc(100vh-68px)] grid h-[calc(100vh-68px)] grid-cols-[270px_minmax(0,1fr)] gap-12 py-12 xl:grid-cols-[300px_minmax(0,1fr)]">
             <aside className="flex h-full flex-col justify-between">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">The weather, in three views</p>
@@ -115,8 +118,8 @@ export function ProductStory() {
               </div>
             </div>
           </div>
-          <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-full">
-            {stages.map((stage, index) => <div id={`story-trigger-${index}`} key={stage.number} className="h-1/3" />)}
+          <div aria-hidden="true" className="pointer-events-none">
+            {stages.map((stage, index) => <div id={`story-trigger-${index}`} key={stage.number} className="scroll-stage h-screen" />)}
           </div>
         </div>
 
