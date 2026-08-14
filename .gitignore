@@ -1,0 +1,8 @@
+# Build artefacts and local dependencies
+node_modules/
+.next/
+out/
+
+# Local environment and editor files
+.env*.local
+.DS_Store

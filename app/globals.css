@@ -1,0 +1,92 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Weather Atlas source palette: #FAF8F2, #262626, #FBC056, #5AA4F3. */
+:root {
+  --canvas: #faf8f2;
+  --foreground: #262626;
+  --muted: #6d6d6d;
+  --panel: #f4efe4;
+  --panel-strong: #eee7d9;
+  --rule: rgba(38, 38, 38, 0.14);
+  --rule-strong: rgba(38, 38, 38, 0.26);
+  --sun: #fbc056;
+  --sun-pale: #fae38e;
+  --rain: #5aa4f3;
+  --drizzle: #67d1f0;
+  --cloud: #c8c8c8;
+  --map: #eae5d9;
+}
+
+.dark {
+  --canvas: #262626;
+  --foreground: #fefefe;
+  --muted: #929292;
+  --panel: #303030;
+  --panel-strong: #383838;
+  --rule: rgba(254, 254, 254, 0.16);
+  --rule-strong: rgba(254, 254, 254, 0.32);
+  --map: #323232;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--canvas);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  text-rendering: optimizeLegibility;
+}
+
+::selection { background: var(--sun); color: #262626; }
+
+a { color: inherit; text-decoration: none; }
+
+.site-rule { border-color: var(--rule); }
+.text-muted { color: var(--muted); }
+.bg-panel { background: var(--panel); }
+.bg-panel-strong { background: var(--panel-strong); }
+.bg-canvas { background: var(--canvas); }
+.text-foreground { color: var(--foreground); }
+.border-rule { border-color: var(--rule); }
+.border-rule-strong { border-color: var(--rule-strong); }
+
+/* The site treats UI frames as part of the editorial typography, not as SaaS cards. */
+.app-frame {
+  background: var(--canvas);
+  border: 1px solid var(--rule-strong);
+  border-radius: 2rem;
+  overflow: hidden;
+}
+
+.app-surface {
+  background: var(--panel);
+  border: 1px solid var(--rule);
+  border-radius: 1.25rem;
+}
+
+.tiny-rule { height: 1px; background: var(--rule); }
+
+.weather-grid {
+  background-image:
+    linear-gradient(var(--rule) 1px, transparent 1px),
+    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
+  background-size: 26px 26px;
+}
+
+.story-progress {
+  background: var(--sun);
+  transform-origin: top;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .stage-fade { transition: opacity 320ms ease, transform 320ms ease; }
+}
+
+@media (max-width: 1023px) {
+  .app-frame { border-radius: 1.55rem; }
+}
