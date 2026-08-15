@@ -1,5 +1,7 @@
+.DS_Store
 node_modules/
 .next/
+.npm-cache/
 out/
-.DS_Store
-.env*.local
+landing-screenshots/
+app/page 2.jsx

@@ -1,0 +1,43 @@
+import SiteFooter from "../SiteFooter";
+import SiteBrand from "../SiteBrand";
+
+// -----------------------------------------------------------------------------
+// Contact page metadata
+// -----------------------------------------------------------------------------
+// Gives the browser/search result a specific title for the support page.
+export const metadata = {
+  title: "Contact | Weather Atlas",
+  description: "Contact Weather Atlas support."
+};
+
+// -----------------------------------------------------------------------------
+// Contact page
+// -----------------------------------------------------------------------------
+// A simple support page that points users to the developer email address.
+export default function ContactPage() {
+  return (
+    <main className="flex min-h-screen flex-col bg-[var(--paper)] text-[var(--ink)]">
+      {/* Shared floating brand keeps navigation back to the main site available. */}
+      <SiteBrand />
+      {/* Main contact message */}
+      <div className="mx-auto flex min-h-[68vh] max-w-4xl flex-col justify-center px-5 py-20 md:px-10 lg:px-16">
+        <section className="max-w-3xl">
+          <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Say hello.</h1>
+          <p className="mt-6 max-w-2xl text-lg leading-8 text-[var(--body)]">
+            If you run into issues, want to suggest a feature, or just want to say hi, email:
+          </p>
+          <a
+            href="mailto:yutao5726@gmail.com"
+            className="mt-8 inline-flex rounded-full bg-[var(--sun)] px-7 py-4 text-base font-semibold text-[var(--ink)] transition hover:bg-[var(--partly)]"
+          >
+            yutao5726@gmail.com
+          </a>
+        </section>
+      </div>
+      {/* Shared footer keeps subpage navigation consistent */}
+      <div className="mt-auto">
+        <SiteFooter />
+      </div>
+    </main>
+  );
+}
