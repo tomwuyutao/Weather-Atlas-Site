@@ -2,97 +2,42 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Weather Atlas source palette: #FAF8F2, #262626, #FBC056, #5AA4F3. */
 :root {
-  --canvas: #faf8f2;
-  --foreground: #262626;
-  --muted: #6d6d6d;
-  --panel: #f4efe4;
-  --panel-strong: #eee7d9;
-  --rule: rgba(38, 38, 38, 0.14);
-  --rule-strong: rgba(38, 38, 38, 0.26);
-  --sun: #fbc056;
-  --sun-pale: #fae38e;
-  --rain: #5aa4f3;
-  --drizzle: #67d1f0;
-  --cloud: #c8c8c8;
-  --map: #eae5d9;
+  --page: #fbfbef;
+  --ink: #191919;
+  --muted: #74746f;
+  --line: #dfdfd2;
+  --panel: #f1f1e7;
+  --accent: #e5d6ff;
+  --dark-page: #191919;
+  --dark-ink: #f7f7ef;
+  --dark-muted: #b2b2aa;
+  --dark-line: #3d3d39;
+  --dark-panel: #282825;
 }
 
 .dark {
-  --canvas: #262626;
-  --foreground: #fefefe;
-  --muted: #929292;
-  --panel: #303030;
-  --panel-strong: #383838;
-  --rule: rgba(254, 254, 254, 0.16);
-  --rule-strong: rgba(254, 254, 254, 0.32);
-  --map: #323232;
+  --page: var(--dark-page);
+  --ink: var(--dark-ink);
+  --muted: var(--dark-muted);
+  --line: var(--dark-line);
+  --panel: var(--dark-panel);
+  --accent: #cbb1ee;
 }
 
 * { box-sizing: border-box; }
-
-html { scroll-behavior: smooth; }
-
-body {
-  margin: 0;
-  background: var(--canvas);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-  text-rendering: optimizeLegibility;
-}
-
-::selection { background: var(--sun); color: #262626; }
-
+html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+body { margin: 0; background: var(--page); color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
 a { color: inherit; text-decoration: none; }
+button { font: inherit; }
 
-.site-rule { border-color: var(--rule); }
-.text-muted { color: var(--muted); }
-.bg-panel { background: var(--panel); }
-.bg-panel-strong { background: var(--panel-strong); }
-.bg-canvas { background: var(--canvas); }
-.text-foreground { color: var(--foreground); }
-.border-rule { border-color: var(--rule); }
-.border-rule-strong { border-color: var(--rule-strong); }
-
-/* The site treats UI frames as part of the editorial typography, not as SaaS cards. */
-.app-frame {
-  background: var(--canvas);
-  border: 1px solid var(--rule-strong);
-  border-radius: 2rem;
-  overflow: hidden;
-}
-
-.app-surface {
-  background: var(--panel);
-  border: 1px solid var(--rule);
-  border-radius: 1.25rem;
-}
-
-.tiny-rule { height: 1px; background: var(--rule); }
-
-.weather-grid {
-  background-image:
-    linear-gradient(var(--rule) 1px, transparent 1px),
-    linear-gradient(90deg, var(--rule) 1px, transparent 1px);
-  background-size: 26px 26px;
-}
-
-.story-progress {
-  background: var(--sun);
-  transform-origin: top;
-}
-
-/* Desktop product stages settle like discrete editorial pages, not a long generic feed. */
-@media (min-width: 1024px) {
-  html { scroll-snap-type: y mandatory; }
-  .scroll-stage { scroll-snap-align: start; scroll-snap-stop: always; }
+.snap-page { scroll-snap-align: start; scroll-snap-stop: always; }
+.surface { border: 1px solid var(--line); background: var(--panel); }
+.subtle-grid {
+  background-image: linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 34px 34px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-  .stage-fade { transition: opacity 320ms ease, transform 320ms ease; }
-}
-
-@media (max-width: 1023px) {
-  .app-frame { border-radius: 1.55rem; }
+  .fade-stage { transition: opacity 250ms ease, transform 250ms ease; }
 }

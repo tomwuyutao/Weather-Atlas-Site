@@ -1,65 +1,59 @@
-import { ProductMockup } from '../components/product-mockups';
-import { ProductStory } from '../components/product-story';
-import { appStoreUrl, SiteHeader } from '../components/site-header';
+import { FloatingNavigation } from '../components/floating-navigation';
+import { PagedStory } from '../components/paged-story';
+import { PlaceholderProduct } from '../components/placeholder-product';
 import { SiteFooter } from '../components/site-footer';
+
+const mobileStages = [
+  ['01', 'Section one', 'Placeholder heading.', 'flow'],
+  ['02', 'Section two', 'Another placeholder heading.', 'compare'],
+  ['03', 'Section three', 'Final placeholder heading.', 'map'],
+] as const;
 
 export default function HomePage() {
   return (
     <>
-      <SiteHeader />
-      {/* No overflow ancestor here: desktop product story relies on native `position: sticky`. */}
-      <main className="pt-[68px]">
-        {/* Hero — centered, editorial, and visibly product-led from the opening viewport. */}
-        <section className="relative min-h-[calc(100svh-68px)] overflow-hidden px-5 pb-0 pt-32 sm:px-8 sm:pt-36 lg:px-12 lg:pt-40">
-          <div className="mx-auto flex max-w-[980px] flex-col items-center text-center">
-            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.16em] text-muted"><span className="h-2 w-2 rounded-full bg-[var(--sun)]" /> Weather Atlas for iPhone</p>
-            <h1 className="mt-7 font-display text-[clamp(3.8rem,8vw,7.7rem)] font-normal leading-[0.86] tracking-[-0.065em] text-foreground">
-              Follow the forecast,<br /><em className="font-normal">find the sun.</em>
-            </h1>
-            <p className="mt-7 max-w-[510px] text-lg leading-[1.45] text-muted sm:text-xl">Weather Atlas shows where today is brightest, across the places you care about and the map in front of you.</p>
-            <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-              <a href={appStoreUrl} className="rounded-xl border border-[var(--foreground)] bg-[var(--sun-pale)] px-5 py-3.5 text-sm font-semibold text-foreground transition-transform hover:-translate-y-px">Download for iOS</a>
-              <a href="#how-it-works" className="rounded-xl border border-rule px-5 py-3.5 text-sm font-medium text-foreground transition-colors hover:bg-panel">Explore the app</a>
-            </div>
-            <p className="mt-5 text-xs text-muted">A calmer way to make weather plans.</p>
+      <FloatingNavigation />
+      <main>
+        {/* Centered opening composition and lower demo plane are structural placeholders only. */}
+        <section className="snap-page flex min-h-[100svh] flex-col items-center justify-between overflow-hidden px-5 pb-0 pt-36 text-center sm:px-8 sm:pt-40">
+          <div className="mx-auto max-w-[850px]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Placeholder label</p>
+            <h1 className="mt-8 font-editorial text-[clamp(4rem,8vw,7.7rem)] leading-[.84] tracking-[-.07em] text-[var(--ink)]">Placeholder headline,<br /><em>placeholder emphasis.</em></h1>
+            <p className="mx-auto mt-8 max-w-[500px] text-lg leading-relaxed text-[var(--muted)]">Placeholder paragraph copy. This is intentionally neutral text used to demonstrate the layout only.</p>
+            <a id="placeholder-action" href="#stage-one" className="mt-7 inline-flex rounded-xl border-2 border-[var(--ink)] bg-[var(--accent)] px-5 py-3.5 text-sm font-semibold text-[var(--ink)]">Primary action</a>
+            <p className="mt-5 text-xs text-[var(--muted)]">Placeholder supporting detail</p>
           </div>
-          <div className="relative mx-auto mt-12 w-full max-w-[850px] sm:mt-14">
-            <div className="absolute -left-14 top-12 h-32 w-32 rounded-full bg-[var(--sun-pale)] opacity-45 blur-[1px]" aria-hidden="true" />
-            <div className="absolute -right-12 bottom-10 h-24 w-24 rounded-full bg-[var(--drizzle)] opacity-20 blur-[1px]" aria-hidden="true" />
-            <ProductMockup view="location" />
+          <div className="mt-12 w-full max-w-[800px] translate-y-10 sm:mt-16"><PlaceholderProduct variant="flow" /></div>
+        </section>
+
+        <section className="border-y border-[var(--line)] px-5 py-10 sm:px-8 lg:px-12">
+          <div className="mx-auto grid max-w-[1180px] gap-6 sm:grid-cols-3">
+            {['Placeholder detail one', 'Placeholder detail two', 'Placeholder detail three'].map((item) => <p key={item} className="border-l-2 border-[var(--accent)] pl-4 text-sm text-[var(--muted)]">{item}</p>)}
           </div>
         </section>
 
-        <section className="border-y border-rule px-5 py-9 sm:px-8 lg:px-12">
-          <div className="mx-auto grid max-w-[1280px] gap-5 sm:grid-cols-3 sm:gap-8">
-            <SmallPromise label="Your Location" text="Know when today is at its brightest." />
-            <SmallPromise label="Saved Places" text="Compare the places already on your mind." />
-            <SmallPromise label="Map" text="Turn a forecast into a direction." />
+        <section className="snap-page px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+          <div className="mx-auto max-w-[1180px]">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-[var(--muted)]">Placeholder label</p>
+            <h2 className="mt-4 max-w-[660px] font-editorial text-5xl leading-[.9] tracking-[-.06em] text-[var(--ink)] sm:text-6xl">Placeholder section heading.</h2>
           </div>
         </section>
 
-        <ProductStory />
+        <PagedStory />
 
-        {/* Closing CTA keeps the visual quiet and returns attention to the decision to download. */}
-        <section className="border-t border-rule px-5 py-20 sm:px-8 sm:py-28 lg:px-12">
-          <div className="mx-auto max-w-[780px] text-center">
-            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-muted">Weather Atlas for iPhone</p>
-            <h2 className="mt-5 font-display text-5xl font-bold leading-[0.94] tracking-[-0.06em] text-foreground sm:text-6xl">Make room for the better forecast.</h2>
-            <p className="mx-auto mt-6 max-w-[510px] text-base leading-relaxed text-muted sm:text-lg">A weather app for checking less and choosing more: where to go, when to go, and which plans have the best chance of sun.</p>
-            <a href={appStoreUrl} className="mt-9 inline-flex rounded-full bg-[var(--foreground)] px-5 py-3.5 text-sm font-semibold text-[var(--canvas)] transition-transform hover:-translate-y-px">Download for iOS</a>
-          </div>
+        {/* Mobile turns the pinned story into normal full-height placeholder pages. */}
+        <section className="lg:hidden">
+          {mobileStages.map(([number, label, title, product]) => <article id={`mobile-${number}`} className="snap-page grid min-h-[100svh] content-center gap-8 px-5 py-20 sm:px-8" key={number}>
+            <div><p className="text-sm font-semibold text-[var(--muted)]">{number} / 03</p><p className="mt-6 text-xs font-semibold uppercase tracking-[.16em] text-[var(--muted)]">{label}</p><h2 className="mt-3 font-editorial text-5xl leading-[.9] tracking-[-.06em] text-[var(--ink)]">{title}</h2><p className="mt-5 max-w-[460px] text-base leading-relaxed text-[var(--muted)]">Placeholder paragraph content that fills this product page.</p></div>
+            <PlaceholderProduct variant={product} />
+          </article>)}
+        </section>
+
+        <section className="snap-page flex min-h-[78svh] items-center justify-center border-t border-[var(--line)] px-5 py-20 text-center sm:px-8">
+          <div className="max-w-[720px]"><p className="text-xs font-semibold uppercase tracking-[.18em] text-[var(--muted)]">Placeholder label</p><h2 className="mt-5 font-editorial text-5xl leading-[.9] tracking-[-.06em] text-[var(--ink)] sm:text-6xl">Final placeholder heading.</h2><p className="mt-6 text-[var(--muted)]">Placeholder supporting copy.</p><a href="#placeholder-action" className="mt-8 inline-flex rounded-xl border-2 border-[var(--ink)] bg-[var(--accent)] px-5 py-3.5 text-sm font-semibold text-[var(--ink)]">Primary action</a></div>
         </section>
       </main>
       <SiteFooter />
     </>
-  );
-}
-
-function SmallPromise({ label, text }: { label: string; text: string }) {
-  return (
-    <div className="border-l-2 border-[var(--sun)] pl-4">
-      <p className="text-sm font-semibold text-foreground">{label}</p>
-      <p className="mt-1 text-sm leading-relaxed text-muted">{text}</p>
-    </div>
   );
 }
