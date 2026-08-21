@@ -7,19 +7,19 @@ const publicBasePath = process.env.NEXT_PUBLIC_BASE_PATH || "";
 // -----------------------------------------------------------------------------
 // Shared site footer
 // -----------------------------------------------------------------------------
-// Keeps Contact and Privacy pages visually connected to the homepage.
+// Keeps Support and Privacy pages visually connected to the homepage.
 export default function SiteFooter() {
   // Utility links shown on support/legal pages.
   const links = [
-    ["Contact", `${publicBasePath}/contact/`],
+    ["Support", `${publicBasePath}/contact/`],
     ["Privacy Policy", `${publicBasePath}/privacy/`]
   ];
 
   return (
-    <footer className="px-6 py-12 text-[var(--ink)] md:px-10">
-      <div className="mx-auto flex w-full max-w-7xl justify-end">
+    <footer className="site-footer py-8 text-[var(--ink)] md:py-10">
+      <div className="site-container flex justify-end pr-6 md:pr-8">
         {/* Utility navigation for support/legal pages */}
-        <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)]">
+        <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)] md:text-base">
           {links.map(([label, href]) => (
             <a key={label} href={href} className="transition hover:text-[var(--ink)]">
               {label}

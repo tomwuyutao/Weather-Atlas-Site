@@ -508,7 +508,7 @@ export default function LandingPage() {
           </div>
 
           <footer className="site-footer pt-10">
-            <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)] md:text-base">
+            <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 pr-6 text-sm font-medium text-[var(--body)] md:pr-8 md:text-base">
               <a href={publicAsset("/contact/")} className="transition hover:text-[var(--ink)]">Support</a>
               <a href={publicAsset("/privacy/")} className="transition hover:text-[var(--ink)]">Privacy policy</a>
             </nav>

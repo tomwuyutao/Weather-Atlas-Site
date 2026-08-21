@@ -77,29 +77,30 @@ const sections = [
 // personal information.
 export default function PrivacyPolicyPage() {
   return (
-    <main className="flex min-h-screen flex-col bg-[var(--paper)] text-[var(--ink)]">
+    <main className="site-shell flex min-h-screen flex-col text-[var(--ink)]" data-theme="light">
       {/* Shared floating brand keeps navigation back to the main site available. */}
       <SiteBrand />
-      <div className="mx-auto max-w-4xl px-5 py-20 md:px-10 lg:px-16">
+      <article className="site-container flex-1 py-32 md:py-40">
         {/* Page title and revision date */}
-        <header className="mb-16">
-          <h1 className="text-5xl font-semibold leading-none tracking-normal md:text-7xl">Weather Atlas Privacy Policy</h1>
+        <header className="mb-16 max-w-3xl">
+          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">Privacy</p>
+          <h1 className="app-serif mt-5 text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">Privacy Policy</h1>
           <p className="mt-6 text-base leading-8 text-[var(--body)]">Last updated: May 20, 2026</p>
         </header>
 
         {/* Plain-language summary before the detailed policy sections */}
-        <section className="mb-14 rounded-[28px] border border-[var(--line)] bg-[var(--card-fill)] p-6 md:p-8">
-          <h2 className="text-2xl font-semibold tracking-normal">Short version</h2>
+        <section className="mb-14 max-w-3xl rounded-[28px] border border-[var(--line)] bg-[var(--card-fill)] p-6 md:p-8">
+          <h2 className="app-serif text-2xl font-semibold tracking-normal">Short version</h2>
           <p className="mt-4 text-lg leading-8 text-[var(--body)]">
             Weather Atlas does not collect your personal data. The app stores your saved places and preferences on your device, and uses weather and map services only to show forecasts and map views you choose.
           </p>
         </section>
 
         {/* Detailed privacy sections generated from the structured content above */}
-        <div className="space-y-12">
+        <div className="max-w-3xl space-y-12">
           {sections.map((section) => (
             <section key={section.title} className="border-t border-[var(--line)] pt-8">
-              <h2 className="text-2xl font-semibold tracking-normal">{section.title}</h2>
+              <h2 className="app-serif text-2xl font-semibold tracking-normal">{section.title}</h2>
               <div className="mt-4 space-y-4 text-base leading-8 text-[var(--body)]">
                 {section.body.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
@@ -108,7 +109,7 @@ export default function PrivacyPolicyPage() {
             </section>
           ))}
         </div>
-      </div>
+      </article>
       {/* Shared footer keeps subpage navigation consistent */}
       <div className="mt-auto">
         <SiteFooter />
