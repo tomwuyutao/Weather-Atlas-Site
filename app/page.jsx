@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
+import CapabilityHighlights from "./CapabilityHighlights";
+import ComparisonSection from "./ComparisonSection";
 import DownloadButton from "./DownloadButton";
 
 // -----------------------------------------------------------------------------
@@ -310,7 +312,8 @@ function WorkflowPreview({ activeStep }) {
 // -----------------------------------------------------------------------------
 // Landing page
 // -----------------------------------------------------------------------------
-// The page keeps a compact structure: header, hero, interactive workflow, footer.
+// The page follows a four-beat narrative: purpose, comparison, workflow, and
+// quieter supporting capabilities before the download close.
 export default function LandingPage() {
   const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
   const [activeWorkflowProgress, setActiveWorkflowProgress] = useState(0);
@@ -396,7 +399,7 @@ export default function LandingPage() {
         <div className="site-container flex items-center justify-between">
           <a href={publicAsset("/")} className="flex items-center gap-3" aria-label="Weather Atlas home">
             <span className="brand-dot h-10 w-10 rounded-full bg-[var(--sun)]" />
-            <span className="app-serif block text-2xl font-semibold leading-none tracking-normal text-[var(--ink)]">Weather Atlas</span>
+            <span className="block text-2xl font-semibold leading-none tracking-normal text-[var(--ink)]">Weather Atlas</span>
           </a>
           <button
             type="button"
@@ -410,34 +413,26 @@ export default function LandingPage() {
         </div>
       </header>
 
-      {/* First viewport: header and hero stay together so the story starts cleanly. */}
+      {/* First viewport: a calm, centered product promise with no screenshot. */}
       <div className="first-screen flex flex-col">
-        {/* Hero section: product promise plus real app screenshot */}
-        <section className="site-container relative grid flex-1 items-center gap-10 pb-10 pt-24 md:grid-cols-[0.9fr_1.1fr] md:pb-12 md:pt-28">
-          <div className="relative z-10">
-            <h1 className="app-serif max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal text-[var(--ink)] md:text-7xl">
-              Find where it's sunny.
+        <section className="site-container flex flex-1 flex-col items-center justify-center pb-16 pt-28 text-center md:pb-20 md:pt-32">
+          <div className="flex max-w-3xl flex-col items-center">
+            <h1 className="app-serif text-5xl font-semibold leading-[0.92] tracking-normal text-[var(--ink)] md:text-7xl">
+              <span className="block">Find where</span>
+              <span className="block">it’s sunny.</span>
             </h1>
-            <p className="body-text mt-7 max-w-xl text-lg leading-8">
+            <p className="body-text mt-8 max-w-xl text-lg leading-8">
               Planning your next holiday? Weather Atlas helps you find sunny destinations and plan ahead.
             </p>
-            <div className="mt-10 flex">
+            <div className="mt-10 flex justify-center">
               <DownloadButton href={appStoreUrl} />
-            </div>
-          </div>
-
-          <div id="sunny" className="relative flex min-h-[500px] items-center justify-center">
-            <div className="hero-phone-shell relative rounded-[48px] bg-black p-2">
-              <img
-                src={publicAsset(isDarkMode ? "/images/hero-dark-july-28.png" : "/images/hero-light-july-28.png")}
-                alt="Weather Atlas app showing sunny places on a map"
-                className="hero-screenshot h-auto w-auto rounded-[40px] border border-white/10"
-                style={{ maxHeight: "min(640px, calc(100vh - 190px))" }}
-              />
             </div>
           </div>
         </section>
       </div>
+
+      {/* Product difference: a side-by-side comparison with conventional apps. */}
+      <ComparisonSection />
 
       {/* How it works: sticky rail with the app's three product areas. */}
       <section ref={workflowSectionRef} className="py-20 md:py-24">
@@ -493,6 +488,9 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* Supporting capabilities that complement the three main product areas. */}
+      <CapabilityHighlights />
 
       {/* Full-screen close: its opaque surface cleanly takes over from the
           workflow, including the support and privacy links at the bottom. */}
