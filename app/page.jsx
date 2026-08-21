@@ -17,6 +17,12 @@ const publicAsset = (path) => `${publicBasePath}${path}`;
 // Kept in one place so every download CTA points to the same App Store listing.
 const appStoreUrl = "https://apps.apple.com/gb/app/weather-atlas/id6759912603";
 
+// The story rail activates each stage when its heading reaches this viewport
+// position. Keeping the value shared avoids a mismatch between click targets
+// and scroll-driven progress.
+const workflowStageAnchorRatio = 0.2;
+const workflowProgressEpsilon = 0.01;
+
 // -----------------------------------------------------------------------------
 // Discovery workflow content
 // -----------------------------------------------------------------------------
@@ -319,7 +325,7 @@ export default function LandingPage() {
       if (workflowSectionRef.current && workflowContentRefs.current.length) {
         const section = workflowSectionRef.current;
         const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-        const stageAnchor = window.innerHeight * 0.2;
+        const stageAnchor = Math.round(window.innerHeight * workflowStageAnchorRatio);
         const stageStarts = workflowContentRefs.current.map((content) => (
           content.getBoundingClientRect().top + window.scrollY - stageAnchor
         ));
@@ -329,10 +335,14 @@ export default function LandingPage() {
           0
         );
         const nextStageStart = stageStarts[activeIndex + 1] ?? Math.max(sectionEnd, stageStarts[activeIndex] + 1);
-        const stageProgress = Math.min(
+        const rawStageProgress = Math.min(
           Math.max((window.scrollY - stageStarts[activeIndex]) / (nextStageStart - stageStarts[activeIndex]), 0),
           1
         );
+        // Browser scroll positions can be fractional. Treat the first 1% as
+        // the stage's starting point so a rail click never renders a sliver of
+        // progress before the visitor has actually begun scrolling.
+        const stageProgress = rawStageProgress < workflowProgressEpsilon ? 0 : rawStageProgress;
 
         setActiveWorkflowIndex(activeIndex);
         setActiveWorkflowProgress(stageProgress);
@@ -363,9 +373,11 @@ export default function LandingPage() {
     if (!target) return;
 
     // Align the selected stage with the same anchor used by the scroll
-    // observer. This avoids arriving with a partially filled progress line.
+    // observer. A two-pixel cushion keeps rounding from rendering 1% progress
+    // as soon as the browser finishes the smooth scroll.
+    const stageAnchor = Math.round(window.innerHeight * workflowStageAnchorRatio);
     window.scrollTo({
-      top: target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2,
+      top: Math.max(0, Math.floor(target.getBoundingClientRect().top + window.scrollY - stageAnchor - 2)),
       behavior: "smooth"
     });
   };
