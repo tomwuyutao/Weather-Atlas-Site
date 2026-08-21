@@ -442,7 +442,7 @@ export default function LandingPage() {
       {/* How it works: sticky rail with the app's three product areas. */}
       <section ref={workflowSectionRef} className="py-20 md:py-24">
         <div className="site-container grid gap-12 md:grid-cols-2">
-          <nav className="hidden self-start md:sticky md:top-[24vh] md:block" aria-label="Weather Atlas workflow">
+          <nav className="hidden self-start md:sticky md:top-[20vh] md:block" aria-label="Weather Atlas workflow">
             <div className="grid max-w-[250px] gap-1">
               <p className="mb-5 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">How it works</p>
               {workflowSteps.map((step, index) => {
