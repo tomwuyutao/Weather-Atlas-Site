@@ -83,7 +83,7 @@ export default function PrivacyPolicyPage() {
       <article className="site-container flex-1 py-32 md:py-40">
         {/* Page title and revision date */}
         <header className="mb-16 max-w-3xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">Privacy</p>
+          <p className="text-base font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">Privacy</p>
           <h1 className="app-serif mt-5 max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">Privacy policy.</h1>
           <p className="body-text mt-7 max-w-xl text-lg leading-8">
             A clear explanation of the information Weather Atlas stores and the services it uses to show forecasts.

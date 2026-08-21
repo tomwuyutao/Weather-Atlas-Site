@@ -441,6 +441,9 @@ export default function LandingPage() {
               reserved exclusively for the three navigable product areas. */}
           <header className="mx-auto max-w-3xl text-center">
             <p className="comparison-kicker">How it works</p>
+            <h2 className="app-serif mt-5 text-4xl font-semibold leading-[1.02] tracking-normal text-[var(--ink)] md:text-6xl">
+              Find sun across three levels.
+            </h2>
           </header>
 
           <div className="mt-16 grid gap-12 md:mt-20 md:grid-cols-2">
