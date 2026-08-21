@@ -26,60 +26,53 @@ const workflowProgressEpsilon = 0.01;
 // -----------------------------------------------------------------------------
 // Discovery workflow content
 // -----------------------------------------------------------------------------
-// These steps explain the main use case: tracking possible destinations instead
-// of checking traditional city-by-city forecasts.
+// The story follows the app's three primary surfaces: the current location,
+// the places a person has saved, and open-ended discovery on the map.
 const workflowSteps = [
   {
     label: "1",
-    navTitle: "Create lists",
-    title: "Build your travel list",
-    body: "Add the places you’re thinking about visiting."
+    navTitle: "Your place",
+    title: "Find sun at your place.",
+    body: "See today’s conditions and sunny hours, then discover nearby places with more sunshine."
   },
   {
     label: "2",
-    navTitle: "Find sunny dates",
-    title: "See when each place shines",
-    body: "Skip opening forecasts day by day."
+    navTitle: "Saved places",
+    title: "Find sun across your saved places.",
+    body: "Compare the best sunny dates and places across the next 10 days—without checking forecasts one by one."
   },
   {
     label: "3",
-    navTitle: "Visualise on map",
-    title: "Spot sunshine instantly",
-    body: "See weather patterns across your saved places."
+    navTitle: "Explore the map",
+    title: "Explore new places with sun.",
+    body: "See sunny hours spatially, inspect places on the map, and find somewhere brighter."
   }
 ];
 
 // -----------------------------------------------------------------------------
-// Europe list example data
+// Your Location and Saved Places example data
 // -----------------------------------------------------------------------------
-// Mirrors the sunny-city list in the provided app reference. Step one uses this
-// data in a desktop-style window rather than showing a phone screenshot.
-const europePlaces = [
-  { city: "Rome", temperature: "36°", cloud: "0%" },
-  { city: "Athens", temperature: "33°", cloud: "0%" },
-  { city: "Antalya", temperature: "35°", cloud: "3%" },
-  { city: "Ankara", temperature: "29°", cloud: "3%" },
-  { city: "Hamburg", temperature: "27°", cloud: "4%" },
-  { city: "Bursa", temperature: "29°", cloud: "6%" },
-  { city: "Berlin", temperature: "28°", cloud: "9%" }
+// These compact examples mirror the real app's nearby-sunnier ranking and
+// Saved Places planning cards without relying on a live forecast.
+const nearbySunnyPlaces = [
+  { city: "Brighton", sunnyHours: "8 h", distance: "83 km" },
+  { city: "Cambridge", sunnyHours: "7 h", distance: "79 km" },
+  { city: "Oxford", sunnyHours: "7 h", distance: "84 km" }
 ];
 
-// -----------------------------------------------------------------------------
-// Sunny-hours example data
-// -----------------------------------------------------------------------------
-// Each segment uses a percentage position across the 06:00-20:00 timeline.
-// This keeps the visual timeline data-driven and easy to adjust later.
-const sunnyHoursRows = [
-  { date: "Today", segments: [["sun", 0, 74], ["partly", 74, 7], ["sun", 81, 19]] },
-  { date: "Jul 13", segments: [["sun", 0, 27], ["partly", 27, 13]] },
-  { date: "Jul 14", segments: [["partly", 13, 27], ["sun", 40, 14], ["partly", 54, 13], ["sun", 94, 6]] },
-  { date: "Jul 15", segments: [["sun", 0, 7], ["partly", 7, 40], ["sun", 47, 14], ["partly", 61, 13]] },
-  { date: "Jul 16", segments: [["sun", 0, 100]] },
-  { date: "Jul 17", segments: [["sun", 0, 60], ["partly", 60, 13], ["partly", 94, 6]] },
-  { date: "Jul 18", segments: [["partly", 0, 20], ["partly", 47, 13]] },
-  { date: "Jul 19", segments: [["partly", 7, 47]] },
-  { date: "Jul 20", segments: [["partly", 74, 7], ["sun", 81, 19]] },
-  { date: "Jul 21", segments: [["sun", 0, 27], ["partly", 27, 47], ["sun", 74, 26]] }
+const sunnyDateOptions = [
+  { weekday: "Mon", date: "27", accent: "bg-[var(--partly)]" },
+  { weekday: "Tue", date: "28", accent: "bg-[var(--sun)]" },
+  { weekday: "Wed", date: "29", accent: "bg-[var(--sun)]" },
+  { weekday: "Thu", date: "30", accent: "bg-[var(--partly)]" },
+  { weekday: "Fri", date: "31", accent: "bg-[var(--sun-faint-alpha)]" }
+];
+
+const savedPlaceRankings = [
+  { city: "Athens", sunnyHours: "10 h", bestDate: "Wed 29" },
+  { city: "Rome", sunnyHours: "9 h", bestDate: "Tue 28" },
+  { city: "Antalya", sunnyHours: "9 h", bestDate: "Wed 29" },
+  { city: "Madrid", sunnyHours: "8 h", bestDate: "Fri 31" }
 ];
 
 // -----------------------------------------------------------------------------
@@ -137,110 +130,119 @@ function SfSymbol({ name, className = "" }) {
 }
 
 // -----------------------------------------------------------------------------
-// Desktop travel-list preview
+// Your Location preview
 // -----------------------------------------------------------------------------
-// The first story step is intentionally rendered as a clean macOS-style app
-// window. It keeps the focus on the ranked places and omits phone hardware and
-// the app's sort, edit, and add toolbar controls.
-function DesktopTravelList() {
+// The current-location report brings together the selected day's local weather,
+// its daily sunshine timeline, and the nearby-sunnier recommendation list.
+function YourLocationPreview() {
   return (
-    <div className="stage-preview w-full max-w-[560px] overflow-hidden rounded-[26px] border border-[var(--line)] bg-[var(--card-fill)] p-5 text-[var(--ink)] md:p-6">
-      <h3 className="app-serif text-3xl font-semibold leading-none tracking-normal md:text-4xl">Europe</h3>
-      <ol className="mt-6 grid gap-1 md:mt-7">
-        {europePlaces.map((place, index) => (
-          <li
-            key={place.city}
-            className="grid grid-cols-[2rem_minmax(0,1fr)_auto_auto_auto] items-center gap-3 border-b border-[var(--line)] py-2.5 text-sm md:grid-cols-[2.25rem_minmax(0,1fr)_auto_auto_auto] md:gap-3 md:py-3 md:text-base"
-          >
-            <span className="font-medium text-[var(--muted)]">{index + 1}</span>
-            <span className="text-lg font-semibold md:text-xl">{place.city}</span>
-            <span className="flex items-center gap-1 text-[var(--sun)]">
-              <SfSymbol name="thermometer.medium" className="h-4 w-3 bg-[var(--sun)]" />
-              {place.temperature}
-            </span>
-            <span className="flex items-center gap-1 text-[var(--body)]">
-              <SfSymbol name="cloud" className="h-4 w-4 bg-[var(--body)]" />
-              {place.cloud}
-            </span>
+    <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--card-fill)] p-5 text-[var(--ink)] md:p-7">
+      <div className="flex items-start justify-between gap-5">
+        <div>
+          <p className="text-sm font-medium text-[var(--body)]">Your Location</p>
+          <h3 className="app-serif mt-1 text-3xl font-semibold leading-none tracking-normal md:text-4xl">London</h3>
+          <p className="mt-2 text-sm text-[var(--body)]">Partly sunny · 18°</p>
+        </div>
+        <SfSymbol name="cloud.sun.fill" className="h-11 w-11 bg-[var(--sun)]" />
+      </div>
+
+      <section className="mt-7 border-t border-[var(--line)] pt-5">
+        <div className="flex items-center justify-between gap-4">
+          <span className="flex items-center gap-2 text-base font-semibold">
             <SfSymbol name="sun.max.fill" className="h-5 w-5 bg-[var(--sun)]" />
-          </li>
-        ))}
-      </ol>
+            Daily Sunny Hours
+          </span>
+          <span className="text-sm font-semibold text-[var(--sun)]">6 h</span>
+        </div>
+        <div className="mt-5">
+          <div className="relative h-4 overflow-hidden rounded-full bg-[var(--chart-track)]">
+            <span className="absolute inset-y-0 left-[18%] w-[35%] rounded-full bg-[var(--sun)]" />
+            <span className="absolute inset-y-0 left-[63%] w-[19%] rounded-full bg-[var(--partly)]" />
+          </div>
+          <div className="mt-2 flex justify-between text-xs font-medium text-[var(--body)]">
+            <span>06</span><span>09</span><span>12</span><span>15</span><span>18</span><span>21</span>
+          </div>
+        </div>
+      </section>
+
+      <section className="mt-7 border-t border-[var(--line)] pt-5">
+        <div className="flex items-center gap-2 text-base font-semibold">
+          <SfSymbol name="sun.max.fill" className="h-5 w-5 bg-[var(--sun)]" />
+          Nearby sunnier places
+        </div>
+        <ol className="mt-3 grid divide-y divide-[var(--line)]">
+          {nearbySunnyPlaces.map((place) => (
+            <li key={place.city} className="flex items-center justify-between gap-3 py-3 first:pt-0 last:pb-0">
+              <div>
+                <p className="font-semibold">{place.city}</p>
+                <p className="mt-0.5 text-sm text-[var(--body)]">{place.distance} away</p>
+              </div>
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--sun)]">
+                <SfSymbol name="sun.max.fill" className="h-4 w-4 bg-[var(--sun)]" />
+                {place.sunnyHours}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   );
 }
 
 // -----------------------------------------------------------------------------
-// Sunny-hours preview
+// Saved Places preview
 // -----------------------------------------------------------------------------
-// Recreates the second app view with real layout elements rather than a flat
-// screenshot: dates, hour markers, and colour-coded sunshine ranges.
-function SunnyHoursPreview() {
-  const hours = ["06", "08", "10", "12", "14", "16", "18", "20"];
-
+// This pairs the app's two planning cards: the forecast dates with the best
+// overall sunshine and the saved places ranking for the selected date.
+function SavedPlacesPreview() {
   return (
     <div className="stage-preview w-full max-w-[560px] rounded-[26px] border border-[var(--line)] bg-[var(--card-fill)] p-5 text-[var(--ink)] md:p-7">
-      <div className="flex items-center gap-3">
-        <SfSymbol name="sun.max.fill" className="h-8 w-8 bg-[var(--ink)] md:h-10 md:w-10" />
-        <h3 className="text-2xl font-semibold tracking-normal md:text-3xl">Sunny Hours</h3>
-      </div>
-
-      <div className="mt-6 text-xs font-semibold text-[var(--body)] md:mt-8 md:text-sm">
-        <div className="grid grid-cols-[4rem_minmax(0,1fr)] gap-x-2.5 md:grid-cols-[4.75rem_minmax(0,1fr)] md:gap-x-3">
-          <span aria-hidden="true" />
-          <div className="grid grid-cols-8">
-            {hours.map((hour) => (
-              <span key={hour} className="text-center">{hour}</span>
-            ))}
-          </div>
-
-          <div className="mt-1 grid gap-y-1 md:gap-y-1.5">
-            {sunnyHoursRows.map((row) => (
-              <span key={row.date} className={`flex h-7 items-center ${row.date === "Today" ? "font-semibold text-[var(--ink)]" : "font-medium"}`}>
-                {row.date}
-              </span>
-            ))}
-          </div>
-
-          <div className="relative mt-1">
-            {/* One continuous grid layer prevents hour lines breaking between dates. */}
-            <div className="absolute inset-0 grid grid-cols-8" aria-hidden="true">
-              {hours.map((hour) => (
-                <span key={hour} className="border-l border-[var(--line)]" />
-              ))}
-            </div>
-            <div className="relative grid gap-y-1 md:gap-y-1.5">
-              {sunnyHoursRows.map((row) => (
-                <div key={row.date} className="relative h-7 overflow-hidden">
-                  <span
-                    aria-hidden="true"
-                    className="absolute top-1/2 h-4 w-full -translate-y-1/2 rounded-full bg-[var(--chart-track)]"
-                  />
-                  {row.segments.map(([type, start, width], index) => (
-                    <span
-                      key={`${row.date}-${index}`}
-                      className={`absolute top-1/2 h-4 -translate-y-1/2 rounded-full ${type === "sun" ? "bg-[var(--sun)]" : "bg-[var(--partly)]"}`}
-                      style={{ left: `${start}%`, width: `${width}%` }}
-                    />
-                  ))}
-                  {row.date === "Today" && (
-                    <span
-                      aria-hidden="true"
-                      className="absolute top-1/2 h-4 w-full -translate-y-1/2 rounded-full border-[1.5px] border-[var(--ink)]"
-                    />
-                  )}
-                </div>
-              ))}
-            </div>
-          </div>
+      <div className="flex items-start justify-between gap-4">
+        <div>
+          <p className="text-sm font-medium text-[var(--body)]">Saved Places</p>
+          <h3 className="app-serif mt-1 text-3xl font-semibold leading-none tracking-normal md:text-4xl">Plan ahead</h3>
         </div>
+        <span className="rounded-full bg-[var(--sun-soft-alpha)] px-3 py-1.5 text-xs font-semibold text-[var(--ink)]">Next 10 days</span>
       </div>
 
-      <div className="mt-6 flex items-center justify-center gap-5 text-sm font-medium text-[var(--body)]">
-        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--sun)]" />Sunny</span>
-        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--partly)]" />Partly Sunny</span>
-        <span className="flex items-center gap-2"><i className="h-3 w-3 rounded-full bg-[var(--chart-track)]" />No Sun</span>
-      </div>
+      <section className="mt-7 border-t border-[var(--line)] pt-5">
+        <div className="flex items-center gap-2 text-base font-semibold">
+          <span aria-hidden="true" className="text-lg">▦</span>
+          Best Sunny Dates
+        </div>
+        <div className="mt-4 grid grid-cols-5 gap-2">
+          {sunnyDateOptions.map((option) => (
+            <div key={option.date} className="text-center">
+              <p className="text-xs font-medium text-[var(--body)]">{option.weekday}</p>
+              <span className={`mt-2 flex aspect-square items-center justify-center rounded-2xl border border-[color:var(--line)] text-lg font-semibold ${option.accent}`}>
+                {option.date}
+              </span>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      <section className="mt-7 border-t border-[var(--line)] pt-5">
+        <div className="flex items-center gap-2 text-base font-semibold">
+          <SfSymbol name="sun.max.fill" className="h-5 w-5 bg-[var(--sun)]" />
+          Best Sunny Places
+        </div>
+        <ol className="mt-3 grid divide-y divide-[var(--line)]">
+          {savedPlaceRankings.map((place, index) => (
+            <li key={place.city} className="grid grid-cols-[1.5rem_minmax(0,1fr)_auto] items-center gap-3 py-3 first:pt-0 last:pb-0">
+              <span className="text-sm font-medium text-[var(--muted)]">{index + 1}</span>
+              <div className="min-w-0">
+                <p className="truncate font-semibold">{place.city}</p>
+                <p className="mt-0.5 text-sm text-[var(--body)]">Best on {place.bestDate}</p>
+              </div>
+              <span className="flex items-center gap-1.5 text-sm font-semibold text-[var(--sun)]">
+                <SfSymbol name="sun.max.fill" className="h-4 w-4 bg-[var(--sun)]" />
+                {place.sunnyHours}
+              </span>
+            </li>
+          ))}
+        </ol>
+      </section>
     </div>
   );
 }
@@ -272,13 +274,13 @@ function MapStoryPreview() {
 // -----------------------------------------------------------------------------
 // Workflow preview
 // -----------------------------------------------------------------------------
-// Shows three distinct coded previews: a travel list, a sunshine timeline, and
-// a screenshot-backed map with an editable card.
-function EuropeListExample({ activeStep }) {
+// Shows the app's three product areas: current location, saved-place planning,
+// and map discovery.
+function WorkflowPreview({ activeStep }) {
   if (activeStep === 0) {
     return (
       <div className="relative flex justify-start">
-        <DesktopTravelList />
+        <YourLocationPreview />
       </div>
     );
   }
@@ -286,7 +288,7 @@ function EuropeListExample({ activeStep }) {
   if (activeStep === 1) {
     return (
       <div className="relative flex justify-start">
-        <SunnyHoursPreview />
+        <SavedPlacesPreview />
       </div>
     );
   }
@@ -432,7 +434,7 @@ export default function LandingPage() {
         </section>
       </div>
 
-      {/* How it works: Granola-style sticky rail with scrollable content */}
+      {/* How it works: sticky rail with the app's three product areas. */}
       <section ref={workflowSectionRef} className="py-20 md:py-24">
         <div className="site-container grid gap-12 md:grid-cols-2">
           <nav className="hidden self-start md:sticky md:top-[24vh] md:block" aria-label="Weather Atlas workflow">
@@ -480,7 +482,7 @@ export default function LandingPage() {
                   <p className="body-text mt-4 text-lg leading-8">{step.body}</p>
                 </div>
 
-                <EuropeListExample activeStep={index} />
+                <WorkflowPreview activeStep={index} />
               </article>
             ))}
           </div>
