@@ -302,29 +302,40 @@ function EuropeListExample({ activeStep }) {
 // The page keeps a compact structure: header, hero, interactive workflow, footer.
 export default function LandingPage() {
   const [activeWorkflowIndex, setActiveWorkflowIndex] = useState(0);
-  const [workflowProgress, setWorkflowProgress] = useState(0);
+  const [activeWorkflowProgress, setActiveWorkflowProgress] = useState(0);
   const [colorMode, setColorMode] = useState("light");
   const isDarkMode = colorMode === "dark";
   const workflowSectionRef = useRef(null);
   const workflowContentRefs = useRef([]);
 
-  // Keep the sticky left rail in sync with the right-hand scroll content,
-  // matching the Granola-style staged narrative without adding a scroll library.
+  // Keep the sticky left rail in sync with the right-hand scroll content.
+  // Each stage begins when its heading reaches this point in the viewport. The
+  // click handler below uses the same anchor, so opening a rail item always
+  // begins its own progress bar at 0%.
   useEffect(() => {
     let animationFrame = null;
 
     const updateActiveStep = () => {
-      if (workflowSectionRef.current) {
+      if (workflowSectionRef.current && workflowContentRefs.current.length) {
         const section = workflowSectionRef.current;
         const sectionTop = section.getBoundingClientRect().top + window.scrollY;
-        const scrollableDistance = Math.max(section.offsetHeight - window.innerHeight, 1);
-        const progress = Math.min(Math.max((window.scrollY - sectionTop) / scrollableDistance, 0), 1);
-        setWorkflowProgress(progress);
+        const stageAnchor = window.innerHeight * 0.2;
+        const stageStarts = workflowContentRefs.current.map((content) => (
+          content.getBoundingClientRect().top + window.scrollY - stageAnchor
+        ));
+        const sectionEnd = sectionTop + section.offsetHeight - window.innerHeight + stageAnchor;
+        const activeIndex = stageStarts.reduce(
+          (currentIndex, start, index) => (window.scrollY >= start ? index : currentIndex),
+          0
+        );
+        const nextStageStart = stageStarts[activeIndex + 1] ?? Math.max(sectionEnd, stageStarts[activeIndex] + 1);
+        const stageProgress = Math.min(
+          Math.max((window.scrollY - stageStarts[activeIndex]) / (nextStageStart - stageStarts[activeIndex]), 0),
+          1
+        );
 
-        // The next rail item only becomes active after the previous progress
-        // line is complete, so the highlight and progress bar stay in sync.
-        const activeIndex = Math.min(Math.floor(progress * workflowSteps.length), workflowSteps.length - 1);
         setActiveWorkflowIndex(activeIndex);
+        setActiveWorkflowProgress(stageProgress);
       }
     };
 
@@ -351,9 +362,11 @@ export default function LandingPage() {
     const target = workflowContentRefs.current[index];
     if (!target) return;
 
-    target.scrollIntoView({
-      behavior: "smooth",
-      block: "center"
+    // Align the selected stage with the same anchor used by the scroll
+    // observer. This avoids arriving with a partially filled progress line.
+    window.scrollTo({
+      top: target.getBoundingClientRect().top + window.scrollY - window.innerHeight * 0.2,
+      behavior: "smooth"
     });
   };
 
@@ -415,7 +428,7 @@ export default function LandingPage() {
               <p className="mb-5 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">How it works</p>
               {workflowSteps.map((step, index) => {
                 const isActive = activeWorkflowIndex === index;
-                const segmentProgress = Math.min(Math.max(workflowProgress * workflowSteps.length - index, 0), 1);
+                const segmentProgress = index < activeWorkflowIndex ? 1 : index === activeWorkflowIndex ? activeWorkflowProgress : 0;
 
                 return (
                   <button
@@ -462,27 +475,27 @@ export default function LandingPage() {
         </div>
       </section>
 
-      {/* Download close: quiet final call-to-action on the same page surface. */}
-      <section id="download" className="download-cta py-28 md:py-36">
-        <div className="site-container text-center">
-          <h2 className="text-5xl font-black leading-none tracking-normal text-[var(--ink)] md:text-7xl">
-            Try Weather Atlas today
-          </h2>
-          <div className="mt-10 flex justify-center">
-            <DownloadButton href={appStoreUrl} />
+      {/* Full-screen close: its opaque surface cleanly takes over from the
+          workflow, including the support and privacy links at the bottom. */}
+      <section id="download" className="download-cta relative z-10 flex min-h-[100svh] py-10 md:py-12">
+        <div className="site-container flex flex-1 flex-col">
+          <div className="flex flex-1 flex-col items-center justify-center text-center">
+            <h2 className="text-5xl font-black leading-none tracking-normal text-[var(--ink)] md:text-7xl">
+              Try Weather Atlas today
+            </h2>
+            <div className="mt-10 flex justify-center">
+              <DownloadButton href={appStoreUrl} />
+            </div>
           </div>
+
+          <footer className="site-footer pt-10">
+            <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)] md:text-base">
+              <a href={publicAsset("/contact/")} className="transition hover:text-[var(--ink)]">Support</a>
+              <a href={publicAsset("/privacy/")} className="transition hover:text-[var(--ink)]">Privacy policy</a>
+            </nav>
+          </footer>
         </div>
       </section>
-
-      {/* Footer: plain support/legal links on the same warm background. */}
-      <footer className="site-footer py-10 md:py-12">
-        <div className="site-container flex justify-end">
-          <nav className="flex flex-wrap items-center justify-end gap-x-8 gap-y-3 text-sm font-medium text-[var(--body)] md:text-base">
-            <a href={publicAsset("/contact/")} className="transition hover:text-[var(--ink)]">Support</a>
-            <a href={publicAsset("/privacy/")} className="transition hover:text-[var(--ink)]">Privacy policy</a>
-          </nav>
-        </div>
-      </footer>
     </main>
   );
 }

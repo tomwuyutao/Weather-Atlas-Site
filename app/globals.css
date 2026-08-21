@@ -180,9 +180,10 @@ body {
   color: var(--download-text);
 }
 
-/* Closing CTA keeps the same warm surface as the rest of the light site. */
+/* Closing CTA takes over as its own full viewport, covering the sticky story
+   rail cleanly as the narrative hands off to the final download action. */
 .download-cta {
-  background: transparent;
+  background: var(--site-bg);
 }
 
 .site-footer {
