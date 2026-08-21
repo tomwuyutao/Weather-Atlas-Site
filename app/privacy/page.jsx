@@ -84,14 +84,17 @@ export default function PrivacyPolicyPage() {
         {/* Page title and revision date */}
         <header className="mb-16 max-w-3xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">Privacy</p>
-          <h1 className="app-serif mt-5 text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">Privacy Policy</h1>
-          <p className="mt-6 text-base leading-8 text-[var(--body)]">Last updated: May 20, 2026</p>
+          <h1 className="app-serif mt-5 max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">Privacy policy.</h1>
+          <p className="body-text mt-7 max-w-xl text-lg leading-8">
+            A clear explanation of the information Weather Atlas stores and the services it uses to show forecasts.
+          </p>
+          <p className="mt-5 text-base leading-8 text-[var(--body)]">Last updated: May 20, 2026</p>
         </header>
 
         {/* Plain-language summary before the detailed policy sections */}
         <section className="mb-14 max-w-3xl rounded-[28px] border border-[var(--line)] bg-[var(--card-fill)] p-6 md:p-8">
           <h2 className="app-serif text-2xl font-semibold tracking-normal">Short version</h2>
-          <p className="mt-4 text-lg leading-8 text-[var(--body)]">
+          <p className="body-text mt-4 text-lg leading-8">
             Weather Atlas does not collect your personal data. The app stores your saved places and preferences on your device, and uses weather and map services only to show forecasts and map views you choose.
           </p>
         </section>
@@ -101,7 +104,7 @@ export default function PrivacyPolicyPage() {
           {sections.map((section) => (
             <section key={section.title} className="border-t border-[var(--line)] pt-8">
               <h2 className="app-serif text-2xl font-semibold tracking-normal">{section.title}</h2>
-              <div className="mt-4 space-y-4 text-base leading-8 text-[var(--body)]">
+              <div className="body-text mt-4 space-y-4 text-lg leading-8">
                 {section.body.map((paragraph) => (
                   <p key={paragraph}>{paragraph}</p>
                 ))}

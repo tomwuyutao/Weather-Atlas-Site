@@ -23,8 +23,8 @@ export default function ContactPage() {
       <div className="site-container flex flex-1 items-center py-32 md:py-40">
         <section className="max-w-2xl">
           <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">Support</p>
-          <h1 className="app-serif mt-5 text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">We’re here to help.</h1>
-          <p className="mt-7 max-w-xl text-lg leading-8 text-[var(--body)]">
+          <h1 className="app-serif mt-5 max-w-2xl text-5xl font-semibold leading-[0.96] tracking-normal md:text-7xl">We’re here to help.</h1>
+          <p className="body-text mt-7 max-w-xl text-lg leading-8">
             If you run into issues, want to suggest a feature, or just want to say hi, email:
           </p>
           <a
