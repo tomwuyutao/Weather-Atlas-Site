@@ -74,21 +74,18 @@ function MapTapVisual() {
 const capabilities = [
   {
     key: "timeline",
-    eyebrow: "Plan beyond today",
     title: "See the sunny hours ahead.",
     body: "The 10-day timeline lets you compare when your saved places will be at their brightest, not just what the weather looks like now.",
     visual: <TenDayTimelineVisual />
   },
   {
     key: "region",
-    eyebrow: "Look further afield",
     title: "Search a country or continent.",
     body: "Open up a whole region when you are still deciding where to go, then narrow in on its sunnier places.",
     visual: <RegionSearchVisual />
   },
   {
     key: "tap",
-    eyebrow: "Stay curious",
     title: "Tap the map to search there.",
     body: "Any spot on the map can become the start of a new sunshine search—no need to know the city first.",
     visual: <MapTapVisual />
@@ -99,8 +96,8 @@ export default function CapabilityHighlights() {
   return (
     <section className="capability-section">
       <div className="site-container py-24 md:py-32">
-        <header className="max-w-2xl">
-          <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">More to explore</p>
+        <header className="mx-auto max-w-3xl text-center">
+          <p className="comparison-kicker">More to explore</p>
           <h2 className="app-serif mt-5 text-4xl font-semibold leading-[1.02] tracking-normal text-[var(--ink)] md:text-6xl">
             A little more sunshine intelligence.
           </h2>
@@ -111,11 +108,10 @@ export default function CapabilityHighlights() {
             <article key={capability.key} className={`capability-row ${index % 2 === 1 ? "capability-row-reverse" : ""}`}>
               <div>{capability.visual}</div>
               <div className="self-center">
-                <p className="text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">{capability.eyebrow}</p>
-                <h3 className="app-serif mt-5 text-4xl font-semibold leading-[1.04] tracking-normal text-[var(--ink)] md:text-5xl">
+                <h3 className="app-serif text-3xl font-semibold leading-[1.04] tracking-normal text-[var(--ink)] md:text-4xl">
                   {capability.title}
                 </h3>
-                <p className="body-text mt-5 max-w-xl text-lg leading-8">{capability.body}</p>
+                <p className="body-text mt-4 max-w-xl text-lg leading-8">{capability.body}</p>
               </div>
             </article>
           ))}

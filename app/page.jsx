@@ -436,10 +436,16 @@ export default function LandingPage() {
 
       {/* How it works: sticky rail with the app's three product areas. */}
       <section ref={workflowSectionRef} className="py-20 md:py-24">
-        <div className="site-container grid gap-12 md:grid-cols-2">
+        <div className="site-container">
+          {/* Matches the centered comparison-section kicker, while the rail is
+              reserved exclusively for the three navigable product areas. */}
+          <header className="mx-auto max-w-3xl text-center">
+            <p className="comparison-kicker">How it works</p>
+          </header>
+
+          <div className="mt-16 grid gap-12 md:mt-20 md:grid-cols-2">
           <nav className="hidden self-start md:sticky md:top-[20vh] md:block" aria-label="Weather Atlas workflow">
             <div className="grid max-w-[250px] gap-1">
-              <p className="mb-5 text-sm font-semibold uppercase tracking-[0.16em] text-[var(--sun)]">How it works</p>
               {workflowSteps.map((step, index) => {
                 const isActive = activeWorkflowIndex === index;
                 const segmentProgress = index < activeWorkflowIndex ? 1 : index === activeWorkflowIndex ? activeWorkflowProgress : 0;
@@ -475,7 +481,7 @@ export default function LandingPage() {
                 className="min-h-[88svh] scroll-mt-24"
               >
                 <div className="mb-8 max-w-2xl">
-                  <h2 className="app-serif text-4xl font-semibold leading-[1.04] tracking-normal text-[var(--ink)] md:text-5xl">
+                  <h2 className="app-serif text-3xl font-semibold leading-[1.04] tracking-normal text-[var(--ink)] md:text-4xl">
                     <span className="text-[var(--sun)] md:hidden">{step.label}. </span>
                     {step.title}
                   </h2>
@@ -485,6 +491,7 @@ export default function LandingPage() {
                 <WorkflowPreview activeStep={index} />
               </article>
             ))}
+          </div>
           </div>
         </div>
       </section>
