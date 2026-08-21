@@ -22,6 +22,9 @@ const appStoreUrl = "https://apps.apple.com/gb/app/weather-atlas/id6759912603";
 // and scroll-driven progress.
 const workflowStageAnchorRatio = 0.2;
 const workflowProgressEpsilon = 0.01;
+// Clicking stops a couple of pixels before the stage boundary to avoid a
+// rounded-up progress bar. This tolerance still activates the chosen item.
+const workflowActivationTolerance = 4;
 
 // -----------------------------------------------------------------------------
 // Discovery workflow content
@@ -333,7 +336,9 @@ export default function LandingPage() {
         ));
         const sectionEnd = sectionTop + section.offsetHeight - window.innerHeight + stageAnchor;
         const activeIndex = stageStarts.reduce(
-          (currentIndex, start, index) => (window.scrollY >= start ? index : currentIndex),
+          (currentIndex, start, index) => (
+            window.scrollY >= start - workflowActivationTolerance ? index : currentIndex
+          ),
           0
         );
         const nextStageStart = stageStarts[activeIndex + 1] ?? Math.max(sectionEnd, stageStarts[activeIndex] + 1);
